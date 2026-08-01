@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import AppLayout from '@/components/AppLayout';
 import { adminApi } from '@/lib/placement-api';
+import { ClipboardIcon } from '@/components/ui/Icons';
 import type { AdminStudent, Company, CompanyStatus } from '@/types/placement';
 
 const STATUS_BADGE: Record<CompanyStatus, string> = {
@@ -89,7 +90,9 @@ function StudentCompaniesContent() {
           </div>
         ) : companies.length === 0 ? (
           <div className="text-center py-20 text-gray-400 dark:text-gray-500 font-mono">
-            <div className="text-5xl mb-3">📋</div>
+            <div className="w-12 h-12 mx-auto mb-3 text-gray-400 dark:text-gray-500">
+              <ClipboardIcon className="w-full h-full" />
+            </div>
             <div className="text-sm font-semibold">NO APPLICATIONS RECORDED FOR THIS STUDENT</div>
           </div>
         ) : (

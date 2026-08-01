@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import AppLayout from '@/components/AppLayout';
 import { adminApi } from '@/lib/placement-api';
+import { ResourceIcon, ExternalLinkIcon } from '@/components/ui/Icons';
 import type { AdminResource, ResourceCategory } from '@/types/placement';
 
 const CATEGORY_COLORS: Record<ResourceCategory, string> = {
@@ -80,7 +81,9 @@ function AdminResourcesContent() {
           </div>
         ) : filtered.length === 0 ? (
           <div className="text-center py-20 text-gray-400 dark:text-gray-500 font-mono">
-            <div className="text-5xl mb-3">📚</div>
+            <div className="w-12 h-12 mx-auto mb-3 text-gray-400 dark:text-gray-500">
+              <ResourceIcon className="w-full h-full" />
+            </div>
             <div className="text-sm font-semibold">NO RESOURCES MATCHED</div>
           </div>
         ) : (
@@ -114,9 +117,10 @@ function AdminResourcesContent() {
                         href={r.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-xs font-mono font-semibold text-black dark:text-white hover:underline max-w-xs truncate block"
+                        className="inline-flex items-center text-xs font-mono font-semibold text-black dark:text-white hover:underline max-w-xs truncate"
                       >
-                        🔗 {r.link.replace(/^https?:\/\//, '')}
+                        <ExternalLinkIcon className="w-3.5 h-3.5 inline mr-1 shrink-0" />
+                        <span className="truncate">{r.link.replace(/^https?:\/\//, '')}</span>
                       </a>
                     </td>
                     <td className="px-6 py-4 font-mono text-xs text-gray-500 dark:text-gray-400">
