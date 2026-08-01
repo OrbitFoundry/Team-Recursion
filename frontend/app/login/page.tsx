@@ -12,16 +12,16 @@ import { redirectToGoogleAuth } from '@/lib/auth-utils';
 function LoginPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { login, isAuthenticated } = useAuth();
+  const { login, isAuthenticated, isAdmin } = useAuth();
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [errors, setErrors] = useState<{ email?: string; password?: string; general?: string }>({});
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (isAuthenticated) {
-      router.push('/home');
+      router.push(isAdmin ? '/admin/dashboard' : '/dashboard');
     }
-  }, [isAuthenticated, router]);
+  }, [isAuthenticated, isAdmin, router]);
 
   useEffect(() => {
     const error = searchParams.get('error');
@@ -42,7 +42,8 @@ function LoginPageContent() {
 
     try {
       await login(formData);
-      router.push('/home');
+      // AuthContext sets user state, useEffect will redirect or fallback below
+      router.push('/dashboard');
     } catch (error: unknown) {
       const apiError = error as { 
         response?: { 

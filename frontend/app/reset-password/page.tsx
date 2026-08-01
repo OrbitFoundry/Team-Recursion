@@ -106,7 +106,7 @@ function ResetPasswordPageContent() {
 
       // Small delay to show success message before redirect
       setTimeout(() => {
-        router.push('/home');
+        router.push('/dashboard');
       }, 1500);
     } catch (err: unknown) {
       const apiError = err as { 

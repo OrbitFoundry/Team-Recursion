@@ -77,6 +77,10 @@ router.post('/', async (req: Request, res: Response) => {
 // PUT /api/companies/:id — update own company only
 router.put('/:id', async (req: Request, res: Response) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ error: { message: 'Invalid company ID format' } });
+    }
+
     const authReq = req as AuthRequest;
     const userId = authReq.user!.userId;
 
@@ -106,6 +110,10 @@ router.put('/:id', async (req: Request, res: Response) => {
 // DELETE /api/companies/:id — delete own company only
 router.delete('/:id', async (req: Request, res: Response) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ error: { message: 'Invalid company ID format' } });
+    }
+
     const authReq = req as AuthRequest;
     const userId = authReq.user!.userId;
 

@@ -43,8 +43,8 @@ interface GoogleAuthResult {
   token?: string;
 }
 
-passport.serializeUser((user: GoogleAuthResult | string, done: (err: any, id?: any) => void) => {
-  if (typeof user === 'object' && user.user?.id) {
+passport.serializeUser((user: GoogleAuthResult | string | Express.User, done) => {
+  if (typeof user === 'object' && 'user' in user && user.user?.id) {
     done(null, user.user.id);
   } else if (typeof user === 'string') {
     done(null, user);
@@ -53,7 +53,7 @@ passport.serializeUser((user: GoogleAuthResult | string, done: (err: any, id?: a
   }
 });
 
-passport.deserializeUser((id: string, done: (err: any, user?: any) => void) => {
+passport.deserializeUser((id: string, done) => {
   done(null, { id });
 });
 

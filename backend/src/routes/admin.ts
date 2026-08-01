@@ -59,6 +59,9 @@ router.get('/students', async (_req: Request, res: Response) => {
 // GET /api/admin/students/:id/companies — view a specific student's applications
 router.get('/students/:id/companies', async (req: Request, res: Response) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ error: { message: 'Invalid student ID format' } });
+    }
     const studentId = new mongoose.Types.ObjectId(req.params.id);
 
     const student = await User.findById(studentId).select('name email role');
@@ -152,6 +155,10 @@ router.get('/companies', async (req: Request, res: Response) => {
 // PUT /api/admin/companies/:id — edit any student's application
 router.put('/companies/:id', async (req: Request, res: Response) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ error: { message: 'Invalid company ID format' } });
+    }
+
     const validation = validateUpdateCompany(req.body);
     if (!validation.isValid) {
       return res.status(400).json({ error: { message: 'Validation failed', errors: validation.errors } });
@@ -177,6 +184,10 @@ router.put('/companies/:id', async (req: Request, res: Response) => {
 // DELETE /api/admin/companies/:id — delete any student's application
 router.delete('/companies/:id', async (req: Request, res: Response) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ error: { message: 'Invalid company ID format' } });
+    }
+
     const company = await Company.findByIdAndDelete(req.params.id);
 
     if (!company) {
@@ -231,6 +242,10 @@ router.get('/resources', async (_req: Request, res: Response) => {
 // DELETE /api/admin/resources/:id — moderate/remove any resource
 router.delete('/resources/:id', async (req: Request, res: Response) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ error: { message: 'Invalid resource ID format' } });
+    }
+
     const resource = await Resource.findByIdAndDelete(req.params.id);
 
     if (!resource) {

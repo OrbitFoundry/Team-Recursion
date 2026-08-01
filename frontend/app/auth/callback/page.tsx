@@ -24,7 +24,7 @@ function AuthCallbackContent() {
         secure: process.env.NODE_ENV === 'production',
         path: '/',
       });
-      router.push('/home');
+      router.push('/dashboard');
     } else {
       router.push('/login?error=no_token');
     }

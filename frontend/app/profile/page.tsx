@@ -2,15 +2,11 @@
 
 import { useState } from 'react';
 import ProtectedRoute from '@/components/ProtectedRoute';
+import AppLayout from '@/components/AppLayout';
 import { useAuth } from '@/contexts/AuthContext';
-import Input from '@/components/ui/Input';
-import Button from '@/components/ui/Button';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 
-export default function ProfilePage() {
+function ProfileContent() {
   const { user, updateProfile } = useAuth();
-  const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     name: user?.name || '',
@@ -25,7 +21,6 @@ export default function ProfilePage() {
   };
 
   const handleSave = async () => {
-    // Validation
     const newErrors: typeof errors = {};
     if (!formData.name || formData.name.length < 2) {
       newErrors.name = 'Name must be at least 2 characters';
@@ -63,104 +58,118 @@ export default function ProfilePage() {
   };
 
   return (
-    <ProtectedRoute>
-      <div className="min-h-screen bg-gray-50">
-        <nav className="bg-white shadow">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between h-16">
-              <div className="flex items-center gap-4">
-                <Link href="/home" className="text-xl font-semibold">
-                  YourApp
-                </Link>
-                <span className="text-gray-400">/</span>
-                <span className="text-gray-600">Profile</span>
+    <AppLayout>
+      <div className="max-w-3xl mx-auto space-y-6">
+        <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-6 shadow-sm">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-gray-100 dark:border-gray-800">
+            <div className="flex items-center gap-4">
+              <div className="w-16 h-16 rounded-2xl bg-indigo-600 flex items-center justify-center text-white text-2xl font-bold">
+                {user?.name?.[0]?.toUpperCase() || 'U'}
               </div>
-              <div className="flex items-center gap-4">
-                <Link href="/home">
-                  <Button variant="outline">Back to Home</Button>
-                </Link>
+              <div>
+                <h2 className="text-xl font-bold dark:text-white">{user?.name}</h2>
+                <p className="text-sm text-gray-500 dark:text-gray-400">{user?.email}</p>
+                <div className="mt-1 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 capitalize">
+                  {user?.role || 'student'}
+                </div>
               </div>
             </div>
+
+            {!isEditing && (
+              <button
+                onClick={() => setIsEditing(true)}
+                className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-xl transition-colors"
+              >
+                Edit Profile
+              </button>
+            )}
           </div>
-        </nav>
 
-        <main className="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-          <div className="bg-white rounded-lg shadow p-8">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-3xl font-bold text-gray-900">Profile Settings</h2>
-              {!isEditing && (
-                <Button onClick={() => setIsEditing(true)}>Edit Profile</Button>
-              )}
+          {errors.general && (
+            <div className="mt-6 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-sm p-4 rounded-xl">
+              {errors.general}
+            </div>
+          )}
+
+          <div className="mt-6 space-y-4">
+            <div>
+              <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                Full Name
+              </label>
+              <input
+                type="text"
+                name="name"
+                disabled={!isEditing}
+                value={formData.name}
+                onChange={handleChange}
+                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-75 disabled:cursor-not-allowed"
+              />
+              {errors.name && <p className="text-xs text-red-500 mt-1">{errors.name}</p>}
             </div>
 
-            {errors.general && (
-              <div className="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
-                {errors.general}
+            <div>
+              <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                Email Address
+              </label>
+              <input
+                type="email"
+                name="email"
+                disabled={!isEditing}
+                value={formData.email}
+                onChange={handleChange}
+                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-75 disabled:cursor-not-allowed"
+              />
+              {errors.email && <p className="text-xs text-red-500 mt-1">{errors.email}</p>}
+            </div>
+
+            <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4 mt-6">
+              <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-2">Account Status</h3>
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-gray-500 dark:text-gray-400">Email Verification:</span>
+                {user?.isEmailVerified ? (
+                  <span className="px-2.5 py-0.5 bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300 rounded-full text-xs font-semibold">
+                    Verified
+                  </span>
+                ) : (
+                  <span className="px-2.5 py-0.5 bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300 rounded-full text-xs font-semibold">
+                    Unverified
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {isEditing && (
+              <div className="flex gap-3 pt-4">
+                <button
+                  onClick={handleSave}
+                  disabled={isLoading}
+                  className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 text-white text-sm font-medium rounded-xl transition-colors"
+                >
+                  {isLoading ? 'Saving…' : 'Save Changes'}
+                </button>
+                <button
+                  onClick={() => {
+                    setIsEditing(false);
+                    setFormData({ name: user?.name || '', email: user?.email || '' });
+                    setErrors({});
+                  }}
+                  className="px-5 py-2.5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm font-medium rounded-xl transition-colors"
+                >
+                  Cancel
+                </button>
               </div>
             )}
-
-            <div className="space-y-6">
-              <div>
-                <Input
-                  label="Full Name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  error={errors.name}
-                  disabled={!isEditing}
-                />
-              </div>
-
-              <div>
-                <Input
-                  label="Email Address"
-                  name="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  error={errors.email}
-                  disabled={!isEditing}
-                />
-              </div>
-
-              <div className="bg-gray-50 rounded-lg p-4">
-                <h3 className="font-semibold text-gray-900 mb-2">Account Status</h3>
-                <div className="flex items-center gap-2">
-                  <span className="text-sm text-gray-600">Email Verified:</span>
-                  {user?.isEmailVerified ? (
-                    <span className="px-2 py-1 bg-green-100 text-green-800 rounded text-sm font-medium">
-                      Verified
-                    </span>
-                  ) : (
-                    <span className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded text-sm font-medium">
-                      Not Verified
-                    </span>
-                  )}
-                </div>
-              </div>
-
-              {isEditing && (
-                <div className="flex gap-4">
-                  <Button onClick={handleSave} isLoading={isLoading}>
-                    Save Changes
-                  </Button>
-                  <Button
-                    variant="outline"
-                    onClick={() => {
-                      setIsEditing(false);
-                      setFormData({ name: user?.name || '', email: user?.email || '' });
-                      setErrors({});
-                    }}
-                  >
-                    Cancel
-                  </Button>
-                </div>
-              )}
-            </div>
           </div>
-        </main>
+        </div>
       </div>
-    </ProtectedRoute>
+    </AppLayout>
   );
 }
 
+export default function ProfilePage() {
+  return (
+    <ProtectedRoute>
+      <ProfileContent />
+    </ProtectedRoute>
+  );
+}

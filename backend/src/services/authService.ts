@@ -17,7 +17,9 @@ export interface LoginData {
 }
 
 export const registerUser = async (data: RegisterData) => {
-  const { name, email, password } = data;
+  const name = data.name.trim();
+  const email = data.email.toLowerCase().trim();
+  const { password } = data;
 
   // Check if user already exists (generic error for security)
   const existingUser = await User.findOne({ email });
@@ -63,7 +65,8 @@ export const registerUser = async (data: RegisterData) => {
 };
 
 export const loginUser = async (data: LoginData) => {
-  const { email, password } = data;
+  const email = data.email.toLowerCase().trim();
+  const { password } = data;
 
   // Find user and include password
   const user = await User.findOne({ email }).select('+password');
@@ -101,7 +104,8 @@ export const loginUser = async (data: LoginData) => {
   };
 };
 
-export const forgotPassword = async (email: string) => {
+export const forgotPassword = async (rawEmail: string) => {
+  const email = rawEmail.toLowerCase().trim();
   const user = await User.findOne({ email });
   if (!user) {
     // Don't reveal if user exists for security

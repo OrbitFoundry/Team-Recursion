@@ -62,6 +62,10 @@ router.post('/', async (req: Request, res: Response) => {
 // DELETE /api/resources/:id — delete own resource only
 router.delete('/:id', async (req: Request, res: Response) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ error: { message: 'Invalid resource ID format' } });
+    }
+
     const authReq = req as AuthRequest;
     const userId = authReq.user!.userId;
 
