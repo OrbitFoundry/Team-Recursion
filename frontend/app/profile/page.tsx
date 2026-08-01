@@ -98,7 +98,7 @@ function ProfileContent() {
                 <h2 className="text-2xl font-bold tracking-tight dark:text-white">{user?.name}</h2>
                 <p className="text-xs font-mono text-gray-500 dark:text-gray-400">{user?.email}</p>
                 <div className="mt-2 inline-flex items-center px-3 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-widest bg-black text-white dark:bg-white dark:text-black">
-                  ROLE: {user?.role || 'student'}
+                  STUDENT ACCOUNT
                 </div>
               </div>
             </div>

@@ -9,7 +9,7 @@ import { authApi } from '@/lib/auth-api';
 import { showToast } from '@/components/ToastProvider';
 import { validatePassword } from '@/lib/password-validation';
 import Cookies from 'js-cookie';
-import { CheckIcon } from '@/components/ui/Icons';
+import { CheckIcon, CookedBrandIcon } from '@/components/ui/Icons';
 
 function ResetPasswordPageContent() {
   const router = useRouter();
@@ -134,11 +134,11 @@ function ResetPasswordPageContent() {
 
   if (isSuccess) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-[#0c0b10] py-12 px-4 sm:px-6 lg:px-8 font-sans selection:bg-[#c5b0f4] selection:text-black">
-        <div className="max-w-md w-full space-y-8 bg-white dark:bg-[#161522] p-8 md:p-10 rounded-3xl border border-gray-200/80 dark:border-gray-800/80 shadow-sm text-center relative overflow-hidden">
-          <div className="absolute top-0 left-0 right-0 h-2 bg-[#c8e6cd]" />
-          <div className="mx-auto w-14 h-14 rounded-full bg-[#c8e6cd] text-emerald-950 flex items-center justify-center shadow-sm">
-            <CheckIcon className="w-7 h-7 text-emerald-950" />
+      <div className="h-screen w-screen overflow-hidden flex items-center justify-center bg-white dark:bg-[#0c0b10] px-4 font-sans selection:bg-[#c5b0f4] selection:text-black">
+        <div className="max-w-md w-full space-y-6 bg-white dark:bg-[#161522] p-8 rounded-3xl border border-gray-200/80 dark:border-gray-800/80 shadow-sm text-center relative overflow-hidden">
+          <div className="absolute top-0 left-0 right-0 h-1.5 bg-[#c8e6cd]" />
+          <div className="mx-auto w-12 h-12 rounded-full bg-[#c8e6cd] text-emerald-950 flex items-center justify-center shadow-sm">
+            <CheckIcon className="w-6 h-6 text-emerald-950" />
           </div>
           <div className="text-[11px] font-mono font-bold uppercase tracking-widest text-gray-500 mb-1">CREDENTIALS UPDATED</div>
           <h2 className="text-2xl font-bold tracking-tight dark:text-white">
@@ -147,7 +147,7 @@ function ResetPasswordPageContent() {
           <p className="text-xs font-mono text-gray-600 dark:text-gray-400">
             Your credentials have been updated securely. Redirecting to your dashboard...
           </p>
-          <div className="pt-4 flex justify-center">
+          <div className="pt-2 flex justify-center">
             <div className="animate-spin rounded-full h-8 w-8 border-2 border-black border-t-transparent dark:border-white dark:border-t-transparent"></div>
           </div>
         </div>
@@ -156,22 +156,22 @@ function ResetPasswordPageContent() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white dark:bg-[#0c0b10] py-12 px-4 sm:px-6 lg:px-8 font-sans selection:bg-[#c5b0f4] selection:text-black">
-      <div className="max-w-md w-full space-y-8 bg-white dark:bg-[#161522] p-8 md:p-10 rounded-3xl border border-gray-200/80 dark:border-gray-800/80 shadow-sm relative overflow-hidden">
+    <div className="h-screen w-screen overflow-hidden flex items-center justify-center bg-white dark:bg-[#0c0b10] px-4 font-sans selection:bg-[#c5b0f4] selection:text-black">
+      <div className="max-w-md w-full space-y-6 bg-white dark:bg-[#161522] p-8 md:p-10 rounded-3xl border border-gray-200/80 dark:border-gray-800/80 shadow-sm relative overflow-hidden">
         
         {/* Accent Editorial Ribbon */}
-        <div className="absolute top-0 left-0 right-0 h-2 bg-[#efd4d4]" />
+        <div className="absolute top-0 left-0 right-0 h-1.5 bg-[#efd4d4]" />
 
         {/* Brand Header */}
-        <div className="text-center pt-2">
-          <div className="mx-auto w-12 h-12 rounded-full bg-black text-white dark:bg-white dark:text-black font-extrabold flex items-center justify-center text-sm font-sans tracking-tight mb-4 shadow-sm">
-            TR
+        <div className="text-center pt-1">
+          <div className="mx-auto w-10 h-10 rounded-full border border-gray-200 dark:border-gray-800 bg-black dark:bg-white flex items-center justify-center mb-3 shadow-sm">
+            <CookedBrandIcon className="w-5 h-5 text-white dark:text-black" />
           </div>
           <div className="text-[10px] font-mono font-bold uppercase tracking-widest text-gray-500 mb-1">SECURITY RECOVERY</div>
           <h2 className="text-2xl font-extrabold tracking-tight dark:text-white">
             Reset Your Password
           </h2>
-          <p className="mt-2 text-xs font-mono text-gray-500 dark:text-gray-400">
+          <p className="mt-1 text-xs font-mono text-gray-500 dark:text-gray-400">
             Enter your new secure password below
           </p>
           {!token && (
@@ -181,14 +181,14 @@ function ResetPasswordPageContent() {
           )}
         </div>
 
-        <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
+        <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
           {errors.general && (
-            <div className="bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/50 text-rose-700 dark:text-rose-300 text-xs font-mono p-4 rounded-2xl">
+            <div className="bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/50 text-rose-700 dark:text-rose-300 text-xs font-mono p-3 rounded-2xl">
               {errors.general}
             </div>
           )}
 
-          <div className="space-y-4">
+          <div className="space-y-3">
             <PasswordInput
               label="NEW PASSWORD"
               name="password"
@@ -205,7 +205,7 @@ function ResetPasswordPageContent() {
               name="confirmPassword"
               autoComplete="new-password"
               required
-              value={formData.password}
+              value={formData.confirmPassword}
               onChange={handleChange}
               error={errors.confirmPassword}
               placeholder="Repeat new password"
@@ -213,12 +213,12 @@ function ResetPasswordPageContent() {
           </div>
 
           <div>
-            <Button type="submit" variant="primary" className="w-full py-3.5 mt-2" isLoading={isLoading} disabled={!token}>
+            <Button type="submit" variant="primary" className="w-full py-3 rounded-full text-xs font-mono font-bold tracking-wider uppercase mt-1" isLoading={isLoading} disabled={!token}>
               SET NEW PASSWORD
             </Button>
           </div>
 
-          <div className="text-center">
+          <div className="text-center pt-1">
             <Link href="/login" className="text-xs font-mono text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors">
               ← Back to Sign In
             </Link>
@@ -232,7 +232,7 @@ function ResetPasswordPageContent() {
 export default function ResetPasswordPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-[#0c0b10]">
+      <div className="h-screen w-screen overflow-hidden flex items-center justify-center bg-white dark:bg-[#0c0b10]">
         <div className="animate-spin rounded-full h-10 w-10 border-2 border-black border-t-transparent dark:border-white dark:border-t-transparent"></div>
       </div>
     }>
