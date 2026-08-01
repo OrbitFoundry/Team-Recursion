@@ -13,6 +13,7 @@ import {
   StudentsIcon,
   CompanyIcon,
   ExternalLinkIcon,
+  CookedBrandIcon,
 } from '@/components/ui/Icons';
 
 export default function LandingPage() {
@@ -39,9 +40,8 @@ export default function LandingPage() {
       <header className="sticky top-0 z-50 bg-white/90 dark:bg-[#0c0b10]/90 backdrop-blur-md border-b border-[#e6e6e6] dark:border-gray-800">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full overflow-hidden border border-gray-200 dark:border-gray-800 shadow-sm bg-black dark:bg-white flex items-center justify-center shrink-0">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/logo.png" alt="cooked? Logo" className="w-full h-full object-cover" />
+            <div className="w-10 h-10 rounded-full border border-gray-200 dark:border-gray-800 shadow-sm bg-black dark:bg-white flex items-center justify-center shrink-0">
+              <CookedBrandIcon className="w-5 h-5 text-white dark:text-black" />
             </div>
             <div>
               <span className="font-black text-xl tracking-tight block leading-none font-sans">cooked?</span>
@@ -230,10 +230,10 @@ export default function LandingPage() {
         <section className="rounded-3xl bg-[#1f1d3d] text-white p-8 md:p-14 border border-white/10 shadow-sm">
           <div className="max-w-3xl space-y-6">
             <div className="inline-block px-3.5 py-1 rounded-full bg-white/10 text-white text-[10px] font-mono uppercase tracking-widest font-bold border border-white/15">
-              TECHNICAL ARCHITECTURE &amp; TEAM RECURSION
+              TECHNICAL ARCHITECTURE &amp; PERFORMANCE
             </div>
             <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white leading-tight">
-              Engineered by Mallu, Bhumit, Ayush, and Gaurav.
+              Engineered for Modern Placement Workflows.
             </h2>
             <p className="text-sm md:text-base text-gray-300 font-sans leading-relaxed">
               Built on Next.js 16 App Router, Node.js REST Services, JWT authentication, and the monochrome editorial design system token architecture.
@@ -256,10 +256,10 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6 text-xs font-mono text-gray-500 dark:text-gray-400">
           <div className="flex items-center gap-3">
             <div className="w-7 h-7 rounded-full bg-black text-white dark:bg-white dark:text-black font-bold flex items-center justify-center text-[10px]">
-              TR
+              c?
             </div>
             <div>
-              &copy; {new Date().getFullYear()} <strong className="text-black dark:text-white">TEAM RECURSION</strong> (Mallu, Bhumit, Ayush, Gaurav).
+              &copy; {new Date().getFullYear()} <strong className="text-black dark:text-white">cooked?</strong> Career &amp; Placement Platform.
             </div>
           </div>
           <div className="flex items-center gap-4 uppercase font-bold tracking-wider text-[10px]">
@@ -267,7 +267,7 @@ export default function LandingPage() {
             <span>·</span>
             <span>JETBRAINS MONO</span>
             <span>·</span>
-            <span>DESIGN.md COMPLIANT</span>
+            <span>EDITORIAL SYSTEM</span>
           </div>
         </div>
       </footer>
