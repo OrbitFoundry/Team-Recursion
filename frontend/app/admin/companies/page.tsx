@@ -49,7 +49,9 @@ function EditStatusModal({
           <h2 className="text-lg font-bold tracking-tight dark:text-white truncate">
             {company.companyName}
           </h2>
-          <div className="text-xs font-mono text-gray-500 dark:text-gray-400 mt-1">{company.student.name} ({company.student.email})</div>
+          <div className="text-xs font-mono text-gray-500 dark:text-gray-400 mt-1">
+            {company.student?.name || 'Unknown Student'} ({company.student?.email || 'N/A'})
+          </div>
         </div>
         <div className="p-6 space-y-4">
           <div>
@@ -206,8 +208,8 @@ function AdminCompaniesContent() {
                 {companies.map((c) => (
                   <tr key={c._id} className="hover:bg-gray-50/80 dark:hover:bg-gray-900/40 transition-colors">
                     <td className="px-6 py-4">
-                      <div className="font-bold text-gray-900 dark:text-white">{c.student.name}</div>
-                      <div className="text-xs font-mono text-gray-500 dark:text-gray-400">{c.student.email}</div>
+                      <div className="font-bold text-gray-900 dark:text-white">{c.student?.name || 'Unknown Student'}</div>
+                      <div className="text-xs font-mono text-gray-500 dark:text-gray-400">{c.student?.email || 'N/A'}</div>
                     </td>
                     <td className="px-6 py-4 font-bold text-gray-900 dark:text-white">{c.companyName}</td>
                     <td className="px-6 py-4 text-gray-600 dark:text-gray-300 font-medium">{c.role}</td>

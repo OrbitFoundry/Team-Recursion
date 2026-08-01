@@ -78,7 +78,10 @@ function ProfileContent() {
 
             {!isEditing && (
               <button
-                onClick={() => setIsEditing(true)}
+                onClick={() => {
+                  setFormData({ name: user?.name || '', email: user?.email || '' });
+                  setIsEditing(true);
+                }}
                 className="px-6 py-2.5 bg-black text-white dark:bg-white dark:text-black font-mono text-xs font-bold uppercase tracking-wider rounded-full hover:scale-105 active:scale-95 transition-all shadow-sm"
               >
                 EDIT PROFILE
@@ -172,7 +175,7 @@ function ProfileContent() {
 
 export default function ProfilePage() {
   return (
-    <ProtectedRoute>
+    <ProtectedRoute allowBoth>
       <ProfileContent />
     </ProtectedRoute>
   );

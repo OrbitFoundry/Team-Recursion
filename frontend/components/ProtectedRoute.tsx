@@ -8,9 +8,11 @@ interface ProtectedRouteProps {
   children: React.ReactNode;
   /** If true, only admins can access. Students are redirected to /dashboard */
   adminOnly?: boolean;
+  /** If true, both admins and students can access without role redirection */
+  allowBoth?: boolean;
 }
 
-export default function ProtectedRoute({ children, adminOnly = false }: ProtectedRouteProps) {
+export default function ProtectedRoute({ children, adminOnly = false, allowBoth = false }: ProtectedRouteProps) {
   const { isAuthenticated, isAdmin, loading, user } = useAuth();
   const router = useRouter();
 
@@ -24,6 +26,8 @@ export default function ProtectedRoute({ children, adminOnly = false }: Protecte
       return () => clearTimeout(timer);
     }
 
+    if (allowBoth) return;
+
     // Admin-only page: redirect students away
     if (adminOnly && user && !isAdmin) {
       router.push('/dashboard');
@@ -33,22 +37,24 @@ export default function ProtectedRoute({ children, adminOnly = false }: Protecte
     if (!adminOnly && user && isAdmin) {
       router.push('/admin/dashboard');
     }
-  }, [isAuthenticated, isAdmin, loading, user, adminOnly, router]);
+  }, [isAuthenticated, isAdmin, loading, user, adminOnly, allowBoth, router]);
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-950">
-        <div className="flex flex-col items-center gap-4">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600" />
-          <p className="text-gray-500 dark:text-gray-400 text-sm">Loading...</p>
+      <div className="flex items-center justify-center min-h-screen bg-white dark:bg-[#0c0b10]">
+        <div className="flex flex-col items-center gap-4 font-mono">
+          <div className="animate-spin rounded-full h-10 w-10 border-2 border-black border-t-transparent dark:border-white dark:border-t-transparent" />
+          <p className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">VERIFYING ACCESS…</p>
         </div>
       </div>
     );
   }
 
   if (!isAuthenticated) return null;
-  if (adminOnly && !isAdmin) return null;
-  if (!adminOnly && isAdmin) return null;
+  if (!allowBoth) {
+    if (adminOnly && !isAdmin) return null;
+    if (!adminOnly && isAdmin) return null;
+  }
 
   return <>{children}</>;
 }

@@ -19,10 +19,11 @@ const studentNav: NavItem[] = [
 ];
 
 const adminNav: NavItem[] = [
-  { href: '/admin/dashboard', label: 'Admin Dashboard', icon: '📈' },
+  { href: '/admin/dashboard', label: 'Admin Overview', icon: '📈' },
   { href: '/admin/students', label: 'Students', icon: '🎓' },
   { href: '/admin/companies', label: 'All Applications', icon: '🏢' },
   { href: '/admin/resources', label: 'Resource Moderation', icon: '📚' },
+  { href: '/profile', label: 'Account Settings', icon: '👤' },
 ];
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
@@ -76,7 +77,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       >
         {/* Logo */}
         <div className="flex items-center gap-3 px-6 py-5 border-b border-gray-100 dark:border-gray-800/80">
-          <div className="w-9 h-9 rounded-full bg-black dark:bg-white flex items-center justify-center text-white dark:text-black font-bold text-sm tracking-tighter">
+          <div className="w-9 h-9 rounded-full bg-black dark:bg-white flex items-center justify-center text-white dark:text-black font-bold text-sm tracking-tighter shadow-sm">
             TR
           </div>
           <div>
@@ -92,7 +93,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         {/* Nav list */}
         <nav className="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto">
           {navItems.map((item) => {
-            const active = pathname === item.href || (item.href !== '/dashboard' && item.href !== '/admin/dashboard' && pathname.startsWith(item.href));
+            const active = pathname === item.href || (item.href !== '/dashboard' && item.href !== '/admin/dashboard' && item.href !== '/profile' && pathname.startsWith(item.href));
             return (
               <Link
                 key={item.href}
@@ -115,10 +116,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <div className="p-4 border-t border-gray-100 dark:border-gray-800/80">
           <div className="flex items-center gap-3 px-3 py-2.5 mb-2 rounded-2xl bg-gray-50 dark:bg-gray-900/60">
             <div className="w-8 h-8 rounded-full bg-[#c5b0f4] flex items-center justify-center text-black font-bold text-xs">
-              {user?.name?.[0]?.toUpperCase() || '?'}
+              {user?.name?.[0]?.toUpperCase() || 'U'}
             </div>
             <div className="flex-1 min-w-0">
-              <div className="text-xs font-semibold truncate text-gray-900 dark:text-white">{user?.name}</div>
+              <div className="text-xs font-semibold truncate text-gray-900 dark:text-white">{user?.name || 'User'}</div>
               <div className="text-[11px] text-gray-500 dark:text-gray-400 truncate font-mono">{user?.email}</div>
             </div>
           </div>
@@ -139,6 +140,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             <button
               className="lg:hidden p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-300 transition-colors"
               onClick={() => setSidebarOpen(true)}
+              aria-label="Toggle sidebar menu"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
@@ -173,6 +175,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               onClick={toggleDark}
               className="p-2.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-base transition-colors"
               title="Toggle theme"
+              aria-label="Toggle dark mode"
             >
               {darkMode ? '☀️' : '🌙'}
             </button>

@@ -33,11 +33,22 @@ function AddResourceModal({
     e.preventDefault();
     setSaving(true);
     setError('');
+
+    let formattedLink = form.link.trim();
+    if (!formattedLink) {
+      setError('Please provide a valid document or website link.');
+      setSaving(false);
+      return;
+    }
+    if (!/^https?:\/\//i.test(formattedLink)) {
+      formattedLink = 'https://' + formattedLink;
+    }
+
     try {
-      await onSave(form);
+      await onSave({ ...form, link: formattedLink });
       onClose();
     } catch {
-      setError('Failed to save resource. Please check the URL format.');
+      setError('Failed to save resource. Please check the URL structure.');
     } finally {
       setSaving(false);
     }
@@ -73,7 +84,7 @@ function AddResourceModal({
               CATEGORY *
             </label>
             <select
-              className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-sm dark:text-white focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all"
+              className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-sm dark:text-white focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all font-sans"
               value={form.category}
               onChange={(e) => setForm({ ...form, category: e.target.value as ResourceCategory })}
             >
@@ -85,12 +96,12 @@ function AddResourceModal({
               URL / DOCUMENT LINK *
             </label>
             <input
-              type="url"
-              className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-sm dark:text-white focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all"
+              type="text"
+              className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-sm dark:text-white focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all font-mono text-xs"
               value={form.link}
               onChange={(e) => setForm({ ...form, link: e.target.value })}
               required
-              placeholder="https://takeuforward.org/…"
+              placeholder="takeuforward.org/strivers-a2z-dsa-course"
             />
           </div>
           <div className="flex gap-3 pt-3">
