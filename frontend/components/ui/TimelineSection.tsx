@@ -8,6 +8,7 @@ export function TimelineSection() {
   const [events, setEvents] = useState<TimelineEvent[]>([]);
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   
   const [form, setForm] = useState({
@@ -31,21 +32,47 @@ export function TimelineSection() {
     loadEvents();
   }, []);
 
+  const handleOpenAdd = () => {
+    setEditingId(null);
+    setForm({ title: '', description: '', date: new Date().toISOString().slice(0, 16) });
+    setModalOpen(true);
+  };
+
+  const handleOpenEdit = (event: TimelineEvent) => {
+    setEditingId(event._id);
+    setForm({
+      title: event.title,
+      description: event.description || '',
+      date: new Date(event.date).toISOString().slice(0, 16),
+    });
+    setModalOpen(true);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
     try {
-      await timelineApi.create({
-        title: form.title,
-        description: form.description,
-        date: new Date(form.date).toISOString(),
-      });
-      showToast('Event added to timeline!', 'success');
+      if (editingId) {
+        await timelineApi.update(editingId, {
+          title: form.title,
+          description: form.description,
+          date: new Date(form.date).toISOString(),
+        });
+        showToast('Event updated!', 'success');
+      } else {
+        await timelineApi.create({
+          title: form.title,
+          description: form.description,
+          date: new Date(form.date).toISOString(),
+        });
+        showToast('Event added to timeline!', 'success');
+      }
       setModalOpen(false);
+      setEditingId(null);
       setForm({ title: '', description: '', date: new Date().toISOString().slice(0, 16) });
       await loadEvents();
     } catch (err) {
-      showToast('Failed to add event', 'error');
+      showToast(editingId ? 'Failed to update event' : 'Failed to add event', 'error');
     } finally {
       setSaving(false);
     }
@@ -70,7 +97,7 @@ export function TimelineSection() {
           <p className="text-xs font-mono text-gray-500 dark:text-gray-400">Track upcoming tests, interviews, and deadlines</p>
         </div>
         <button
-          onClick={() => setModalOpen(true)}
+          onClick={handleOpenAdd}
           className="inline-flex items-center gap-1.5 px-4 py-2 bg-black text-white dark:bg-white dark:text-black font-mono text-[10px] font-bold uppercase tracking-widest rounded-full hover:scale-105 active:scale-95 transition-all shadow-sm"
         >
           <PlusIcon className="w-3 h-3" /> ADD EVENT
@@ -116,15 +143,26 @@ export function TimelineSection() {
                         </p>
                       )}
                     </div>
-                    <button 
-                      onClick={() => handleDelete(event._id)}
-                      className="opacity-0 group-hover:opacity-100 p-1.5 text-gray-400 hover:text-rose-500 transition-all rounded-full hover:bg-rose-50 dark:hover:bg-rose-950/30"
-                      title="Delete Event"
-                    >
-                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                      </svg>
-                    </button>
+                    <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all">
+                      <button 
+                        onClick={() => handleOpenEdit(event)}
+                        className="p-1.5 text-gray-400 hover:text-black dark:hover:text-white transition-all rounded-full hover:bg-gray-200 dark:hover:bg-gray-800"
+                        title="Edit Event"
+                      >
+                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                        </svg>
+                      </button>
+                      <button 
+                        onClick={() => handleDelete(event._id)}
+                        className="p-1.5 text-gray-400 hover:text-rose-500 transition-all rounded-full hover:bg-rose-50 dark:hover:bg-rose-950/30"
+                        title="Delete Event"
+                      >
+                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -133,12 +171,14 @@ export function TimelineSection() {
         </div>
       )}
 
-      {/* Add Event Modal */}
+      {/* Add / Edit Event Modal */}
       {modalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-fade-in-up">
           <div className="bg-white dark:bg-[#161522] rounded-3xl shadow-2xl w-full max-w-sm border border-gray-200/80 dark:border-gray-800/80 overflow-hidden">
             <div className="p-6 border-b border-gray-100 dark:border-gray-800/80 bg-gray-50/50 dark:bg-gray-900/40">
-              <h2 className="text-xl font-bold tracking-tight dark:text-white">Add Important Date</h2>
+              <h2 className="text-xl font-bold tracking-tight dark:text-white">
+                {editingId ? 'Edit Event' : 'Add Important Date'}
+              </h2>
             </div>
             <form onSubmit={handleSubmit} className="p-6 space-y-4 font-sans">
               <div>
@@ -183,11 +223,11 @@ export function TimelineSection() {
                   disabled={saving}
                   className="flex-1 py-2.5 bg-black text-white dark:bg-white dark:text-black font-mono text-[11px] font-bold uppercase tracking-wider rounded-full hover:scale-105 active:scale-95 disabled:opacity-50 transition-all shadow-sm"
                 >
-                  {saving ? 'SAVING…' : 'SAVE EVENT'}
+                  {saving ? 'SAVING…' : editingId ? 'UPDATE EVENT' : 'SAVE EVENT'}
                 </button>
                 <button
                   type="button"
-                  onClick={() => setModalOpen(false)}
+                  onClick={() => { setModalOpen(false); setEditingId(null); }}
                   className="flex-1 py-2.5 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 font-mono text-[11px] font-bold uppercase tracking-wider rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
                 >
                   CANCEL

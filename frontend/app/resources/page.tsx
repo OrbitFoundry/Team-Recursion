@@ -19,14 +19,20 @@ const CATEGORY_COLORS: Record<ResourceCategory, string> = {
   'Core Subjects': 'bg-[#dceeb1] text-black',
 };
 
-function AddResourceModal({
+function ResourceModal({
+  initial,
   onSave,
   onClose,
 }: {
+  initial?: Resource;
   onSave: (data: { title: string; category: ResourceCategory; link: string }) => Promise<void>;
   onClose: () => void;
 }) {
-  const [form, setForm] = useState({ title: '', category: 'DSA' as ResourceCategory, link: '' });
+  const [form, setForm] = useState({
+    title: initial?.title || '',
+    category: (initial?.category || 'DSA') as ResourceCategory,
+    link: initial?.link || '',
+  });
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 
@@ -60,7 +66,9 @@ function AddResourceModal({
       <div className="bg-white dark:bg-[#161522] rounded-3xl shadow-2xl w-full max-w-md border border-gray-200/80 dark:border-gray-800/80 overflow-hidden font-sans">
         <div className="p-6 border-b border-gray-100 dark:border-gray-800/80 bg-gray-50/50 dark:bg-gray-900/40">
           <div className="text-[11px] font-mono uppercase tracking-widest text-gray-500 mb-1">REPOSITORIES</div>
-          <h2 className="text-xl font-bold tracking-tight dark:text-white">Add Prep Resource</h2>
+          <h2 className="text-xl font-bold tracking-tight dark:text-white">
+            {initial?._id ? 'Edit Prep Resource' : 'Add Prep Resource'}
+          </h2>
         </div>
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           {error && (
@@ -111,7 +119,7 @@ function AddResourceModal({
               disabled={saving}
               className="flex-1 py-3 bg-black text-white dark:bg-white dark:text-black font-mono text-xs font-bold uppercase tracking-wider rounded-full hover:scale-105 active:scale-95 disabled:opacity-50 transition-all shadow-sm"
             >
-              {saving ? 'SAVING…' : 'ADD RESOURCE'}
+              {saving ? 'SAVING…' : initial?._id ? 'UPDATE RESOURCE' : 'ADD RESOURCE'}
             </button>
             <button
               type="button"
@@ -131,7 +139,7 @@ function ResourcesContent() {
   const [resources, setResources] = useState<Resource[]>([]);
   const [loading, setLoading] = useState(true);
   const [filterCategory, setFilterCategory] = useState('');
-  const [showModal, setShowModal] = useState(false);
+  const [modal, setModal] = useState<{ open: boolean; resource?: Resource }>({ open: false });
   const [deleting, setDeleting] = useState<string | null>(null);
 
   const load = async () => {
@@ -157,15 +165,19 @@ function ResourcesContent() {
     }
   };
 
-  const handleAdd = async (data: { title: string; category: ResourceCategory; link: string }) => {
-    await resourcesApi.create(data);
+  const handleSave = async (data: { title: string; category: ResourceCategory; link: string }) => {
+    if (modal.resource?._id) {
+      await resourcesApi.update(modal.resource._id, data);
+    } else {
+      await resourcesApi.create(data);
+    }
     await load();
   };
 
   return (
     <AppLayout>
-      {showModal && (
-        <AddResourceModal onSave={handleAdd} onClose={() => setShowModal(false)} />
+      {modal.open && (
+        <ResourceModal initial={modal.resource} onSave={handleSave} onClose={() => setModal({ open: false })} />
       )}
 
       {/* Header Banner */}
@@ -175,7 +187,7 @@ function ResourcesContent() {
           <p className="text-xs font-mono text-gray-500 dark:text-gray-400 mt-1">Curated links for DSA, core CS fundamentals, and interview prep</p>
         </div>
         <button
-          onClick={() => setShowModal(true)}
+          onClick={() => setModal({ open: true })}
           className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-black text-white dark:bg-white dark:text-black font-mono text-xs font-bold uppercase tracking-wider rounded-full hover:scale-105 active:scale-95 transition-all shadow-sm"
         >
           <PlusIcon className="w-4 h-4" /> ADD RESOURCE
@@ -234,13 +246,21 @@ function ResourcesContent() {
                   <span className={`text-[11px] font-mono font-bold uppercase tracking-wider px-3 py-1 rounded-full ${CATEGORY_COLORS[r.category]}`}>
                     {r.category}
                   </span>
-                  <button
-                    onClick={() => handleDelete(r._id)}
-                    disabled={deleting === r._id}
-                    className="opacity-0 group-hover:opacity-100 text-rose-500 hover:text-rose-700 dark:hover:text-rose-400 font-mono text-[11px] font-bold uppercase transition-all"
-                  >
-                    {deleting === r._id ? '…' : 'DELETE'}
-                  </button>
+                  <div className="opacity-0 group-hover:opacity-100 transition-all flex items-center gap-2">
+                    <button
+                      onClick={() => setModal({ open: true, resource: r })}
+                      className="text-gray-500 hover:text-black dark:hover:text-white font-mono text-[11px] font-bold uppercase transition-all"
+                    >
+                      EDIT
+                    </button>
+                    <button
+                      onClick={() => handleDelete(r._id)}
+                      disabled={deleting === r._id}
+                      className="text-rose-500 hover:text-rose-700 dark:hover:text-rose-400 font-mono text-[11px] font-bold uppercase transition-all"
+                    >
+                      {deleting === r._id ? '…' : 'DELETE'}
+                    </button>
+                  </div>
                 </div>
                 <h3 className="font-bold text-base dark:text-white mb-2 line-clamp-2 leading-snug">{r.title}</h3>
               </div>
