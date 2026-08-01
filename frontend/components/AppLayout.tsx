@@ -25,8 +25,6 @@ interface NavItem {
 const navItems: NavItem[] = [
   { href: '/dashboard', label: 'Dashboard', icon: <DashboardIcon className="w-4 h-4" /> },
   { href: '/companies', label: 'Applications', icon: <CompanyIcon className="w-4 h-4" /> },
-  { href: '/admin/students', label: 'Placement Directory', icon: <StudentsIcon className="w-4 h-4" /> },
-  { href: '/admin/dashboard', label: 'Analytics Room', icon: <AnalyticsIcon className="w-4 h-4" /> },
   { href: '/resources', label: 'Resource Hub', icon: <ResourceIcon className="w-4 h-4" /> },
   { href: '/profile', label: 'Profile', icon: <ProfileIcon className="w-4 h-4" /> },
 ];
@@ -159,14 +157,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 ? 'Resource Center'
                 : pathname === '/profile'
                 ? 'Account Settings'
-                : pathname === '/admin/dashboard'
-                ? 'Admin Control Room'
-                : pathname === '/admin/students'
-                ? 'Student Directory'
-                : pathname === '/admin/companies'
-                ? 'Master Register'
-                : pathname === '/admin/resources'
-                ? 'Resource Moderation'
                 : 'Placement Portal'}
             </h1>
           </div>
