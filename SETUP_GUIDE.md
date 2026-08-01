@@ -1,6 +1,10 @@
-# Staging & Production Deployment Guide
+# Staging & Production Deployment Guide — cooked?
 
-This guide details how to set up, run, and deploy the **cooked? Career & Placement Portal** locally for development and staging, as well as deploy to production environments.
+> **Track your placement journey from applied to offered in one place.**
+> 
+> **Team Recursion**: Mallu (Planning/Testing), Bhumit (Frontend), Ayush (Frontend), Gaurav (Backend)  
+> **Live Demo**: [team-recursion-placement-portal.netlify.app](https://team-recursion-placement-portal.netlify.app/)  
+> **Repository**: [github.com/Gaurav-205/cooked](https://github.com/Gaurav-205/cooked)
 
 ---
 

@@ -1,15 +1,39 @@
 # cooked? — Placement & Career Portal
 
+> **Track your placement journey from applied to offered in one place.**
+
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Next.js](https://img.shields.io/badge/Next.js%2016-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)](https://nextjs.org/)
 [![Express](https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white)](https://expressjs.com/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 
-A modern, full-stack **Placement & Career Portal** branded as **cooked?**.
+---
 
-### 👥 Core Engineers
-- **Mallu** · **Bhumit** · **Ayush** · **Gaurav**
+## 🏆 Hackathon Submission — Team Recursion
+
+### 📌 Problem Statement
+Students preparing for campus placements track applications, interview rounds, and prep resources across scattered spreadsheets and notes, making it hard to stay organized. **cooked?** consolidates all of it into a single, role-aware portal.
+
+### 🌐 Project Links
+| Resource | Link |
+|---|---|
+| **Live Demo** | [team-recursion-placement-portal.netlify.app](https://team-recursion-placement-portal.netlify.app/) |
+| **GitHub Repository** | [github.com/Gaurav-205/cooked](https://github.com/Gaurav-205/cooked) |
+
+### 👥 Team Members
+| Name | Role | GitHub Profile |
+|---|---|---|
+| **Mallu** | Planning and Testing | [@Mallu722](https://github.com/Mallu722) |
+| **Bhumit** | Frontend | [@BhumigyaPeswani](https://github.com/BhumigyaPeswani) |
+| **Ayush** | Frontend | [@Aayush-207](https://github.com/Aayush-207) |
+| **Gaurav** | Backend | [@Gaurav-205](https://github.com/Gaurav-205) |
+
+### 🔑 Judge / Evaluator Demo Credentials
+| Role | Email | Password |
+|---|---|---|
+| **Admin** | `admin@placement.dev` | `Admin@12345` |
+| **Student** | `gaurav@student.dev` | `Student@123` |
 
 ---
 
