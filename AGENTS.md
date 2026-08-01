@@ -23,6 +23,7 @@ The following skills are installed in the workspace to extend AI agent capabilit
 | **`nodejs-backend-patterns`** | `.agents/skills/nodejs-backend-patterns/` | Production Node.js & Express API design, middleware patterns, error handling, rate limiting, and security best practices. |
 | **`tailwind-design-system`** | `.agents/skills/tailwind-design-system/` | Design tokens, scalable component libraries, and responsive UI layout patterns using Tailwind CSS v4. |
 | **`ui-ux-pro-max`** | `.agents/skills/ui-ux-pro-max/` | UI/UX design database with 84 visual styles, 192 color palettes, 74 font pairings, animations, and accessibility guidelines. |
+| **`improve-codebase-architecture`** | `.agents/skills/improve-codebase-architecture/` | Scans codebase for deepening opportunities, surfaces architectural friction, and generates visual HTML reports. |
 | **`multi-stage-dockerfile`** | `.agents/skills/multi-stage-dockerfile/` | Creates optimized multi-stage Dockerfiles for Node.js backend and Next.js frontend microservices. |
 | **`prisma-mongodb-upgrade`** | `.agents/skills/prisma-mongodb-upgrade/` | Migration and architectural decision guide for MongoDB databases and Prisma ORM configurations. |
 | **`grill-me`** | `.agents/skills/grill-me/` | Relentless interview mode for pressure-testing system design and architecture plans before implementation. |
@@ -65,6 +66,15 @@ Our visual identity and UI design tokens are documented in **[`DESIGN.md`](./DES
    - Use `AuthContext` for stateless JWT cookie session management and dynamic user recovery.
    - Keep visual components atomic and styled per the tokens in `DESIGN.md`.
 
-4. **Git & Commit Hygiene**:
-   - Never commit sensitive `.env` files or credentials (checked against `.gitignore`).
-   - Provide clean `.env.example` templates for both `backend/` and `frontend/`.
+4. **🔄 Multi-Developer Auto-Commit & Auto-Push Pipeline**:
+   - **Team Collaboration Rule**: 4 core team members (**Mallu, Bhumit, Ayush, Gaurav**) collaborate on this repository.
+   - **Industry Standard Commit Convention**: After completing each prompt, subtask, feature, or bug fix, code MUST be staged (`git add .`) and committed using **Conventional Commits**:
+     - `feat:` for new features or capabilities
+     - `fix:` for bug fixes or state remediations
+     - `docs:` for documentation updates (`README.md`, `AGENTS.md`, `DESIGN.md`, etc.)
+     - `refactor:` for code restructurings without behavior changes
+     - `style:` for UI/CSS styling enhancements
+     - `test:` for test additions or updates
+     - `chore:` for build scripts, skill additions, or maintenance
+   - **Immediate Push**: Immediately push to remote tracking branch (`git push origin main`) at the end of every prompt so all team members always operate on synchronized, up-to-date code.
+
