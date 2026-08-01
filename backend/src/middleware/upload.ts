@@ -9,17 +9,17 @@ if (!fs.existsSync(uploadDir)) {
 }
 
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
+  destination: function (_req: any, _file: any, cb: any) {
     cb(null, uploadDir);
   },
-  filename: function (req, file, cb) {
+  filename: function (_req: any, file: any, cb: any) {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
     const ext = path.extname(file.originalname);
     cb(null, file.fieldname + '-' + uniqueSuffix + ext);
   }
 });
 
-const fileFilter = (req: any, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
+const fileFilter = (_req: any, file: any, cb: any) => {
   const allowedMimeTypes = [
     'application/pdf',
     'application/msword',

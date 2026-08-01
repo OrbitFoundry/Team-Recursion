@@ -214,16 +214,18 @@ router.put('/me', authenticate, async (req: Request, res: Response) => {
 router.post('/me/resume', authenticate, uploadResume.single('resume'), async (req: Request, res: Response) => {
   try {
     const authReq = req as AuthRequest;
+    const file = (req as Request & { file?: { filename: string } }).file;
+
     if (!authReq.user?.userId) {
       return res.status(401).json({ error: { message: 'User not authenticated' } });
     }
 
-    if (!req.file) {
+    if (!file) {
       return res.status(400).json({ error: { message: 'No file uploaded' } });
     }
 
     // Generate URL path for the uploaded file
-    const resumeUrl = `/uploads/resumes/${req.file.filename}`;
+    const resumeUrl = `/uploads/resumes/${file.filename}`;
 
     const user = await User.findById(authReq.user.userId);
     if (!user) {
