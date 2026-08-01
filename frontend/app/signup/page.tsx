@@ -31,13 +31,9 @@ export default function SignupPage() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      if (isAdmin) {
-        router.push('/admin/dashboard');
-      } else {
-        router.push('/dashboard');
-      }
+      router.push('/dashboard');
     }
-  }, [isAuthenticated, isAdmin, router]);
+  }, [isAuthenticated, router]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -82,16 +78,12 @@ export default function SignupPage() {
     setIsLoading(true);
 
     try {
-      const registeredUser = await register({
+      await register({
         name: formData.name,
         email: formData.email,
         password: formData.password,
       });
-      if (registeredUser?.role === 'admin') {
-        router.push('/admin/dashboard');
-      } else {
-        router.push('/dashboard');
-      }
+      router.push('/dashboard');
     } catch (error: unknown) {
       const apiError = error as { response?: { data?: { error?: { message: string } } }; message?: string };
       const errorMessage = apiError.response?.data?.error?.message || apiError.message || 'Registration failed. Please try again.';

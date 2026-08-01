@@ -5,17 +5,17 @@ import { AppError } from '../types/errors';
 export interface TokenPayload {
   userId: string;
   email: string;
-  role: 'student' | 'admin';
+  role?: string;
   iat?: number;
   exp?: number;
 }
 
 export const generateToken = (payload: TokenPayload): string => {
   try {
-    const tokenPayload: { userId: string; email: string; role: string } = {
+    const tokenPayload: { userId: string; email: string; role?: string } = {
       userId: payload.userId,
       email: payload.email,
-      role: payload.role,
+      role: payload.role || 'user',
     };
     // expiresIn can be a string like '7d' or a number in seconds
     const options: SignOptions = {

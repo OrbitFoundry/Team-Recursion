@@ -22,19 +22,13 @@ interface NavItem {
   icon: React.ReactNode;
 }
 
-const studentNav: NavItem[] = [
+const navItems: NavItem[] = [
   { href: '/dashboard', label: 'Dashboard', icon: <DashboardIcon className="w-4 h-4" /> },
-  { href: '/companies', label: 'My Applications', icon: <CompanyIcon className="w-4 h-4" /> },
-  { href: '/resources', label: 'Resources', icon: <ResourceIcon className="w-4 h-4" /> },
+  { href: '/companies', label: 'Applications', icon: <CompanyIcon className="w-4 h-4" /> },
+  { href: '/admin/students', label: 'Placement Directory', icon: <StudentsIcon className="w-4 h-4" /> },
+  { href: '/admin/dashboard', label: 'Analytics Room', icon: <AnalyticsIcon className="w-4 h-4" /> },
+  { href: '/resources', label: 'Resource Hub', icon: <ResourceIcon className="w-4 h-4" /> },
   { href: '/profile', label: 'Profile', icon: <ProfileIcon className="w-4 h-4" /> },
-];
-
-
-const adminNav: NavItem[] = [
-  { href: '/admin/dashboard', label: 'Admin Control Room', icon: <AnalyticsIcon className="w-4 h-4" /> },
-  { href: '/admin/students', label: 'Student Directory', icon: <StudentsIcon className="w-4 h-4" /> },
-  { href: '/admin/companies', label: 'Master Register', icon: <CompanyIcon className="w-4 h-4" /> },
-  { href: '/admin/resources', label: 'Resource Moderation', icon: <ResourceIcon className="w-4 h-4" /> },
 ];
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
@@ -68,8 +62,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     router.push('/login');
   };
 
-  const navItems = user?.role === 'admin' ? [...studentNav, ...adminNav] : studentNav;
-
   return (
     <div className="min-h-screen bg-gray-50/50 dark:bg-[#0f0e17] text-gray-900 dark:text-gray-100 flex font-sans selection:bg-[#c5b0f4]">
       {/* Mobile overlay */}
@@ -97,7 +89,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               PlacementPortal
             </div>
             <div className="text-[10px] font-mono uppercase tracking-widest text-gray-500 dark:text-gray-400">
-              {user?.role === 'admin' ? 'ADMIN CONTROL' : 'STUDENT PORTAL'}
+              TEAM RECURSION
             </div>
           </div>
         </div>
