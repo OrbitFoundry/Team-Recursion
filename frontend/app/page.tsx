@@ -13,6 +13,7 @@ import {
   StudentsIcon,
   CompanyIcon,
   ExternalLinkIcon,
+  CookedBrandIcon,
 } from '@/components/ui/Icons';
 
 export default function LandingPage() {
@@ -39,9 +40,8 @@ export default function LandingPage() {
       <header className="sticky top-0 z-50 bg-white/90 dark:bg-[#0c0b10]/90 backdrop-blur-md border-b border-[#e6e6e6] dark:border-gray-800">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full overflow-hidden border border-gray-200 dark:border-gray-800 shadow-sm bg-black dark:bg-white flex items-center justify-center shrink-0">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/logo.png" alt="cooked? Logo" className="w-full h-full object-cover" />
+            <div className="w-10 h-10 rounded-full border border-gray-200 dark:border-gray-800 shadow-sm bg-black dark:bg-white flex items-center justify-center shrink-0">
+              <CookedBrandIcon className="w-5 h-5 text-white dark:text-black" />
             </div>
             <div>
               <span className="font-black text-xl tracking-tight block leading-none font-sans">cooked?</span>

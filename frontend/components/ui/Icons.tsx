@@ -145,3 +145,12 @@ export function EditIcon({ className = "w-4 h-4" }: { className?: string }) {
   );
 }
 
+export function CookedBrandIcon({ className = "w-5 h-5" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M9.879 16.121A3 3 0 1012.015 11" />
+    </svg>
+  );
+}
+

@@ -18,14 +18,10 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "cooked? | Placement & Career Portal — Team Recursion",
-  description: "cooked? — Track job applications, manage placement resources, and monitor your career journey with an ultra-clean editorial design.",
-  keywords: ["cooked?", "placement", "jobs", "applications", "career", "interview prep", "DSA", "team recursion"],
-  authors: [{ name: "Team Recursion" }],
-  icons: {
-    icon: "/logo.png",
-    apple: "/logo.png",
-  },
+  title: "cooked? | Career & Placement Portal",
+  description: "cooked? — Track job applications, manage placement resources, and monitor your career journey with an ultra-clean editorial interface.",
+  keywords: ["cooked?", "placement portal", "career tracker", "job applications", "interview prep"],
+  authors: [{ name: "cooked?" }],
   robots: {
     index: true,
     follow: true,
