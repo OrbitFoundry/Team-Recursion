@@ -258,6 +258,10 @@ process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 
 // Handle unhandled promise rejections
 process.on('unhandledRejection', (reason: unknown, promise: Promise<unknown>) => {
+  console.log('UNHANDLED REJECTION REASON:', reason);
+  if (reason instanceof Error && reason.stack) {
+    console.log('UNHANDLED REJECTION STACK:', reason.stack);
+  }
   logger.error('Unhandled Rejection at:', promise, 'reason:', reason);
   // Don't exit in development, but log the error
   if (process.env.NODE_ENV === 'production') {
@@ -267,6 +271,10 @@ process.on('unhandledRejection', (reason: unknown, promise: Promise<unknown>) =>
 
 // Handle uncaught exceptions
 process.on('uncaughtException', (error: Error) => {
+  console.log('UNCAUGHT EXCEPTION ERROR:', error);
+  if (error && error.stack) {
+    console.log('UNCAUGHT EXCEPTION STACK:', error.stack);
+  }
   logger.error('Uncaught Exception:', error);
   gracefulShutdown('uncaughtException');
 });

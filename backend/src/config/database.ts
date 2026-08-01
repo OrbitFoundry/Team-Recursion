@@ -5,7 +5,7 @@ import { logger } from '../utils/logger';
 export const connectDatabase = async (): Promise<void> => {
   const mongoUri = config.database.uri;
   const maskedUri = mongoUri.replace(/\/\/[^:]+:[^@]+@/, '//***:***@');
-  
+
   logger.info('Connecting to MongoDB...');
   logger.debug(`MongoDB URI: ${maskedUri}`);
 

@@ -21,9 +21,9 @@ export default function LandingPage() {
 
   useEffect(() => {
     if (!loading && isAuthenticated) {
-      router.push(isAdmin ? '/admin/dashboard' : '/dashboard');
+      router.push('/dashboard');
     }
-  }, [isAuthenticated, isAdmin, loading, router]);
+  }, [isAuthenticated, loading, router]);
 
   if (loading) {
     return (
