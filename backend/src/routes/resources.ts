@@ -59,6 +59,46 @@ router.post('/', async (req: Request, res: Response) => {
   }
 });
 
+// PUT /api/resources/:id — update own resource
+router.put('/:id', async (req: Request, res: Response) => {
+  try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ error: { message: 'Invalid resource ID format' } });
+    }
+
+    const authReq = req as AuthRequest;
+    const userId = authReq.user!.userId;
+
+    const validation = validateCreateResource(req.body);
+    if (!validation.isValid) {
+      return res.status(400).json({ error: { message: 'Validation failed', errors: validation.errors } });
+    }
+
+    const { title, category, link } = req.body;
+
+    const resource = await Resource.findOneAndUpdate(
+      { _id: req.params.id, userId: new mongoose.Types.ObjectId(userId) },
+      {
+        $set: {
+          title: title.trim(),
+          category,
+          link: link.trim(),
+        },
+      },
+      { new: true, runValidators: true }
+    );
+
+    if (!resource) {
+      return res.status(404).json({ error: { message: 'Resource not found or access denied' } });
+    }
+
+    return res.status(200).json({ resource });
+  } catch (error: unknown) {
+    const err = error as Error;
+    return res.status(500).json({ error: { message: err.message || 'Failed to update resource' } });
+  }
+});
+
 // DELETE /api/resources/:id — delete own resource only
 router.delete('/:id', async (req: Request, res: Response) => {
   try {

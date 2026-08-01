@@ -65,6 +65,11 @@ export const resourcesApi = {
     return res.data.resource;
   },
 
+  update: async (id: string, data: { title: string; category: ResourceCategory; link: string }) => {
+    const res = await apiClient.put<{ resource: Resource }>(`/resources/${id}`, data);
+    return res.data.resource;
+  },
+
   delete: async (id: string) => {
     await apiClient.delete(`/resources/${id}`);
   },
@@ -97,6 +102,11 @@ export const timelineApi = {
 
   create: async (data: Partial<TimelineEvent>): Promise<TimelineEvent> => {
     const res = await apiClient.post<{ event: TimelineEvent }>('/timeline', data);
+    return res.data.event;
+  },
+
+  update: async (id: string, data: Partial<TimelineEvent>): Promise<TimelineEvent> => {
+    const res = await apiClient.put<{ event: TimelineEvent }>(`/timeline/${id}`, data);
     return res.data.event;
   },
 
