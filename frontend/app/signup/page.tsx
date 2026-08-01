@@ -13,7 +13,7 @@ import { ArrowRightIcon } from '@/components/ui/Icons';
 
 export default function SignupPage() {
   const router = useRouter();
-  const { register, isAuthenticated, isAdmin } = useAuth();
+  const { register, isAuthenticated } = useAuth();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -116,7 +116,7 @@ export default function SignupPage() {
             TR
           </div>
           <div className="text-[10px] font-mono font-bold uppercase tracking-widest text-gray-500 mb-1">
-            TEAM RECURSION PLACEMENT PORTAL
+            cooked? PORTAL · TEAM RECURSION
           </div>
           <h2 className="text-2xl font-extrabold tracking-tight dark:text-white">
             Create Your Account

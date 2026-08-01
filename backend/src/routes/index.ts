@@ -10,7 +10,7 @@ const router = Router();
 
 router.get('/', (_req, res) => {
   res.json({
-    message: 'Placement Preparation Portal API',
+    message: 'cooked? API',
     version: '2.0.0',
   });
 });

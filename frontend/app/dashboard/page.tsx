@@ -70,7 +70,7 @@ function DashboardContent() {
       <div className="mb-8 p-8 rounded-3xl bg-[#c5b0f4] text-black relative overflow-hidden shadow-sm">
         <div className="relative z-10 max-w-2xl">
           <div className="inline-block px-3 py-1 rounded-full bg-black text-white text-[11px] font-mono uppercase tracking-widest mb-3">
-            PLACEMENT PULSE
+            cooked? PULSE
           </div>
           <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-black">
             Welcome back, {user?.name?.split(' ')[0]}
@@ -80,7 +80,7 @@ function DashboardContent() {
           </p>
         </div>
         <div className="absolute -right-8 -bottom-10 opacity-10 text-9xl font-black pointer-events-none select-none">
-          RECURSION
+          cooked?
         </div>
       </div>
 

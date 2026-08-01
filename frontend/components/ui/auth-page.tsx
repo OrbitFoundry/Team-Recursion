@@ -33,8 +33,8 @@ export function AuthPage() {
 						TR
 					</div>
 					<div>
-						<p className="text-xl font-bold tracking-tight">Team Recursion</p>
-						<p className="text-[10px] font-mono uppercase tracking-widest text-gray-300">PLACEMENT PORTAL</p>
+						<p className="text-xl font-bold tracking-tight">cooked?</p>
+						<p className="text-[10px] font-mono uppercase tracking-widest text-gray-300">CAREER & PLACEMENT PORTAL</p>
 					</div>
 				</div>
 				<div className="z-10 mt-auto max-w-lg">

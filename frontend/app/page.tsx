@@ -41,11 +41,11 @@ export default function LandingPage() {
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full overflow-hidden border border-gray-200 dark:border-gray-800 shadow-sm bg-black dark:bg-white flex items-center justify-center shrink-0">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/logo.png" alt="Team Recursion Logo" className="w-full h-full object-cover" />
+              <img src="/logo.png" alt="cooked? Logo" className="w-full h-full object-cover" />
             </div>
             <div>
-              <span className="font-extrabold text-base tracking-tight block leading-none font-sans">TEAM RECURSION</span>
-              <span className="text-[9px] font-mono tracking-widest text-gray-500 uppercase">PLACEMENT PORTAL</span>
+              <span className="font-black text-xl tracking-tight block leading-none font-sans">cooked?</span>
+              <span className="text-[9px] font-mono tracking-widest text-gray-500 uppercase">CAREER & PLACEMENT PORTAL</span>
             </div>
           </div>
           <div className="flex items-center gap-3 font-mono text-xs font-bold uppercase tracking-wider">
@@ -68,7 +68,7 @@ export default function LandingPage() {
       {/* 2. Marquee Strip */}
       <div className="bg-black text-white dark:bg-white dark:text-black overflow-hidden py-2 font-mono text-[10px] uppercase tracking-widest font-semibold border-b border-black/10">
         <div className="flex gap-12 whitespace-nowrap animate-pulse justify-center items-center opacity-90">
-          <span>CAMPUS RECRUITMENT ENGINE</span>
+          <span>cooked? RECRUITMENT ENGINE</span>
           <span>·</span>
           <span>REAL-TIME APPLICATION TRACKER</span>
           <span>·</span>
@@ -87,13 +87,13 @@ export default function LandingPage() {
         <section className="rounded-3xl bg-[#c5b0f4] text-black p-8 md:p-16 relative overflow-hidden shadow-sm border border-black/5">
           <div className="relative z-10 max-w-3xl">
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-black text-white text-[11px] font-mono uppercase tracking-widest mb-6 font-bold">
-              <span>✦</span> CAMPUS PLACEMENT ENGINE
+              <span>✦</span> cooked? CAMPUS ENGINE
             </div>
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-black leading-[1.05] mb-6">
-              Master Your Placement Journey &amp; Accelerate Your Career.
+              Master Your Placement Journey with cooked?
             </h1>
             <p className="text-base md:text-lg text-black/80 max-w-xl font-sans leading-relaxed mb-8 font-normal">
-              Track job applications, organize interview preparation sheets, monitor selection pipeline stages, and view institutional analytics.
+              Track job applications, organize interview preparation sheets, monitor selection pipeline stages, and view real-time career analytics.
             </p>
             <div className="flex flex-wrap items-center gap-4 font-mono text-xs font-bold uppercase tracking-wider">
               <Link
@@ -106,12 +106,12 @@ export default function LandingPage() {
                 href="/login"
                 className="px-8 py-4 rounded-full bg-white text-black border border-black/10 hover:bg-gray-100 transition-all"
               >
-                STUDENT &amp; ADMIN LOGIN
+                SIGN IN TO YOUR PORTAL
               </Link>
             </div>
           </div>
           <div className="absolute -right-16 -bottom-16 opacity-10 text-[220px] font-black pointer-events-none select-none tracking-tighter">
-            RECURSION
+            cooked?
           </div>
         </section>
 

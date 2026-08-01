@@ -80,11 +80,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <div className="flex items-center gap-3 px-6 py-5 border-b border-gray-100 dark:border-gray-800/80">
           <div className="w-10 h-10 rounded-full overflow-hidden border border-gray-200 dark:border-gray-800 shadow-sm bg-black dark:bg-white flex items-center justify-center shrink-0">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/logo.png" alt="Team Recursion" className="w-full h-full object-cover" />
+            <img src="/logo.png" alt="cooked? logo" className="w-full h-full object-cover" />
           </div>
           <div>
-            <div className="font-bold text-sm text-gray-900 dark:text-white tracking-tight flex items-center gap-1">
-              PlacementPortal
+            <div className="font-extrabold text-base text-gray-900 dark:text-white tracking-tight flex items-center gap-1">
+              cooked?
             </div>
             <div className="text-[10px] font-mono uppercase tracking-widest text-gray-500 dark:text-gray-400">
               TEAM RECURSION
@@ -157,7 +157,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 ? 'Resource Center'
                 : pathname === '/profile'
                 ? 'Account Settings'
-                : 'Placement Portal'}
+                : 'cooked?'}
             </h1>
           </div>
 

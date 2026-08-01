@@ -13,7 +13,7 @@ import { ArrowRightIcon } from '@/components/ui/Icons';
 function LoginPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { login, isAuthenticated, isAdmin, user } = useAuth();
+  const { login, isAuthenticated } = useAuth();
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [errors, setErrors] = useState<{ email?: string; password?: string; general?: string }>({});
   const [isLoading, setIsLoading] = useState(false);
@@ -90,7 +90,7 @@ function LoginPageContent() {
             TR
           </div>
           <div className="text-[10px] font-mono font-bold uppercase tracking-widest text-gray-500 mb-1">
-            TEAM RECURSION PLACEMENT PORTAL
+            cooked? PORTAL · TEAM RECURSION
           </div>
           <h2 className="text-2xl font-extrabold tracking-tight dark:text-white">
             Sign In to Your Account

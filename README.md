@@ -1,4 +1,4 @@
-# Placement Preparation Portal
+# cooked? — Placement & Career Portal
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Next.js](https://img.shields.io/badge/Next.js%2016-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)](https://nextjs.org/)
@@ -6,7 +6,7 @@
 [![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 
-A full-stack **Placement Preparation Portal** built by **Team Recursion** with two user roles: **Student** and **Admin**.
+A modern, full-stack **Placement & Career Portal** branded as **cooked?**, built by **Team Recursion**.
 
 ### 👥 Team Recursion
 - **Mallu** · **Bhumit** · **Ayush** · **Gaurav**
@@ -15,24 +15,11 @@ A full-stack **Placement Preparation Portal** built by **Team Recursion** with t
 
 ## ✨ Features
 
-### Students
-- 📊 **Personal Dashboard** — stat cards (applied, active, offers, rejected), success rate, status breakdown chart, recent applications
-- 🏢 **Company Tracker** — full CRUD, search by company name, filter by status, sort by date (asc/desc), notes field
-- 📚 **Resources** — add/view/delete preparation links (DSA, Aptitude, Resume, Interview Experience, Core Subjects)
-- 🌙 **Dark Mode** — toggle stored in localStorage, applies globally
-
-### Admins
-- 📈 **Global Dashboard** — 4 global stat cards, bar chart + pie chart, top 5 companies, recent activity feed, resource moderation panel
-- 🎓 **Students List** — all students with application count, offers, last activity; clickable to drill in
-- 🏢 **All Applications** — cross-student company management with search, filter by status/student, edit status, delete
-- 📚 **Resource Moderation** — view and remove any student's resources
-
-### Security
-- Passwords hashed with **bcrypt** (never stored plain)
-- **JWT** with `userId`, `email`, `role` — stored in secure cookie
-- **Role-based middleware**: `authenticate` + `adminOnly` on all `/api/admin/*` routes
-- Students can only CRUD their **own** companies/resources (userId match enforced in DB query, not just frontend)
-- Input validation on backend for all routes
+- 📊 **Personal Dashboard** — Stat cards (Applied, Active, Offers, Rejected), success rates, live pipeline breakdown charts, and timeline tracking.
+- 🏢 **Applications Tracker** — Application CRUD, tech stack matching, company links, salary packages, custom notes, search & status filters.
+- 📚 **Resource Center** — Preparation links repository (DSA, Aptitude, Resume, Interview Experience, Core Subjects).
+- 🌙 **Monochrome Editorial UI** — Dark mode support, signature pastel story blocks (`#c5b0f4`, `#dceeb1`, `#f4ecd6`, `#c8e6cd`), pill-shaped controls.
+- 🔐 **Authentication & Security** — Password hashing with bcrypt, JWT session management, and optional Google OAuth integration.
 
 ---
 
