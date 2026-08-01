@@ -12,7 +12,7 @@ interface AuthContextType {
   loading: boolean;
   login: (data: LoginData) => Promise<void>;
   register: (data: RegisterData) => Promise<void>;
-  updateProfile: (data: { name?: string; email?: string }) => Promise<void>;
+  updateProfile: (data: { name?: string; email?: string; techStacks?: string[] }) => Promise<void>;
   logout: () => void;
   isAuthenticated: boolean;
   isAdmin: boolean;
@@ -154,7 +154,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     showToast('Account created successfully!', 'success');
   };
 
-  const updateProfile = async (data: { name?: string; email?: string }) => {
+  const updateProfile = async (data: { name?: string; email?: string; techStacks?: string[] }) => {
     const response = await authApi.updateProfile(data);
     if (response?.user) {
       setUser(response.user);

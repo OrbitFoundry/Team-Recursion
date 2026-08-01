@@ -6,6 +6,7 @@ export const validateCreateCompany = (data: {
   applicationDate?: string;
   status?: string;
   companyLink?: string;
+  techStacks?: string[];
   notes?: string;
 }): { isValid: boolean; errors: string[] } => {
   const errors: string[] = [];
@@ -30,6 +31,12 @@ export const validateCreateCompany = (data: {
     errors.push('Company link must be a valid URL starting with http:// or https://');
   }
 
+  if (data.techStacks !== undefined) {
+    if (!Array.isArray(data.techStacks)) {
+      errors.push('Tech stacks must be an array of strings');
+    }
+  }
+
   return { isValid: errors.length === 0, errors };
 };
 
@@ -39,6 +46,7 @@ export const validateUpdateCompany = (data: {
   applicationDate?: string;
   status?: string;
   companyLink?: string;
+  techStacks?: string[];
   notes?: string;
 }): { isValid: boolean; errors: string[] } => {
   const errors: string[] = [];
@@ -61,6 +69,12 @@ export const validateUpdateCompany = (data: {
 
   if (data.companyLink && !/^https?:\/\/.+/.test(data.companyLink)) {
     errors.push('Company link must be a valid URL starting with http:// or https://');
+  }
+
+  if (data.techStacks !== undefined) {
+    if (!Array.isArray(data.techStacks)) {
+      errors.push('Tech stacks must be an array of strings');
+    }
   }
 
   return { isValid: errors.length === 0, errors };

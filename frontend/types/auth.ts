@@ -4,6 +4,8 @@ export interface User {
   email: string;
   role: 'student' | 'admin';
   isEmailVerified: boolean;
+  techStacks?: string[];
+  resumeUrl?: string;
 }
 
 export interface AuthResponse {

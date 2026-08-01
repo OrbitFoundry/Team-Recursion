@@ -4,6 +4,9 @@ import { useState } from 'react';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import AppLayout from '@/components/AppLayout';
 import { useAuth } from '@/contexts/AuthContext';
+import { TechStackSelector } from '@/components/ui/TechStackSelector';
+import { authApi } from '@/lib/auth-api';
+import { showToast } from '@/components/ToastProvider';
 
 function ProfileContent() {
   const { user, updateProfile } = useAuth();
@@ -11,6 +14,7 @@ function ProfileContent() {
   const [formData, setFormData] = useState({
     name: user?.name || '',
     email: user?.email || '',
+    techStacks: user?.techStacks || [],
   });
   const [errors, setErrors] = useState<{ name?: string; email?: string; general?: string }>({});
   const [isLoading, setIsLoading] = useState(false);
@@ -18,6 +22,28 @@ function ProfileContent() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     setErrors({ ...errors, [e.target.name]: undefined, general: undefined });
+  };
+
+  const handleTechStackChange = (stacks: string[]) => {
+    setFormData({ ...formData, techStacks: stacks });
+  };
+
+  const handleResumeUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      setIsLoading(true);
+      await authApi.uploadResume(file);
+      // Reload profile to get new resumeUrl
+      await updateProfile({}); 
+      showToast('Resume uploaded successfully', 'success');
+    } catch (error: any) {
+      showToast(error?.response?.data?.error?.message || 'Failed to upload resume', 'error');
+    } finally {
+      setIsLoading(false);
+      if (e.target) e.target.value = '';
+    }
   };
 
   const handleSave = async () => {
@@ -40,6 +66,7 @@ function ProfileContent() {
       await updateProfile({
         name: formData.name,
         email: formData.email,
+        techStacks: formData.techStacks,
       });
       setIsEditing(false);
     } catch (error: unknown) {
@@ -79,7 +106,7 @@ function ProfileContent() {
             {!isEditing && (
               <button
                 onClick={() => {
-                  setFormData({ name: user?.name || '', email: user?.email || '' });
+                  setFormData({ name: user?.name || '', email: user?.email || '', techStacks: user?.techStacks || [] });
                   setIsEditing(true);
                 }}
                 className="px-6 py-2.5 bg-black text-white dark:bg-white dark:text-black font-mono text-xs font-bold uppercase tracking-wider rounded-full hover:scale-105 active:scale-95 transition-all shadow-sm"
@@ -145,6 +172,48 @@ function ProfileContent() {
               </div>
             </div>
 
+            <div className="border-t border-gray-100 dark:border-gray-800/80 pt-6">
+              <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-4 tracking-tight">Tech Stacks</h3>
+              <TechStackSelector 
+                selectedStacks={formData.techStacks} 
+                onChange={handleTechStackChange} 
+                disabled={!isEditing} 
+              />
+            </div>
+
+            <div className="border-t border-gray-100 dark:border-gray-800/80 pt-6">
+              <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-4 tracking-tight">Resume</h3>
+              <div className="flex flex-col gap-4">
+                {user?.resumeUrl ? (
+                  <a 
+                    href={`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}${user.resumeUrl}`} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:underline"
+                  >
+                    📄 View Current Resume
+                  </a>
+                ) : (
+                  <p className="text-sm text-gray-500">No resume uploaded yet.</p>
+                )}
+                
+                {isEditing && (
+                  <div>
+                    <label className="block text-[11px] font-mono font-semibold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2">
+                      UPLOAD NEW RESUME (PDF/DOC)
+                    </label>
+                    <input
+                      type="file"
+                      accept=".pdf,.doc,.docx"
+                      onChange={handleResumeUpload}
+                      disabled={isLoading}
+                      className="block w-full text-sm text-gray-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-mono file:font-semibold file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200 dark:file:bg-gray-800 dark:file:text-gray-300 transition-all disabled:opacity-50"
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+
             {isEditing && (
               <div className="flex gap-3 pt-4">
                 <button
@@ -157,7 +226,7 @@ function ProfileContent() {
                 <button
                   onClick={() => {
                     setIsEditing(false);
-                    setFormData({ name: user?.name || '', email: user?.email || '' });
+                    setFormData({ name: user?.name || '', email: user?.email || '', techStacks: user?.techStacks || [] });
                     setErrors({});
                   }}
                   className="px-6 py-3 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 font-mono text-xs font-bold uppercase tracking-wider rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"

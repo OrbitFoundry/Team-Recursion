@@ -7,6 +7,7 @@ export interface ICompany extends Document {
   applicationDate: Date;
   status: 'Applied' | 'Online Assessment' | 'Technical Interview' | 'HR Interview' | 'Selected' | 'Rejected';
   companyLink?: string;
+  techStacks?: string[];
   notes?: string;
   createdAt: Date;
   updatedAt: Date;
@@ -43,6 +44,10 @@ const CompanySchema = new Schema<ICompany>(
     companyLink: {
       type: String,
       trim: true,
+    },
+    techStacks: {
+      type: [String],
+      default: [],
     },
     notes: {
       type: String,

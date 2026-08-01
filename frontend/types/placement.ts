@@ -21,6 +21,7 @@ export interface Company {
   applicationDate: string;
   status: CompanyStatus;
   companyLink?: string;
+  techStacks?: string[];
   notes?: string;
   createdAt: string;
   updatedAt: string;
@@ -37,8 +38,6 @@ export interface Resource {
   createdAt: string;
 }
 
-
-
 export interface DashboardStats {
   totalApplied: number;
   totalActive: number;
@@ -48,4 +47,3 @@ export interface DashboardStats {
   statusBreakdown: Record<CompanyStatus, number>;
   recentApplications: Company[];
 }
-

@@ -84,6 +84,9 @@ app.use(cors({
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
+// Serve static files (like resumes) from the uploads directory
+app.use('/uploads', express.static('uploads'));
+
 // Session middleware for Passport
 // Use MongoDB session store in production, MemoryStore in development
 const sessionConfig: session.SessionOptions = {

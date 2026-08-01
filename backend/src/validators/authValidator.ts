@@ -112,6 +112,7 @@ export const validateForgotPassword = (data: {
 export const validateUpdateProfile = (data: {
   name?: string;
   email?: string;
+  techStacks?: string[];
 }): { isValid: boolean; errors: string[] } => {
   const errors: string[] = [];
 
@@ -121,6 +122,14 @@ export const validateUpdateProfile = (data: {
 
   if (data.email !== undefined && (!data.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email))) {
     errors.push('Please provide a valid email address');
+  }
+
+  if (data.techStacks !== undefined) {
+    if (!Array.isArray(data.techStacks)) {
+      errors.push('Tech stacks must be an array of strings');
+    } else if (data.techStacks.length > 50) {
+      errors.push('Maximum 50 tech stacks allowed');
+    }
   }
 
   return {

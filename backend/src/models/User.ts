@@ -9,6 +9,8 @@ export interface IUser extends Document {
   isEmailVerified: boolean;
   resetPasswordToken?: string;
   resetPasswordExpires?: Date;
+  resumeUrl?: string;
+  techStacks?: string[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -47,6 +49,11 @@ const UserSchema = new Schema<IUser>(
     },
     resetPasswordToken: String,
     resetPasswordExpires: Date,
+    resumeUrl: String,
+    techStacks: {
+      type: [String],
+      default: [],
+    },
   },
   {
     timestamps: true,

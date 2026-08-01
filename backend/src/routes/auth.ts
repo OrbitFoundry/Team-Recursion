@@ -15,6 +15,7 @@ import {
 } from '../validators/authValidator';
 import { authenticate, AuthRequest } from '../middleware/auth';
 import { authLimiter, passwordResetLimiter } from '../middleware/rateLimiter';
+import { uploadResume } from '../middleware/upload';
 import User from '../models/User';
 
 const router = Router();
@@ -158,6 +159,8 @@ router.get('/me', authenticate, async (req: Request, res: Response) => {
         email: user.email,
         role: user.role,
         isEmailVerified: user.isEmailVerified,
+        techStacks: user.techStacks,
+        resumeUrl: user.resumeUrl,
       },
     });
   } catch (error: unknown) {
@@ -202,6 +205,43 @@ router.put('/me', authenticate, async (req: Request, res: Response) => {
     return res.status(400).json({
       error: {
         message: err.message || 'Failed to update profile',
+      },
+    });
+  }
+});
+
+// Upload Resume
+router.post('/me/resume', authenticate, uploadResume.single('resume'), async (req: Request, res: Response) => {
+  try {
+    const authReq = req as AuthRequest;
+    if (!authReq.user?.userId) {
+      return res.status(401).json({ error: { message: 'User not authenticated' } });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({ error: { message: 'No file uploaded' } });
+    }
+
+    // Generate URL path for the uploaded file
+    const resumeUrl = `/uploads/resumes/${req.file.filename}`;
+
+    const user = await User.findById(authReq.user.userId);
+    if (!user) {
+      return res.status(404).json({ error: { message: 'User not found' } });
+    }
+
+    user.resumeUrl = resumeUrl;
+    await user.save();
+
+    return res.status(200).json({
+      message: 'Resume uploaded successfully',
+      resumeUrl: user.resumeUrl,
+    });
+  } catch (error: unknown) {
+    const err = error as Error;
+    return res.status(400).json({
+      error: {
+        message: err.message || 'Failed to upload resume',
       },
     });
   }

@@ -59,6 +59,8 @@ export const registerUser = async (data: RegisterData) => {
       email: user.email,
       role: user.role,
       isEmailVerified: user.isEmailVerified,
+      techStacks: user.techStacks,
+      resumeUrl: user.resumeUrl,
     },
     token,
   };
@@ -99,6 +101,8 @@ export const loginUser = async (data: LoginData) => {
       email: user.email,
       role: user.role,
       isEmailVerified: user.isEmailVerified,
+      techStacks: user.techStacks,
+      resumeUrl: user.resumeUrl,
     },
     token,
   };
@@ -168,6 +172,8 @@ export const resetPassword = async (token: string, newPassword: string) => {
       email: user.email,
       role: user.role,
       isEmailVerified: user.isEmailVerified,
+      techStacks: user.techStacks,
+      resumeUrl: user.resumeUrl,
     },
     token: authToken,
   };
@@ -210,6 +216,8 @@ export const findOrCreateGoogleUser = async (
       email: user.email,
       role: user.role,
       isEmailVerified: user.isEmailVerified,
+      techStacks: user.techStacks,
+      resumeUrl: user.resumeUrl,
     },
     token,
   };
@@ -217,7 +225,7 @@ export const findOrCreateGoogleUser = async (
 
 export const updateUserProfile = async (
   userId: string,
-  data: { name?: string; email?: string }
+  data: { name?: string; email?: string; techStacks?: string[] }
 ) => {
   const user = await User.findById(userId);
   if (!user) {
@@ -237,6 +245,10 @@ export const updateUserProfile = async (
     user.name = data.name.trim();
   }
 
+  if (data.techStacks !== undefined) {
+    user.techStacks = data.techStacks;
+  }
+
   await user.save();
 
   return {
@@ -246,6 +258,8 @@ export const updateUserProfile = async (
       email: user.email,
       role: user.role,
       isEmailVerified: user.isEmailVerified,
+      techStacks: user.techStacks,
+      resumeUrl: user.resumeUrl,
     },
   };
 };

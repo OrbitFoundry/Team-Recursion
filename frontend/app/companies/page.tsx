@@ -5,6 +5,8 @@ import ProtectedRoute from '@/components/ProtectedRoute';
 import AppLayout from '@/components/AppLayout';
 import { companiesApi } from '@/lib/placement-api';
 import { PlusIcon, CompanyIcon } from '@/components/ui/Icons';
+import { TechStackSelector } from '@/components/ui/TechStackSelector';
+import { useAuth } from '@/contexts/AuthContext';
 import type { Company, CompanyStatus } from '@/types/placement';
 
 const STATUSES: CompanyStatus[] = [
@@ -37,6 +39,7 @@ function CompanyModal({
       : new Date().toISOString().split('T')[0],
     status: (initial?.status || 'Applied') as CompanyStatus,
     companyLink: initial?.companyLink || '',
+    techStacks: initial?.techStacks || [],
     notes: initial?.notes || '',
   });
   const [saving, setSaving] = useState(false);
@@ -138,6 +141,15 @@ function CompanyModal({
           </div>
           <div>
             <label className="block text-[11px] font-mono font-semibold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-1.5">
+              REQUIRED TECH STACKS
+            </label>
+            <TechStackSelector
+              selectedStacks={form.techStacks}
+              onChange={(stacks) => setForm({ ...form, techStacks: stacks })}
+            />
+          </div>
+          <div>
+            <label className="block text-[11px] font-mono font-semibold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-1.5">
               NOTES & PREP RECAP
             </label>
             <textarea
@@ -171,6 +183,7 @@ function CompanyModal({
 }
 
 function CompaniesContent() {
+  const { user } = useAuth();
   const [companies, setCompanies] = useState<Company[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -309,9 +322,45 @@ function CompaniesContent() {
                   </h3>
                 </div>
                 
-                <div className="text-sm font-medium text-gray-600 dark:text-gray-300 mb-4 truncate" title={c.role}>
+                <div className="text-sm font-medium text-gray-600 dark:text-gray-300 mb-3 truncate" title={c.role}>
                   {c.role}
                 </div>
+                
+                {/* Tech Stacks & Match % */}
+                {c.techStacks && c.techStacks.length > 0 && (
+                  <div className="mb-4">
+                    <div className="flex flex-wrap gap-1.5 mb-2">
+                      {c.techStacks.map(stack => (
+                        <span key={stack} className="inline-block px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-300">
+                          {stack}
+                        </span>
+                      ))}
+                    </div>
+                    {(() => {
+                      const userStacks = user?.techStacks || [];
+                      const matchingStacks = c.techStacks.filter(t => userStacks.includes(t));
+                      const matchPercentage = Math.round((matchingStacks.length / c.techStacks.length) * 100);
+                      const isHighMatch = matchPercentage >= 75;
+                      const isMediumMatch = matchPercentage >= 40 && matchPercentage < 75;
+                      
+                      let colorClass = 'text-rose-600 dark:text-rose-400';
+                      if (isHighMatch) colorClass = 'text-emerald-600 dark:text-emerald-400';
+                      else if (isMediumMatch) colorClass = 'text-amber-600 dark:text-amber-400';
+
+                      return (
+                        <div 
+                          className={`text-xs font-bold font-mono ${colorClass} inline-flex items-center gap-1 cursor-help`}
+                          title={`You match ${matchingStacks.length} out of ${c.techStacks.length} required tech stacks: ${matchingStacks.join(', ') || 'None'}`}
+                        >
+                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                          </svg>
+                          {matchPercentage}% MATCH
+                        </div>
+                      );
+                    })()}
+                  </div>
+                )}
 
                 <div className="flex items-center gap-2 text-xs font-mono text-gray-500 dark:text-gray-400 mb-4">
                   <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

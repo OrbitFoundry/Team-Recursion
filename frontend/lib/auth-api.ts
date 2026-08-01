@@ -34,8 +34,20 @@ export const authApi = {
     return response.data;
   },
 
-  updateProfile: async (data: { name?: string; email?: string }): Promise<{ message: string; user: User }> => {
+  updateProfile: async (data: { name?: string; email?: string; techStacks?: string[] }): Promise<{ message: string; user: User }> => {
     const response = await apiClient.put('/auth/me', data);
+    return response.data;
+  },
+
+  uploadResume: async (file: File): Promise<{ message: string; resumeUrl: string }> => {
+    const formData = new FormData();
+    formData.append('resume', file);
+    
+    const response = await apiClient.post('/auth/me/resume', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
     return response.data;
   },
 };
