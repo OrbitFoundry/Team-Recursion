@@ -2,7 +2,7 @@
 node_modules/
 
 # Build output
-dist/
+# dist/ (tracked for zero-failure Render production deployments)
 
 # Environment variables
 .env
