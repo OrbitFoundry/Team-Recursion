@@ -13,6 +13,7 @@ import routes from './routes';
 import { errorHandler } from './middleware/errorHandler';
 import { notFound } from './middleware/notFound';
 import { requestId } from './middleware/requestId';
+import path from 'path';
 import { logger } from './utils/logger';
 
 // Validate environment variables on startup
@@ -192,6 +193,9 @@ if (config.google.clientId && config.google.clientSecret) {
     res.status(501).json({ error: { message: 'Google OAuth is not configured' } });
   });
 }
+
+// Serve static uploaded files (resumes, attachments)
+app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
 // API routes
 app.use('/api', routes);
