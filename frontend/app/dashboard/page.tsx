@@ -7,7 +7,9 @@ import {
 } from 'recharts';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import AppLayout from '@/components/AppLayout';
-import { dashboardApi } from '@/lib/placement-api';
+import { dashboardApi, companiesApi, timelineApi } from '@/lib/placement-api';
+import { generateStudentReport } from '@/lib/pdfGenerator';
+import { showToast } from '@/components/ToastProvider';
 import { useAuth } from '@/contexts/AuthContext';
 import { PlusIcon, ResourceIcon, ArrowRightIcon } from '@/components/ui/Icons';
 import type { DashboardStats, CompanyStatus } from '@/types/placement';
@@ -48,6 +50,35 @@ function DashboardContent() {
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [isGeneratingReport, setIsGeneratingReport] = useState(false);
+
+  const handleDownloadReport = async () => {
+    if (!user || !stats) return;
+    setIsGeneratingReport(true);
+    try {
+      const [companies, timeline] = await Promise.all([
+        companiesApi.getAll(),
+        timelineApi.getAll()
+      ]);
+      
+      generateStudentReport({
+        user: {
+          name: user.name || 'Student',
+          email: user.email,
+          techStacks: user.techStacks
+        },
+        stats,
+        companies,
+        timeline
+      });
+      showToast('Report downloaded successfully!', 'success');
+    } catch (err) {
+      console.error(err);
+      showToast('Failed to generate report', 'error');
+    } finally {
+      setIsGeneratingReport(false);
+    }
+  };
 
   useEffect(() => {
     dashboardApi.getStats()
@@ -204,6 +235,16 @@ function DashboardContent() {
             >
               <ResourceIcon className="w-4 h-4" /> BROWSE PREP RESOURCES
             </Link>
+            <button
+              onClick={handleDownloadReport}
+              disabled={isGeneratingReport}
+              className="inline-flex items-center gap-2 px-6 py-3 bg-indigo-100 text-indigo-900 dark:bg-indigo-900/60 dark:text-indigo-300 text-xs font-mono uppercase tracking-wider font-bold rounded-full hover:scale-105 active:scale-95 transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+              {isGeneratingReport ? 'GENERATING...' : 'DOWNLOAD REPORT'}
+            </button>
           </div>
 
           {/* Timeline Section */}
