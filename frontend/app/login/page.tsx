@@ -106,7 +106,7 @@ function AuthPageContent() {
     setErrors({});
     
     // Validation
-    const newErrors: any = {};
+    const newErrors: Record<string, string> = {};
     if (!isLogin) {
       if (!formData.name.trim()) newErrors.name = 'Full name is required';
       const passwordValidation = validatePassword(formData.password);

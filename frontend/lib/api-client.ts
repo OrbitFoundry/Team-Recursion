@@ -3,10 +3,9 @@ import Cookies from 'js-cookie';
 import { logger } from './logger';
 
 // Get API URL from environment variable
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
-
-// Remove trailing /api if present since we add it in routes
-const API_URL = API_BASE.endsWith('/api') ? API_BASE : `${API_BASE}/api`;
+const rawApiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+const cleanApiBase = rawApiBase.replace(/\/+$/, '');
+const API_URL = cleanApiBase.endsWith('/api') ? cleanApiBase : `${cleanApiBase}/api`;
 
 // Log in development if using default
 if (!process.env.NEXT_PUBLIC_API_URL && process.env.NODE_ENV === 'development') {

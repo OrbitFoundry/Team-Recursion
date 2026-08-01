@@ -4,7 +4,9 @@
 export const redirectToGoogleAuth = (): void => {
   if (typeof window === 'undefined') return;
   
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
-  window.location.href = `${apiUrl}/api/auth/google`;
+  const rawUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+  const cleanUrl = rawUrl.replace(/\/+$/, '');
+  const baseUrl = cleanUrl.endsWith('/api') ? cleanUrl : `${cleanUrl}/api`;
+  window.location.href = `${baseUrl}/auth/google`;
 };
 

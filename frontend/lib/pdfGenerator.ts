@@ -101,7 +101,7 @@ export const generateStudentReport = ({ user, stats, companies, timeline }: Repo
       columnStyles: { 0: { cellWidth: 25 }, 1: { cellWidth: 20 }, 2: { cellWidth: 50 } }
     });
     
-    currentY = (doc as any).lastAutoTable.finalY + 15;
+    currentY = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 15;
   }
   
   // 4. Application History Table
