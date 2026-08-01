@@ -87,7 +87,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               cooked?
             </div>
             <div className="text-[10px] font-mono uppercase tracking-widest text-gray-500 dark:text-gray-400">
-              TEAM RECURSION
+              CAREER PORTAL
             </div>
           </div>
         </div>
