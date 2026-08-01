@@ -21,6 +21,8 @@ export const companiesApi = {
     role: string;
     applicationDate?: string;
     status?: CompanyStatus;
+    companyLink?: string;
+    techStacks?: string[];
     notes?: string;
   }) => {
     const res = await apiClient.post<{ company: Company }>('/companies', data);
@@ -29,7 +31,15 @@ export const companiesApi = {
 
   update: async (
     id: string,
-    data: Partial<{ companyName: string; role: string; applicationDate: string; status: CompanyStatus; notes: string }>
+    data: Partial<{
+      companyName: string;
+      role: string;
+      applicationDate: string;
+      status: CompanyStatus;
+      companyLink?: string;
+      techStacks?: string[];
+      notes: string;
+    }>
   ) => {
     const res = await apiClient.put<{ company: Company }>(`/companies/${id}`, data);
     return res.data.company;
