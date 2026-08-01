@@ -32,7 +32,7 @@ export default function PasswordInput({
       { label: 'Very Weak', color: 'bg-rose-500' },
       { label: 'Weak', color: 'bg-amber-500' },
       { label: 'Fair', color: 'bg-yellow-500' },
-      { label: 'Good', color: 'bg-indigo-500' },
+      { label: 'Good', color: 'bg-[#c5b0f4]' },
       { label: 'Strong', color: 'bg-emerald-500' },
     ];
 

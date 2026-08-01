@@ -306,7 +306,7 @@ function CompaniesContent() {
                       href={c.companyLink}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-gray-400 hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors"
+                      className="text-gray-400 hover:text-black dark:hover:text-white transition-colors"
                       title="Visit Company Link"
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
