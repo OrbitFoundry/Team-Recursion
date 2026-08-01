@@ -33,7 +33,9 @@ export default function ForgotPasswordPage() {
       <div className="min-h-screen flex items-center justify-center bg-white dark:bg-[#0c0b10] py-12 px-4 sm:px-6 lg:px-8 font-sans selection:bg-[#c5b0f4] selection:text-black">
         <div className="max-w-md w-full space-y-8 bg-white dark:bg-[#161522] p-8 md:p-10 rounded-3xl border border-gray-200/80 dark:border-gray-800/80 shadow-sm text-center">
           <div className="mx-auto w-14 h-14 rounded-full bg-[#c8e6cd] text-emerald-950 flex items-center justify-center font-bold text-xl shadow-sm">
-            ✓
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" />
+            </svg>
           </div>
           <div className="text-[11px] font-mono font-bold uppercase tracking-widest text-gray-500 mb-1">RESET LINK SENT</div>
           <h2 className="text-2xl font-bold tracking-tight dark:text-white">
@@ -46,8 +48,8 @@ export default function ForgotPasswordPage() {
             The link will expire in 1 hour. If you don&apos;t see the email, check your spam folder.
           </p>
           <div className="pt-4">
-            <Link href="/login" className="inline-block px-6 py-3 bg-black text-white dark:bg-white dark:text-black font-mono text-xs font-bold uppercase tracking-wider rounded-full hover:scale-105 transition-all">
-              BACK TO LOGIN →
+            <Link href="/login" className="inline-flex items-center gap-2 px-6 py-3 bg-black text-white dark:bg-white dark:text-black font-mono text-xs font-bold uppercase tracking-wider rounded-full hover:scale-105 transition-all">
+              BACK TO LOGIN <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
             </Link>
           </div>
         </div>
@@ -102,8 +104,9 @@ export default function ForgotPasswordPage() {
           </div>
 
           <div className="text-center">
-            <Link href="/login" className="text-xs font-mono text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors">
-              ← Back to Sign In
+            <Link href="/login" className="inline-flex items-center gap-1.5 text-xs font-mono text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors">
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+              Back to Sign In
             </Link>
           </div>
         </form>
