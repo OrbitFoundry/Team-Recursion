@@ -1,11 +1,10 @@
 'use client';
 
-import { Suspense, useState, useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { redirectToGoogleAuth } from '@/lib/auth-utils';
-import { CookedBrandIcon } from '@/components/ui/Icons';
 import { Eye, EyeOff } from 'lucide-react';
 import { motion } from 'motion/react';
 
@@ -48,16 +47,16 @@ function SafeFlutedGlass() {
     );
   }
 
-  return <div className="w-full h-full bg-gradient-to-br from-[#1f1d3d] via-black to-[#0f0e17] opacity-90" />;
+  return <div className="w-full h-full bg-gradient-to-b from-[#0e0e11] via-[#08080a] to-[#040405] opacity-95" />;
 }
 
-function LoginPageContent() {
+export default function LoginPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const { login, isAuthenticated } = useAuth();
-  const [formData, setFormData] = useState({ email: '', password: '' });
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [errors, setErrors] = useState<{ email?: string; password?: string; general?: string }>({});
+  const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -66,48 +65,17 @@ function LoginPageContent() {
     }
   }, [isAuthenticated, router]);
 
-  useEffect(() => {
-    const error = searchParams.get('error');
-    if (error) {
-      setErrors({ general: 'Authentication failed. Please check your credentials.' });
-    }
-  }, [searchParams]);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-    setErrors({ ...errors, [e.target.name]: undefined, general: undefined });
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setErrors({});
+    setError('');
     setIsLoading(true);
 
     try {
-      await login(formData);
+      await login({ email, password });
       router.push('/dashboard');
-    } catch (error: unknown) {
-      const apiError = error as { 
-        response?: { 
-          data?: { error?: { message: string } };
-          status?: number;
-        }; 
-        message?: string;
-      };
-      
-      if (apiError.response?.status === 429) {
-        const errorMessage = apiError.response?.data?.error?.message || 'Too many attempts. Please try again later.';
-        setErrors({ general: errorMessage });
-      } else {
-        const errorMessage = apiError.response?.data?.error?.message || apiError.message || 'Login failed. Check your credentials.';
-        if (errorMessage.toLowerCase().includes('email')) {
-          setErrors({ email: errorMessage });
-        } else if (errorMessage.toLowerCase().includes('password')) {
-          setErrors({ password: errorMessage });
-        } else {
-          setErrors({ general: errorMessage });
-        }
-      }
+    } catch (err: unknown) {
+      const apiError = err as { response?: { data?: { error?: { message: string } } }; message?: string };
+      setError(apiError.response?.data?.error?.message || apiError.message || 'Invalid credentials. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -118,194 +86,221 @@ function LoginPageContent() {
   };
 
   return (
-    <section className="min-h-screen bg-white p-3 md:p-6 text-black antialiased font-sans dark:bg-[#0c0b10] dark:text-white selection:bg-[#c5b0f4]">
-      <div className="grid min-h-[calc(100vh-3rem)] gap-6 lg:grid-cols-[0.94fr_1.06fr]">
+    <section className="min-h-screen bg-[#09090b] p-4 md:p-8 text-white antialiased font-sans flex items-center justify-center">
+      <div className="grid w-full max-w-7xl grid-cols-1 lg:grid-cols-2 gap-6 min-h-[720px]">
         {/* Left Side - Login Form */}
-        <div className="flex min-h-[720px] items-center justify-center rounded-3xl border border-gray-200/80 bg-white px-6 py-12 dark:border-gray-800/80 dark:bg-[#161522] lg:min-h-0 lg:px-14 lg:py-20 xl:px-20 shadow-sm relative overflow-hidden">
-          <div className="absolute top-0 left-0 right-0 h-2 bg-[#c5b0f4]" />
-
-          <div className="mx-auto w-full max-w-[460px]">
-            {/* Header Brand */}
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-full border border-gray-200 dark:border-gray-800 bg-black dark:bg-white flex items-center justify-center shrink-0 shadow-sm">
-                <CookedBrandIcon className="w-5 h-5 text-white dark:text-black" />
-              </div>
-              <div>
-                <span className="font-extrabold text-xl tracking-tight block leading-none font-sans">cooked?</span>
-                <span className="text-[9px] font-mono tracking-widest text-gray-500 uppercase">CAREER &amp; PLACEMENT PORTAL</span>
-              </div>
+        <div className="relative flex flex-col justify-between rounded-3xl border border-zinc-800/80 bg-[#121215] p-8 sm:p-10 lg:p-12 shadow-2xl overflow-hidden">
+          {/* Floating Top Controls Toolbar */}
+          <div className="flex items-center justify-between mb-6 select-none">
+            <div className="flex items-center gap-1.5 p-1 rounded-xl bg-[#1c1c21] border border-zinc-800 text-zinc-400 text-xs">
+              <button type="button" className="p-1.5 hover:text-white transition-colors rounded-lg">
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 8V4m0 0h4M4 4l5 5m11-5h-4m4 0v4m0-4l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                </svg>
+              </button>
+              <button type="button" className="p-1.5 hover:text-white transition-colors rounded-lg">
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707" />
+                </svg>
+              </button>
+              <button type="button" className="p-1.5 hover:text-white transition-colors rounded-lg">
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+              </button>
             </div>
 
+            <Link href="/" className="text-xs font-mono tracking-widest text-zinc-500 hover:text-white uppercase font-semibold transition-colors">
+              cooked?
+            </Link>
+          </div>
+
+          <div className="mx-auto w-full max-w-[420px] my-auto space-y-6">
             <div>
-              <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl text-black dark:text-white">
-                Sign In to Your Account
+              <h1 className="text-3xl font-bold tracking-tight sm:text-4xl text-white">
+                Welcome back
               </h1>
-              <p className="mt-2 text-xs font-mono text-gray-500 dark:text-gray-400">
-                Don&apos;t have an account?{' '}
-                <Link href="/signup" className="font-bold text-black dark:text-white underline hover:opacity-80">
-                  Sign up free
-                </Link>
-              </p>
             </div>
 
-            <div className="mt-8" />
+            {/* Social Login Buttons */}
+            <div className="grid gap-3 sm:grid-cols-2">
+              <button
+                type="button"
+                onClick={handleGoogleLogin}
+                className="flex h-11 w-full items-center justify-center gap-2.5 rounded-xl border border-zinc-800 bg-[#1c1c21] px-4 text-xs font-medium text-white transition-all hover:bg-zinc-800 shadow-sm"
+              >
+                <GoogleIcon />
+                <span className="whitespace-nowrap">Sign in with Google</span>
+              </button>
+              <button
+                type="button"
+                onClick={handleGoogleLogin}
+                className="flex h-11 w-full items-center justify-center gap-2.5 rounded-xl border border-zinc-800 bg-[#1c1c21] px-4 text-xs font-medium text-white transition-all hover:bg-zinc-800 shadow-sm"
+              >
+                <AppleIcon />
+                <span className="whitespace-nowrap">Sign in with Apple</span>
+              </button>
+            </div>
+
+            <div className="flex items-center gap-4 text-[11px] font-mono text-zinc-600">
+              <div className="h-px flex-1 bg-zinc-800" />
+              or
+              <div className="h-px flex-1 bg-zinc-800" />
+            </div>
 
             <form className="space-y-4 font-sans" onSubmit={handleSubmit}>
-              {errors.general && (
-                <div className="bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/50 text-rose-700 dark:text-rose-300 text-xs font-mono p-4 rounded-2xl">
-                  {errors.general}
+              {error && (
+                <div className="bg-rose-950/40 border border-rose-900/50 text-rose-300 text-xs font-mono p-3.5 rounded-xl">
+                  {error}
                 </div>
               )}
 
-              {/* Email */}
               <div className="space-y-1.5 text-left w-full font-sans">
-                <label className="text-[11px] font-mono font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300">
-                  EMAIL ADDRESS
-                </label>
-                <div className="relative flex h-11 items-center rounded-2xl border border-gray-200 dark:border-gray-800 bg-white px-3.5 dark:bg-gray-900 focus-within:ring-2 focus-within:ring-black dark:focus-within:ring-white transition-all">
+                <label className="text-xs font-medium text-zinc-300 block">Email</label>
+                <div className="relative flex h-11 items-center rounded-xl border border-zinc-800 bg-[#1c1c21] px-3.5 focus-within:border-zinc-500 focus-within:ring-1 focus-within:ring-zinc-500 transition-all">
                   <input
                     name="email"
                     type="email"
                     required
-                    value={formData.email}
-                    onChange={handleChange}
-                    placeholder="name@company.com"
-                    className="w-full bg-transparent text-sm text-black outline-none placeholder:text-gray-400 dark:text-white dark:placeholder:text-gray-500 font-sans"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="harshitlog@gmail.com"
+                    className="w-full bg-transparent text-sm text-white outline-none placeholder:text-zinc-500 font-sans"
                   />
                 </div>
-                {errors.email && <p className="text-xs text-rose-500 font-mono mt-1">{errors.email}</p>}
               </div>
 
-              {/* Password */}
               <div className="space-y-1.5 text-left w-full font-sans">
                 <div className="flex items-center justify-between">
-                  <label className="text-[11px] font-mono font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300">
-                    PASSWORD
-                  </label>
-                  <Link href="/forgot-password" className="text-[11px] font-mono text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white">
-                    Forgot password?
+                  <label className="text-xs font-medium text-zinc-300 block">Password</label>
+                  <Link href="/forgot-password" className="text-xs text-zinc-400 hover:text-white underline">
+                    Forgot?
                   </Link>
                 </div>
-                <div className="relative flex h-11 items-center rounded-2xl border border-gray-200 dark:border-gray-800 bg-white px-3.5 dark:bg-gray-900 focus-within:ring-2 focus-within:ring-black dark:focus-within:ring-white transition-all">
+                <div className="relative flex h-11 items-center rounded-xl border border-zinc-800 bg-[#1c1c21] px-3.5 focus-within:border-zinc-500 focus-within:ring-1 focus-within:ring-zinc-500 transition-all">
                   <input
                     name="password"
                     type={showPassword ? 'text' : 'password'}
                     required
-                    value={formData.password}
-                    onChange={handleChange}
-                    placeholder="••••••••"
-                    className="w-full bg-transparent text-sm text-black outline-none placeholder:text-gray-400 dark:text-white dark:placeholder:text-gray-500 font-sans"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Enter password"
+                    className="w-full bg-transparent text-sm text-white outline-none placeholder:text-zinc-500 font-sans"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3.5 text-gray-400 dark:text-gray-500 hover:text-black dark:hover:text-white"
+                    className="absolute right-3.5 text-zinc-500 hover:text-white cursor-pointer transition-colors"
                   >
                     {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
                   </button>
                 </div>
-                {errors.password && <p className="text-xs text-rose-500 font-mono mt-1">{errors.password}</p>}
               </div>
 
               <button
                 type="submit"
                 disabled={isLoading}
-                className="mt-6 flex h-12 w-full items-center justify-center rounded-full bg-black text-xs font-mono font-bold uppercase tracking-widest text-white transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 dark:bg-white dark:text-black shadow-sm"
+                className="mt-6 flex h-11 w-full items-center justify-center rounded-xl bg-white text-sm font-semibold text-black transition-all hover:bg-zinc-200 active:scale-[0.99] shadow-md disabled:opacity-50"
               >
-                {isLoading ? 'SIGNING IN…' : 'SIGN IN'}
+                {isLoading ? 'Signing in...' : 'Sign in'}
               </button>
             </form>
           </div>
+
+          <div className="mt-6 text-center text-xs text-zinc-500">
+            Don&apos;t have an account?{' '}
+            <Link href="/signup" className="text-white font-medium underline hover:opacity-80">
+              Create an account
+            </Link>
+          </div>
         </div>
 
-        {/* Right Side - Marketing Glass Showcase */}
-        <div className="relative flex min-h-[720px] flex-col overflow-hidden rounded-3xl bg-[#1f1d3d] p-8 text-white dark:bg-[#161522] sm:p-12 lg:min-h-0 lg:p-16 border border-white/10 shadow-sm">
-          <div className="absolute inset-0 z-0 pointer-events-none">
+        {/* Right Side - Testimonial & Mockup Showcase Card */}
+        <div className="relative flex flex-col justify-between overflow-hidden rounded-3xl bg-[#08080a] p-8 sm:p-10 lg:p-12 text-white border border-zinc-800/80 shadow-2xl min-h-[640px]">
+          {/* Background Shader Overlay */}
+          <div className="absolute inset-0 z-0 pointer-events-none opacity-60">
             <SafeFlutedGlass />
           </div>
 
-          <div className="relative z-10 h-full w-full">
-            <div className="max-w-[460px] lg:pt-12">
-              <motion.div
-                initial={{ opacity: 0, y: 12, filter: 'blur(6px)' }}
-                whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                viewport={{ once: true, margin: '-10%' }}
-                transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-                className="flex items-center gap-4"
-              >
-                <div className="w-10 h-10 rounded-full bg-[#c5b0f4] text-black font-extrabold flex items-center justify-center text-sm border border-white/30 shrink-0">
-                  G
+          <div className="relative z-10 space-y-8 max-w-[480px]">
+            {/* Author Profile */}
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="flex items-center gap-3"
+            >
+              <img
+                src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80"
+                alt="Charlotte"
+                className="size-10 rounded-full object-cover border border-white/20 shadow-sm"
+              />
+              <div>
+                <div className="font-semibold text-sm text-white leading-snug">
+                  Charlotte
                 </div>
-                <div>
-                  <div className="font-bold leading-tight text-white font-sans">
-                    Gaurav Khandelwal
-                  </div>
-                  <div className="mt-0.5 text-xs font-mono uppercase tracking-wider text-white/70">
-                    Lead Candidate · Placed
-                  </div>
+                <div className="text-xs text-zinc-400">
+                  Design Engineer
                 </div>
-              </motion.div>
-              <motion.blockquote
-                initial={{ opacity: 0, y: 18, filter: 'blur(8px)' }}
-                whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                viewport={{ once: true, margin: '-10%' }}
-                transition={{
-                  duration: 0.8,
-                  delay: 0.12,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
-                className="mt-7 text-2xl font-bold leading-tight tracking-tight text-white sm:text-3xl lg:text-[34px] font-sans"
-              >
-                “cooked? gave us total clarity over company shortlists and interview rounds.”
-              </motion.blockquote>
-            </div>
+              </div>
+            </motion.div>
 
-            <div className="mt-10 w-full translate-y-[24%] overflow-hidden rounded-2xl border border-white/15 bg-black/70 p-2 shadow-[0_30px_90px_rgba(0,0,0,0.5)] backdrop-blur-xl sm:translate-y-[22%] lg:absolute lg:left-[12%] lg:-bottom-28 lg:mt-0 lg:w-[105%] lg:max-w-none lg:origin-bottom-left lg:translate-y-0 lg:-rotate-3 xl:left-[14%] xl:-bottom-[150px] xl:w-[108%] 2xl:-bottom-[170px] 2xl:w-[112%]">
-              <motion.div
-                initial={{ opacity: 0, y: 72, filter: 'blur(10px)' }}
-                whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                viewport={{ once: true, margin: '-10%' }}
-                transition={{
-                  duration: 1,
-                  delay: 0.22,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
-                className="overflow-hidden rounded-xl border border-white/10 bg-[#0c0b10]"
-              >
-                <div className="flex items-center gap-1.5 border-b border-white/10 bg-black/60 px-4 py-3 select-none">
-                  <div className="size-2.5 rounded-full bg-rose-500/80" />
-                  <div className="size-2.5 rounded-full bg-amber-500/80" />
-                  <div className="size-2.5 rounded-full bg-emerald-500/80" />
-                  <span className="ml-4 text-[9px] font-mono tracking-widest text-white/50 uppercase font-bold">
-                    cooked.portal/login
-                  </span>
+            {/* Testimonial Quote */}
+            <motion.blockquote
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.1 }}
+              className="text-2xl sm:text-3xl lg:text-[32px] font-light leading-snug tracking-tight text-zinc-100"
+            >
+              “Every block had the restraint and polish we usually spend weeks refining.”
+            </motion.blockquote>
+          </div>
+
+          {/* Bottom Browser Mockup Container */}
+          <div className="relative z-10 mt-8 w-full translate-y-6 sm:translate-y-8 rounded-2xl border border-white/10 bg-[#0d0d10] p-1.5 shadow-[0_25px_60px_rgba(0,0,0,0.8)] backdrop-blur-md">
+            <div className="overflow-hidden rounded-xl border border-white/10 bg-[#09090b]">
+              <div className="flex items-center gap-1.5 border-b border-white/10 bg-[#121215] px-3.5 py-2.5 select-none">
+                <div className="size-2.5 rounded-full bg-[#ff5f56]" />
+                <div className="size-2.5 rounded-full bg-[#ffbd2e]" />
+                <div className="size-2.5 rounded-full bg-[#27c93f]" />
+                <span className="mx-auto text-[11px] font-mono text-zinc-400 font-normal">
+                  solaceui.com/dashboard
+                </span>
+              </div>
+
+              {/* Dashboard Content Mockup */}
+              <div className="p-4 sm:p-5 bg-[#09090b] text-zinc-300 font-sans space-y-3">
+                <div className="flex items-center justify-between border-b border-zinc-800 pb-2.5 text-xs">
+                  <div className="flex items-center gap-2">
+                    <span className="font-semibold text-white">Inbox</span>
+                    <span className="px-1.5 py-0.5 rounded bg-zinc-800 text-[10px] text-zinc-400">128</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-[10px] text-zinc-500 font-mono">
+                    <span className="px-2 py-0.5 rounded bg-white/10 text-white font-medium">All mail</span>
+                    <span>Unread</span>
+                  </div>
                 </div>
-                <div className="p-6 bg-[#0c0b10] space-y-4">
-                  <div className="flex items-center justify-between">
+
+                <div className="space-y-2 text-xs">
+                  <div className="p-2.5 rounded-lg bg-[#141418] border border-zinc-800/60 flex items-start justify-between">
                     <div>
-                      <div className="text-xs font-mono uppercase tracking-widest text-[#c5b0f4] font-bold">LIVE DASHBOARD</div>
-                      <div className="text-lg font-bold text-white font-sans">Applications &amp; Resources</div>
+                      <div className="font-medium text-white">William Smith</div>
+                      <div className="text-[11px] text-zinc-400 mt-0.5">Meeting Tomorrow</div>
+                      <div className="text-[10px] text-zinc-500 mt-1 line-clamp-1">Hi, let&apos;s have a meeting tomorrow to discuss the project details...</div>
                     </div>
-                    <span className="px-3 py-1 bg-[#c8e6cd] text-emerald-950 text-[10px] font-mono font-bold rounded-full uppercase">
-                      ACTIVE SESSION
-                    </span>
+                    <span className="text-[9px] font-mono text-zinc-500 shrink-0">4 months ago</span>
                   </div>
-                  <div className="grid grid-cols-3 gap-3">
-                    <div className="p-3 rounded-2xl bg-[#dceeb1] text-black">
-                      <div className="text-xl font-extrabold">24</div>
-                      <div className="text-[10px] font-mono font-bold uppercase opacity-80">APPLIED</div>
+
+                  <div className="p-2.5 rounded-lg bg-[#141418]/60 border border-zinc-800/40 flex items-start justify-between">
+                    <div>
+                      <div className="font-medium text-zinc-300">Alice Smith</div>
+                      <div className="text-[11px] text-zinc-400 mt-0.5">Re: Project Update</div>
+                      <div className="text-[10px] text-zinc-500 mt-1 line-clamp-1">Thank you for the update. It looks great!</div>
                     </div>
-                    <div className="p-3 rounded-2xl bg-[#f4ecd6] text-black">
-                      <div className="text-xl font-extrabold">8</div>
-                      <div className="text-[10px] font-mono font-bold uppercase opacity-80">INTERVIEWS</div>
-                    </div>
-                    <div className="p-3 rounded-2xl bg-[#c8e6cd] text-black">
-                      <div className="text-xl font-extrabold">4</div>
-                      <div className="text-[10px] font-mono font-bold uppercase opacity-80">OFFERS</div>
-                    </div>
+                    <span className="text-[9px] font-mono text-zinc-500 shrink-0">6 months ago</span>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             </div>
           </div>
         </div>
@@ -314,21 +309,9 @@ function LoginPageContent() {
   );
 }
 
-export default function LoginPage() {
-  return (
-    <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-[#0c0b10]">
-        <div className="animate-spin rounded-full h-10 w-10 border-2 border-black border-t-transparent dark:border-white dark:border-t-transparent" />
-      </div>
-    }>
-      <LoginPageContent />
-    </Suspense>
-  );
-}
-
 function GoogleIcon() {
   return (
-    <svg width="15" height="15" viewBox="0 0 24 24" className="shrink-0">
+    <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" className="shrink-0">
       <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09Z" fill="#4285F4" />
       <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23Z" fill="#34A853" />
       <path d="M5.84 14.1c-.22-.66-.35-1.36-.35-2.1s.13-1.44.35-2.1V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l3.66-2.84Z" fill="#FBBC05" />
@@ -339,7 +322,7 @@ function GoogleIcon() {
 
 function AppleIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="shrink-0">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className="shrink-0">
       <path d="M17.05 12.54c-.03-3.02 2.47-4.47 2.58-4.54-1.41-2.06-3.6-2.34-4.38-2.37-1.86-.19-3.64 1.1-4.58 1.1-.95 0-2.42-1.07-3.98-1.04-2.05.03-3.94 1.19-4.99 3.02-2.13 3.69-.54 9.16 1.53 12.15 1.01 1.46 2.22 3.1 3.81 3.04 1.53-.06 2.11-.99 3.96-.99s2.37.99 3.99.96c1.65-.03 2.69-1.49 3.69-2.96 1.16-1.69 1.64-3.33 1.66-3.41-.04-.02-3.2-1.23-3.24-4.87ZM14.03 3.66c.84-1.02 1.41-2.43 1.25-3.84-1.21.05-2.68.81-3.55 1.83-.78.9-1.46 2.34-1.28 3.72 1.35.1 2.73-.69 3.58-1.71Z" />
     </svg>
   );
