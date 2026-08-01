@@ -175,7 +175,7 @@ function ProfileContent() {
 
 export default function ProfilePage() {
   return (
-    <ProtectedRoute allowBoth>
+    <ProtectedRoute>
       <ProfileContent />
     </ProtectedRoute>
   );

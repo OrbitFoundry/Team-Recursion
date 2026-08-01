@@ -10,12 +10,8 @@ function HomeContent() {
   const router = useRouter();
 
   useEffect(() => {
-    if (isAdmin) {
-      router.replace('/admin/dashboard');
-    } else {
-      router.replace('/dashboard');
-    }
-  }, [isAdmin, user, router]);
+    router.replace('/dashboard');
+  }, [router]);
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-950">
