@@ -6,9 +6,9 @@
 [![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 
-A modern, full-stack **Placement & Career Portal** branded as **cooked?**, built by **Team Recursion**.
+A modern, full-stack **Placement & Career Portal** branded as **cooked?**.
 
-### 👥 Team Recursion
+### 👥 Core Engineers
 - **Mallu** · **Bhumit** · **Ayush** · **Gaurav**
 
 ---

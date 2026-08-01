@@ -76,7 +76,7 @@ export default function LandingPage() {
           <span>·</span>
           <span>INSTITUTIONAL METRICS</span>
           <span>·</span>
-          <span>TEAM RECURSION</span>
+          <span>cooked? PLATFORM</span>
         </div>
       </div>
 

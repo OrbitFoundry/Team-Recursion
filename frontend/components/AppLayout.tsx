@@ -163,7 +163,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
           <div className="flex items-center gap-3">
             <div className="hidden sm:inline-flex items-center px-3 py-1 rounded-full text-xs font-mono bg-[#dceeb1] text-black font-semibold">
-              TEAM RECURSION
+              cooked?
             </div>
             <button
               onClick={toggleDark}

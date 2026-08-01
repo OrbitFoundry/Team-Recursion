@@ -30,7 +30,7 @@ export function AuthPage() {
 				<div className="from-[#1f1d3d] absolute inset-0 z-10 bg-gradient-to-t to-transparent opacity-80" />
 				<div className="z-10 flex items-center gap-3">
 					<div className="w-9 h-9 rounded-full bg-white text-black font-bold text-sm flex items-center justify-center tracking-tighter">
-						TR
+						C?
 					</div>
 					<div>
 						<p className="text-xl font-bold tracking-tight">cooked?</p>
@@ -43,7 +43,7 @@ export function AuthPage() {
 							&ldquo;Streamlining institutional campus recruitment with precision tracking and automated student workflows.&rdquo;
 						</p>
 						<footer className="font-mono text-xs uppercase tracking-widest text-[#c5b0f4] font-bold">
-							~ TEAM RECURSION CORE
+							~ COOKED PLATFORM CORE
 						</footer>
 					</blockquote>
 				</div>
@@ -64,9 +64,9 @@ export function AuthPage() {
 				<div className="mx-auto space-y-6 sm:w-sm w-full max-w-md">
 					<div className="flex items-center gap-2.5 lg:hidden mb-2">
 						<div className="w-8 h-8 rounded-full bg-black text-white dark:bg-white dark:text-black font-bold text-xs flex items-center justify-center">
-							TR
+							C?
 						</div>
-						<p className="text-lg font-bold tracking-tight">Team Recursion</p>
+						<p className="text-lg font-bold tracking-tight">cooked?</p>
 					</div>
 					<div className="flex flex-col space-y-1.5">
 						<div className="text-[11px] font-mono uppercase tracking-widest text-gray-500 dark:text-gray-400">INSTITUTIONAL ACCESS</div>
