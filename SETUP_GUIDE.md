@@ -1,6 +1,6 @@
 # Staging & Production Deployment Guide
 
-This guide details how to set up, run, and deploy the **Team Recursion Authentication Template System** locally for development and staging, as well as deploy to production environments.
+This guide details how to set up, run, and deploy the **cooked? Career & Placement Portal** locally for development and staging, as well as deploy to production environments.
 
 ---
 
