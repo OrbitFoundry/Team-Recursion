@@ -30,6 +30,13 @@ const studentNav: NavItem[] = [
 ];
 
 
+const adminNav: NavItem[] = [
+  { href: '/admin/dashboard', label: 'Admin Control Room', icon: <AnalyticsIcon className="w-4 h-4" /> },
+  { href: '/admin/students', label: 'Student Directory', icon: <StudentsIcon className="w-4 h-4" /> },
+  { href: '/admin/companies', label: 'Master Register', icon: <CompanyIcon className="w-4 h-4" /> },
+  { href: '/admin/resources', label: 'Resource Moderation', icon: <ResourceIcon className="w-4 h-4" /> },
+];
+
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const { user, logout } = useAuth();
   const pathname = usePathname();
@@ -61,7 +68,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     router.push('/login');
   };
 
-  const navItems = studentNav;
+  const navItems = user?.role === 'admin' ? [...studentNav, ...adminNav] : studentNav;
 
   return (
     <div className="min-h-screen bg-gray-50/50 dark:bg-[#0f0e17] text-gray-900 dark:text-gray-100 flex font-sans selection:bg-[#c5b0f4]">
