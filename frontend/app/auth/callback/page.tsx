@@ -31,10 +31,10 @@ function AuthCallbackContent() {
   }, [router, searchParams]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="text-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-        <p className="mt-4 text-gray-600">Completing authentication...</p>
+    <div className="h-screen w-screen overflow-hidden flex items-center justify-center bg-white dark:bg-[#0c0b10] font-sans selection:bg-[#c5b0f4]">
+      <div className="text-center space-y-3">
+        <div className="animate-spin rounded-full h-10 w-10 border-2 border-black border-t-transparent dark:border-white dark:border-t-transparent mx-auto"></div>
+        <p className="text-xs font-mono font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Completing authentication...</p>
       </div>
     </div>
   );
@@ -44,10 +44,10 @@ export default function AuthCallbackPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen flex items-center justify-center bg-gray-50">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-            <p className="mt-4 text-gray-600">Loading...</p>
+        <div className="h-screen w-screen overflow-hidden flex items-center justify-center bg-white dark:bg-[#0c0b10] font-sans selection:bg-[#c5b0f4]">
+          <div className="text-center space-y-3">
+            <div className="animate-spin rounded-full h-10 w-10 border-2 border-black border-t-transparent dark:border-white dark:border-t-transparent mx-auto"></div>
+            <p className="text-xs font-mono font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Loading...</p>
           </div>
         </div>
       }

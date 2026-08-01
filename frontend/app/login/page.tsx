@@ -244,7 +244,11 @@ function AuthPageContent() {
                     PASSWORD
                   </label>
                   {isLogin && (
-                    <button type="button" className="text-[11px] font-mono text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white">
+                    <button
+                      type="button"
+                      onClick={() => router.push('/forgot-password')}
+                      className="text-[11px] font-mono text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white"
+                    >
                       Forgot password?
                     </button>
                   )}
