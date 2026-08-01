@@ -8,6 +8,7 @@ import Input from '@/components/ui/Input';
 import PasswordInput from '@/components/ui/PasswordInput';
 import Button from '@/components/ui/Button';
 import { redirectToGoogleAuth } from '@/lib/auth-utils';
+import { ArrowRightIcon } from '@/components/ui/Icons';
 
 function LoginPageContent() {
   const router = useRouter();
@@ -78,15 +79,21 @@ function LoginPageContent() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-white dark:bg-[#0c0b10] py-12 px-4 sm:px-6 lg:px-8 font-sans selection:bg-[#c5b0f4] selection:text-black">
-      <div className="max-w-md w-full space-y-8 bg-white dark:bg-[#161522] p-8 md:p-10 rounded-3xl border border-gray-200/80 dark:border-gray-800/80 shadow-sm">
+      <div className="max-w-md w-full space-y-8 bg-white dark:bg-[#161522] p-8 md:p-10 rounded-3xl border border-gray-200/80 dark:border-gray-800/80 shadow-sm relative overflow-hidden">
+        
+        {/* Accent Editorial Ribbon */}
+        <div className="absolute top-0 left-0 right-0 h-2 bg-[#c5b0f4]" />
+
         {/* Brand Header */}
-        <div className="text-center">
-          <div className="mx-auto w-12 h-12 rounded-full bg-black text-white dark:bg-white dark:text-black font-bold flex items-center justify-center text-sm font-sans tracking-tight mb-4 shadow-sm">
+        <div className="text-center pt-2">
+          <div className="mx-auto w-12 h-12 rounded-full bg-black text-white dark:bg-white dark:text-black font-extrabold flex items-center justify-center text-sm font-sans tracking-tight mb-4 shadow-sm">
             TR
           </div>
-          <div className="text-[11px] font-mono font-bold uppercase tracking-widest text-gray-500 mb-1">TEAM RECURSION</div>
-          <h2 className="text-2xl font-bold tracking-tight dark:text-white">
-            Welcome back
+          <div className="text-[10px] font-mono font-bold uppercase tracking-widest text-gray-500 mb-1">
+            TEAM RECURSION PLACEMENT PORTAL
+          </div>
+          <h2 className="text-2xl font-extrabold tracking-tight dark:text-white">
+            Sign In to Your Account
           </h2>
           <p className="mt-2 text-xs font-mono text-gray-500 dark:text-gray-400">
             Don&apos;t have an account?{' '}
@@ -134,8 +141,8 @@ function LoginPageContent() {
           </div>
 
           <div>
-            <Button type="submit" variant="primary" className="w-full py-3.5" isLoading={isLoading}>
-              SIGN IN
+            <Button type="submit" variant="primary" className="w-full py-3.5 flex items-center justify-center gap-2" isLoading={isLoading}>
+              SIGN IN <ArrowRightIcon className="w-4 h-4" />
             </Button>
           </div>
 
@@ -190,7 +197,7 @@ export default function LoginPage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen flex items-center justify-center bg-white dark:bg-[#0c0b10]">
-        <div className="animate-spin rounded-full h-10 w-10 border-2 border-black border-t-transparent dark:border-white dark:border-t-transparent"></div>
+        <div className="animate-spin rounded-full h-10 w-10 border-2 border-black border-t-transparent dark:border-white dark:border-t-transparent" />
       </div>
     }>
       <LoginPageContent />

@@ -9,6 +9,7 @@ import PasswordInput from '@/components/ui/PasswordInput';
 import Button from '@/components/ui/Button';
 import { redirectToGoogleAuth } from '@/lib/auth-utils';
 import { validatePassword } from '@/lib/password-validation';
+import { ArrowRightIcon } from '@/components/ui/Icons';
 
 export default function SignupPage() {
   const router = useRouter();
@@ -104,15 +105,21 @@ export default function SignupPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-white dark:bg-[#0c0b10] py-12 px-4 sm:px-6 lg:px-8 font-sans selection:bg-[#c5b0f4] selection:text-black">
-      <div className="max-w-md w-full space-y-8 bg-white dark:bg-[#161522] p-8 md:p-10 rounded-3xl border border-gray-200/80 dark:border-gray-800/80 shadow-sm">
+      <div className="max-w-md w-full space-y-8 bg-white dark:bg-[#161522] p-8 md:p-10 rounded-3xl border border-gray-200/80 dark:border-gray-800/80 shadow-sm relative overflow-hidden">
+        
+        {/* Accent Editorial Ribbon */}
+        <div className="absolute top-0 left-0 right-0 h-2 bg-[#dceeb1]" />
+
         {/* Brand Header */}
-        <div className="text-center">
-          <div className="mx-auto w-12 h-12 rounded-full bg-black text-white dark:bg-white dark:text-black font-bold flex items-center justify-center text-sm font-sans tracking-tight mb-4 shadow-sm">
+        <div className="text-center pt-2">
+          <div className="mx-auto w-12 h-12 rounded-full bg-black text-white dark:bg-white dark:text-black font-extrabold flex items-center justify-center text-sm font-sans tracking-tight mb-4 shadow-sm">
             TR
           </div>
-          <div className="text-[11px] font-mono font-bold uppercase tracking-widest text-gray-500 mb-1">TEAM RECURSION</div>
-          <h2 className="text-2xl font-bold tracking-tight dark:text-white">
-            Create an Account
+          <div className="text-[10px] font-mono font-bold uppercase tracking-widest text-gray-500 mb-1">
+            TEAM RECURSION PLACEMENT PORTAL
+          </div>
+          <h2 className="text-2xl font-extrabold tracking-tight dark:text-white">
+            Create Your Account
           </h2>
           <p className="mt-2 text-xs font-mono text-gray-500 dark:text-gray-400">
             Already registered?{' '}
@@ -176,8 +183,8 @@ export default function SignupPage() {
           </div>
 
           <div>
-            <Button type="submit" variant="primary" className="w-full py-3.5 mt-2" isLoading={isLoading}>
-              CREATE ACCOUNT
+            <Button type="submit" variant="primary" className="w-full py-3.5 flex items-center justify-center gap-2 mt-2" isLoading={isLoading}>
+              CREATE ACCOUNT <ArrowRightIcon className="w-4 h-4" />
             </Button>
           </div>
 
