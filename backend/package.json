@@ -7,7 +7,7 @@
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
     "build:render": "npm install && tsc",
-    "postinstall": "tsc",
+    "postinstall": "tsc || true",
     "prestart": "tsc",
     "start": "tsc && node dist/index.js",
     "lint": "eslint src --ext .ts",
