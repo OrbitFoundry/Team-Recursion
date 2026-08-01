@@ -25,7 +25,7 @@ export const authenticate = (
     }
 
     const token = authHeader.substring(7);
-    
+
     if (!token || token.trim() === '') {
       res.status(401).json({
         error: {
@@ -49,7 +49,7 @@ export const authenticate = (
       });
       return;
     }
-    
+
     res.status(401).json({
       error: {
         message: 'Invalid or expired token. Please authenticate again.',
@@ -59,3 +59,24 @@ export const authenticate = (
   }
 };
 
+/**
+ * adminOnly — must be used AFTER authenticate middleware.
+ * Rejects request unless the verified token has role === 'admin'.
+ */
+export const adminOnly = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void => {
+  const authReq = req as AuthRequest;
+  if (!authReq.user || authReq.user.role !== 'admin') {
+    res.status(403).json({
+      error: {
+        message: 'Access denied. Admin role required.',
+        code: 'FORBIDDEN',
+      },
+    });
+    return;
+  }
+  next();
+};

@@ -29,24 +29,25 @@ export const registerUser = async (data: RegisterData) => {
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
 
-  // Create user
+  // Create user (default role: student)
   const user = await User.create({
     name,
     email,
     password: hashedPassword,
+    role: 'student',
     isEmailVerified: false,
   });
 
   // Send welcome email (non-blocking)
   sendWelcomeEmail(email, name).catch((error) => {
-    // Silently fail for welcome emails - don't block registration
     logger.debug('Failed to send welcome email:', error);
   });
 
-  // Generate token
+  // Generate token with role
   const token = generateToken({
     userId: user._id.toString(),
     email: user.email,
+    role: user.role,
   });
 
   return {
@@ -54,6 +55,7 @@ export const registerUser = async (data: RegisterData) => {
       id: user._id.toString(),
       name: user.name,
       email: user.email,
+      role: user.role,
       isEmailVerified: user.isEmailVerified,
     },
     token,
@@ -80,10 +82,11 @@ export const loginUser = async (data: LoginData) => {
     throw new Error('Invalid email or password');
   }
 
-  // Generate token
+  // Generate token with role
   const token = generateToken({
     userId: user._id.toString(),
     email: user.email,
+    role: user.role,
   });
 
   return {
@@ -91,6 +94,7 @@ export const loginUser = async (data: LoginData) => {
       id: user._id.toString(),
       name: user.name,
       email: user.email,
+      role: user.role,
       isEmailVerified: user.isEmailVerified,
     },
     token,
@@ -116,10 +120,8 @@ export const forgotPassword = async (email: string) => {
   await user.save();
 
   // Send reset email with the original (unhashed) token (non-blocking)
-  // Return immediately to avoid timeout - email will be sent in background
   sendPasswordResetEmail(email, resetToken).catch((error) => {
     logger.error('Failed to send password reset email:', error);
-    // Don't throw - email sending failure shouldn't block the response
   });
 
   return { message: 'If an account exists, a password reset email has been sent' };
@@ -148,10 +150,11 @@ export const resetPassword = async (token: string, newPassword: string) => {
   user.resetPasswordExpires = undefined;
   await user.save();
 
-  // Generate token
+  // Generate token with role
   const authToken = generateToken({
     userId: user._id.toString(),
     email: user.email,
+    role: user.role,
   });
 
   return {
@@ -159,6 +162,7 @@ export const resetPassword = async (token: string, newPassword: string) => {
       id: user._id.toString(),
       name: user.name,
       email: user.email,
+      role: user.role,
       isEmailVerified: user.isEmailVerified,
     },
     token: authToken,
@@ -179,11 +183,12 @@ export const findOrCreateGoogleUser = async (
       await user.save();
     }
   } else {
-    // Create new user
+    // Create new user as student by default
     user = await User.create({
       name,
       email,
       googleId,
+      role: 'student',
       isEmailVerified: true, // Google emails are verified
     });
   }
@@ -191,6 +196,7 @@ export const findOrCreateGoogleUser = async (
   const token = generateToken({
     userId: user._id.toString(),
     email: user.email,
+    role: user.role,
   });
 
   return {
@@ -198,6 +204,7 @@ export const findOrCreateGoogleUser = async (
       id: user._id.toString(),
       name: user.name,
       email: user.email,
+      role: user.role,
       isEmailVerified: user.isEmailVerified,
     },
     token,
@@ -233,9 +240,8 @@ export const updateUserProfile = async (
       id: user._id.toString(),
       name: user.name,
       email: user.email,
+      role: user.role,
       isEmailVerified: user.isEmailVerified,
     },
   };
 };
-
-

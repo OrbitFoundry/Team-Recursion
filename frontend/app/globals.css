@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Dark mode — class-based (toggled via JS on documentElement) */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @keyframes slide-in {
   from {
     transform: translateX(100%);
@@ -13,4 +16,21 @@
 
 .animate-slide-in {
   animation: slide-in 0.3s ease-out;
+}
+
+/* Smooth transitions for dark mode */
+* {
+  transition-property: background-color, border-color, color;
+  transition-duration: 150ms;
+  transition-timing-function: ease;
+}
+
+/* Override for animated elements (don't transition everything) */
+.animate-spin,
+.animate-pulse,
+.transition-all,
+.transition-colors,
+.transition-shadow,
+.transition-transform {
+  transition-property: revert;
 }

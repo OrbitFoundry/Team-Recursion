@@ -5,18 +5,19 @@ import { AppError } from '../types/errors';
 export interface TokenPayload {
   userId: string;
   email: string;
+  role: 'student' | 'admin';
   iat?: number;
   exp?: number;
 }
 
 export const generateToken = (payload: TokenPayload): string => {
   try {
-    const tokenPayload: { userId: string; email: string } = { 
-      userId: payload.userId, 
-      email: payload.email 
+    const tokenPayload: { userId: string; email: string; role: string } = {
+      userId: payload.userId,
+      email: payload.email,
+      role: payload.role,
     };
     // expiresIn can be a string like '7d' or a number in seconds
-    // Type assertion needed because config.jwt.expiresIn is string, but jwt expects StringValue | number
     const options: SignOptions = {
       expiresIn: config.jwt.expiresIn as SignOptions['expiresIn'],
     };
@@ -29,12 +30,12 @@ export const generateToken = (payload: TokenPayload): string => {
 export const verifyToken = (token: string): TokenPayload => {
   try {
     const decoded = jwt.verify(token, config.jwt.secret) as TokenPayload;
-    
+
     // Ensure required fields are present
     if (!decoded.userId || !decoded.email) {
       throw new AppError('Invalid token payload', 401, 'INVALID_TOKEN');
     }
-    
+
     return decoded;
   } catch (error) {
     if (error instanceof jwt.TokenExpiredError) {
@@ -46,4 +47,3 @@ export const verifyToken = (token: string): TokenPayload => {
     throw new AppError('Token verification failed', 401, 'TOKEN_VERIFICATION_ERROR');
   }
 };
-

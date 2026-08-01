@@ -9,7 +9,8 @@
     "build:render": "npm install --include=dev && npm run build",
     "start": "node dist/index.js",
     "lint": "eslint src --ext .ts",
-    "setup:env": "node scripts/setup-env.js"
+    "setup:env": "node scripts/setup-env.js",
+    "seed": "npx tsx src/seeds/seed.ts"
   },
   "keywords": [
     "express",

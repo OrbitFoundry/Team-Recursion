@@ -2,6 +2,7 @@ export interface User {
   id: string;
   name: string;
   email: string;
+  role: 'student' | 'admin';
   isEmailVerified: boolean;
 }
 
@@ -30,4 +31,3 @@ export interface ResetPasswordData {
   token: string;
   password: string;
 }
-
