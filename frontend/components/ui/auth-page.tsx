@@ -8,7 +8,6 @@ import { Input } from './Input';
 import {
 	AtSign as AtSignIcon,
 	ChevronLeft as ChevronLeftIcon,
-	Grid2x2Plus as Grid2x2PlusIcon,
 } from 'lucide-react';
 
 const AppleIcon = (props: React.ComponentProps<'svg'>) => (
@@ -25,67 +24,69 @@ const GithubIcon = (props: React.ComponentProps<'svg'>) => (
 
 export function AuthPage() {
 	return (
-		<main className="relative md:h-screen md:overflow-hidden lg:grid lg:grid-cols-2">
-			<div className="bg-muted/60 relative hidden h-full flex-col border-r p-10 lg:flex">
-				<div className="from-background absolute inset-0 z-10 bg-gradient-to-t to-transparent" />
-				<div className="z-10 flex items-center gap-2">
-					<Grid2x2PlusIcon className="size-6" />
-					<p className="text-xl font-semibold">Asme</p>
+		<main className="relative md:h-screen md:overflow-hidden lg:grid lg:grid-cols-2 font-sans bg-white dark:bg-[#0f0e17] text-gray-900 dark:text-white">
+			{/* Left Side Story Block Banner (Deep Indigo Navy Ground with Animated Floating Vector Paths) */}
+			<div className="relative hidden h-full flex-col border-r border-gray-200/80 dark:border-gray-800/80 p-10 lg:flex bg-[#1f1d3d] text-white">
+				<div className="from-[#1f1d3d] absolute inset-0 z-10 bg-gradient-to-t to-transparent opacity-80" />
+				<div className="z-10 flex items-center gap-3">
+					<div className="w-9 h-9 rounded-full bg-white text-black font-bold text-sm flex items-center justify-center tracking-tighter">
+						TR
+					</div>
+					<div>
+						<p className="text-xl font-bold tracking-tight">Team Recursion</p>
+						<p className="text-[10px] font-mono uppercase tracking-widest text-gray-300">PLACEMENT PORTAL</p>
+					</div>
 				</div>
-				<div className="z-10 mt-auto">
-					<blockquote className="space-y-2">
-						<p className="text-xl">
-							&ldquo;This Platform has helped me to save time and serve my
-							clients faster than ever before.&rdquo;
+				<div className="z-10 mt-auto max-w-lg">
+					<blockquote className="space-y-3">
+						<p className="text-2xl font-bold tracking-tight leading-snug">
+							&ldquo;Streamlining institutional campus recruitment with precision tracking and automated student workflows.&rdquo;
 						</p>
-						<footer className="font-mono text-sm font-semibold">
-							~ Ali Hassan
+						<footer className="font-mono text-xs uppercase tracking-widest text-[#c5b0f4] font-bold">
+							~ TEAM RECURSION CORE
 						</footer>
 					</blockquote>
 				</div>
-				<div className="absolute inset-0">
+				<div className="absolute inset-0 overflow-hidden opacity-40">
 					<FloatingPaths position={1} />
 					<FloatingPaths position={-1} />
 				</div>
 			</div>
-			<div className="relative flex min-h-screen flex-col justify-center p-4">
-				<div
-					aria-hidden
-					className="absolute inset-0 isolate contain-strict -z-10 opacity-60"
-				>
-					<div className="bg-[radial-gradient(68.54%_68.72%_at_55.02%_31.46%,--theme(--color-foreground/.06)_0,hsla(0,0%,55%,.02)_50%,--theme(--color-foreground/.01)_80%)] absolute top-0 right-0 h-320 w-140 -translate-y-87.5 rounded-full" />
-					<div className="bg-[radial-gradient(50%_50%_at_50%_50%,--theme(--color-foreground/.04)_0,--theme(--color-foreground/.01)_80%,transparent_100%)] absolute top-0 right-0 h-320 w-60 [translate:5%_-50%] rounded-full" />
-					<div className="bg-[radial-gradient(50%_50%_at_50%_50%,--theme(--color-foreground/.04)_0,--theme(--color-foreground/.01)_80%,transparent_100%)] absolute top-0 right-0 h-320 w-60 -translate-y-87.5 rounded-full" />
-				</div>
-				<Button variant="ghost" className="absolute top-7 left-5" asChild>
-					<a href="#">
+
+			{/* Right Side Auth Form Container */}
+			<div className="relative flex min-h-screen flex-col justify-center p-6 md:p-12">
+				<Button variant="ghost" className="absolute top-7 left-5 rounded-full font-mono text-xs uppercase font-bold" asChild>
+					<a href="/">
 						<ChevronLeftIcon className='size-4 me-2' />
 						Home
 					</a>
 				</Button>
-				<div className="mx-auto space-y-4 sm:w-sm">
-					<div className="flex items-center gap-2 lg:hidden">
-						<Grid2x2PlusIcon className="size-6" />
-						<p className="text-xl font-semibold">Asme</p>
+				<div className="mx-auto space-y-6 sm:w-sm w-full max-w-md">
+					<div className="flex items-center gap-2.5 lg:hidden mb-2">
+						<div className="w-8 h-8 rounded-full bg-black text-white dark:bg-white dark:text-black font-bold text-xs flex items-center justify-center">
+							TR
+						</div>
+						<p className="text-lg font-bold tracking-tight">Team Recursion</p>
 					</div>
-					<div className="flex flex-col space-y-1">
-						<h1 className="font-heading text-2xl font-bold tracking-wide">
+					<div className="flex flex-col space-y-1.5">
+						<div className="text-[11px] font-mono uppercase tracking-widest text-gray-500 dark:text-gray-400">INSTITUTIONAL ACCESS</div>
+						<h1 className="text-2xl font-extrabold tracking-tight dark:text-white">
 							Sign In or Join Now!
 						</h1>
-						<p className="text-muted-foreground text-base">
-							login or create your asme account.
+						<p className="text-xs font-mono text-gray-500 dark:text-gray-400">
+							Log in or create your placement portal account.
 						</p>
 					</div>
-					<div className="space-y-2">
-						<Button type="button" size="lg" className="w-full">
+					<div className="space-y-2.5">
+						<Button type="button" size="lg" className="w-full rounded-full font-mono text-xs uppercase font-bold bg-black text-white hover:scale-[1.02] active:scale-95 transition-all shadow-sm">
 							<GoogleIcon className='size-4 me-2' />
 							Continue with Google
 						</Button>
-						<Button type="button" size="lg" className="w-full">
+						<Button type="button" size="lg" className="w-full rounded-full font-mono text-xs uppercase font-bold border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-800 hover:scale-[1.02] active:scale-95 transition-all">
 							<AppleIcon className='size-4 me-2' />
 							Continue with Apple
 						</Button>
-						<Button type="button" size="lg" className="w-full">
+						<Button type="button" size="lg" className="w-full rounded-full font-mono text-xs uppercase font-bold border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-800 hover:scale-[1.02] active:scale-95 transition-all">
 							<GithubIcon className='size-4 me-2' />
 							Continue with GitHub
 						</Button>
@@ -93,37 +94,37 @@ export function AuthPage() {
 
 					<AuthSeparator />
 
-					<form className="space-y-2">
-						<p className="text-muted-foreground text-start text-xs">
-							Enter your email address to sign in or create an account
+					<form className="space-y-3.5">
+						<p className="text-gray-500 dark:text-gray-400 text-start text-xs font-mono">
+							Enter your institutional email address
 						</p>
 						<div className="relative h-max">
 							<Input
-								placeholder="your.email@example.com"
-								className="peer ps-9"
+								placeholder="student@university.edu"
+								className="peer ps-9 rounded-xl font-mono text-xs"
 								type="email"
 							/>
-							<div className="text-muted-foreground pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 peer-disabled:opacity-50">
+							<div className="text-gray-400 pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 peer-disabled:opacity-50">
 								<AtSignIcon className="size-4" aria-hidden="true" />
 							</div>
 						</div>
 
-						<Button type="button" className="w-full">
+						<Button type="button" className="w-full rounded-full font-mono text-xs font-bold uppercase tracking-wider bg-black text-white dark:bg-white dark:text-black hover:scale-[1.02] active:scale-95 transition-all py-3">
 							<span>Continue With Email</span>
 						</Button>
 					</form>
-					<p className="text-muted-foreground mt-8 text-sm">
+					<p className="text-gray-400 text-center mt-6 text-xs font-mono">
 						By clicking continue, you agree to our{' '}
 						<a
 							href="#"
-							className="hover:text-primary underline underline-offset-4"
+							className="text-black dark:text-white font-semibold underline underline-offset-4"
 						>
 							Terms of Service
 						</a>{' '}
 						and{' '}
 						<a
 							href="#"
-							className="hover:text-primary underline underline-offset-4"
+							className="text-black dark:text-white font-semibold underline underline-offset-4"
 						>
 							Privacy Policy
 						</a>
@@ -145,14 +146,14 @@ function FloatingPaths({ position }: { position: number }) {
 		} ${343 - i * 6}C${616 - i * 5 * position} ${470 - i * 6} ${
 			684 - i * 5 * position
 		} ${875 - i * 6} ${684 - i * 5 * position} ${875 - i * 6}`,
-		color: `rgba(15,23,42,${0.1 + i * 0.03})`,
+		color: `rgba(197,176,244,${0.15 + i * 0.02})`,
 		width: 0.5 + i * 0.03,
 	}));
 
 	return (
 		<div className="pointer-events-none absolute inset-0">
 			<svg
-				className="h-full w-full text-slate-950 dark:text-white"
+				className="h-full w-full text-[#c5b0f4]"
 				viewBox="0 0 696 316"
 				fill="none"
 			>
@@ -163,7 +164,7 @@ function FloatingPaths({ position }: { position: number }) {
 						d={path.d}
 						stroke="currentColor"
 						strokeWidth={path.width}
-						strokeOpacity={0.1 + path.id * 0.03}
+						strokeOpacity={0.15 + path.id * 0.02}
 						initial={{ pathLength: 0.3, opacity: 0.6 }}
 						animate={{
 							pathLength: 1,
@@ -197,10 +198,10 @@ const GoogleIcon = (props: React.ComponentProps<'svg'>) => (
 
 const AuthSeparator = () => {
 	return (
-		<div className="flex w-full items-center justify-center">
-			<div className="bg-border h-px w-full" />
-			<span className="text-muted-foreground px-2 text-xs">OR</span>
-			<div className="bg-border h-px w-full" />
+		<div className="flex w-full items-center justify-center my-4">
+			<div className="bg-gray-200 dark:bg-gray-800 h-px w-full" />
+			<span className="text-gray-400 px-3 text-[11px] font-mono uppercase font-bold">OR</span>
+			<div className="bg-gray-200 dark:bg-gray-800 h-px w-full" />
 		</div>
 	);
 };
