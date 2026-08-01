@@ -186,7 +186,7 @@ function ProfileContent() {
               <div className="flex flex-col gap-4">
                 {user?.resumeUrl ? (
                   <a 
-                    href={`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}${user.resumeUrl}`} 
+                    href={user.resumeUrl.startsWith('http') ? user.resumeUrl : `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}${user.resumeUrl.startsWith('/') ? '' : '/'}${user.resumeUrl}`} 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-black dark:text-white underline underline-offset-4 hover:opacity-80"
