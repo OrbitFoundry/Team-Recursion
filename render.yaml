@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: team-recursion-backend
+    name: cooked-backend
     env: node
     rootDir: backend
     buildCommand: npm install && npm run build
@@ -15,4 +15,4 @@ services:
       - key: SESSION_SECRET
         generateValue: true
       - key: FRONTEND_URL
-        value: https://team-recursion-placement-portal.netlify.app
+        value: https://cooked-placement.netlify.app
