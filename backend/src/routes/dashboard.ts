@@ -79,13 +79,8 @@ router.get('/stats', async (req: Request, res: Response) => {
 });
 
 // GET /api/dashboard/admin-stats — global system metrics for admin
-router.get('/admin-stats', async (req: Request, res: Response) => {
+router.get('/admin-stats', async (_req: Request, res: Response) => {
   try {
-    const authReq = req as AuthRequest;
-    if (authReq.user?.role !== 'admin') {
-      return res.status(403).json({ error: { message: 'Access denied. Admin role required.' } });
-    }
-
     const [statsResult] = await Company.aggregate([
       {
         $facet: {
@@ -121,7 +116,7 @@ router.get('/admin-stats', async (req: Request, res: Response) => {
     ]);
 
     const User = mongoose.model('User');
-    const totalStudents = await User.countDocuments({ role: 'student' });
+    const totalStudents = await User.countDocuments({});
 
     const statusBreakdown: Record<string, number> = {
       'Applied': 0,
