@@ -26,6 +26,7 @@ The following skills are installed in the workspace to extend AI agent capabilit
 | **`improve-codebase-architecture`** | `.agents/skills/improve-codebase-architecture/` | Scans codebase for deepening opportunities, surfaces architectural friction, and generates visual HTML reports. |
 | **`multi-stage-dockerfile`** | `.agents/skills/multi-stage-dockerfile/` | Creates optimized multi-stage Dockerfiles for Node.js backend and Next.js frontend microservices. |
 | **`prisma-mongodb-upgrade`** | `.agents/skills/prisma-mongodb-upgrade/` | Migration and architectural decision guide for MongoDB databases and Prisma ORM configurations. |
+| **`documentation-writer`** | `.agents/skills/documentation-writer/` | Technical writer specializing in creating high-quality software documentation using Diátaxis framework. |
 | **`grill-me`** | `.agents/skills/grill-me/` | Relentless interview mode for pressure-testing system design and architecture plans before implementation. |
 | **`find-skills`** | `.agents/skills/find-skills/` | Registry search tool to discover, inspect, and install new skills via `npx skills find <query>`. |
 
@@ -51,23 +52,36 @@ Our visual identity and UI design tokens are documented in **[`DESIGN.md`](./DES
 
 ## ⚡ Workflow & Best Practices for Agents
 
-1. **Coding Posture (`ponytail`)**:
+1. **📥 Pre-Prompt Mandatory Git Synchronization**:
+   - **ALWAYS pull latest remote state before starting work on ANY prompt/task**:
+     ```bash
+     git pull origin main
+     ```
+   - Ensures all 4 team members (**Mallu, Bhumit, Ayush, Gaurav**) work on synced, up-to-date code.
+
+2. **Coding Posture (`ponytail`)**:
    - Skip speculative abstractions (YAGNI).
    - Prefer native Node.js / Web APIs over adding third-party dependencies.
    - Ship minimal, clean code without removing trust-boundary validations or error logging.
 
-2. **Backend Architecture**:
+3. **Backend Architecture**:
    - Maintain strict layer separation in Express: `routes` ➔ `validators` ➔ `middleware` ➔ `services` ➔ `models`.
    - Keep environment variables validated on boot (`src/utils/env-validator.ts`).
    - Retain automated in-memory MongoDB fallback in development mode (`src/config/database.ts`).
 
-3. **Frontend Architecture**:
+4. **Frontend Architecture**:
    - Next.js 16 App Router with React 19 client components where interaction is needed.
    - Use `AuthContext` for stateless JWT cookie session management and dynamic user recovery.
    - Keep visual components atomic and styled per the tokens in `DESIGN.md`.
 
-4. **🔄 Multi-Developer Auto-Commit & Auto-Push Pipeline**:
-   - **Team Collaboration Rule**: 4 core team members (**Mallu, Bhumit, Ayush, Gaurav**) collaborate on this repository.
+5. **🧪 Mandatory Pre-Commit Compilation & Integrity Verification**:
+   - Before executing ANY commit, agents **MUST** test and verify that changes compile cleanly with zero TypeScript errors or broken imports:
+     ```bash
+     cd frontend && npm run build
+     ```
+   - Ensure nothing is broken or introducing regressions across the frontend or backend services.
+
+6. **🔄 Multi-Developer Auto-Commit & Auto-Push Pipeline**:
    - **Industry Standard Commit Convention**: After completing each prompt, subtask, feature, or bug fix, code MUST be staged (`git add .`) and committed using **Conventional Commits**:
      - `feat:` for new features or capabilities
      - `fix:` for bug fixes or state remediations
@@ -77,4 +91,3 @@ Our visual identity and UI design tokens are documented in **[`DESIGN.md`](./DES
      - `test:` for test additions or updates
      - `chore:` for build scripts, skill additions, or maintenance
    - **Immediate Push**: Immediately push to remote tracking branch (`git push origin main`) at the end of every prompt so all team members always operate on synchronized, up-to-date code.
-
