@@ -2,11 +2,11 @@
 
 import { Suspense, useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { CookedBrandIcon } from '@/components/ui/Icons';
 import { Eye, EyeOff } from 'lucide-react';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
+import { validatePassword } from '@/lib/password-validation';
 
 function SafeFlutedGlass() {
   const [ShaderComponent, setShaderComponent] = useState<React.ComponentType<any> | null>(null);
@@ -50,13 +50,27 @@ function SafeFlutedGlass() {
   return <div className="w-full h-full bg-gradient-to-br from-[#1f1d3d] via-black to-[#0f0e17] opacity-90" />;
 }
 
-function LoginPageContent() {
+function AuthPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { login, isAuthenticated } = useAuth();
-  const [formData, setFormData] = useState({ email: '', password: '' });
+  const { login, register, isAuthenticated } = useAuth();
+  
+  const [isLogin, setIsLogin] = useState(true);
+  
+  const [formData, setFormData] = useState({ 
+    name: '',
+    email: '', 
+    password: '',
+    confirmPassword: ''
+  });
   const [showPassword, setShowPassword] = useState(false);
-  const [errors, setErrors] = useState<{ email?: string; password?: string; general?: string }>({});
+  const [errors, setErrors] = useState<{ 
+    name?: string;
+    email?: string; 
+    password?: string; 
+    confirmPassword?: string;
+    general?: string 
+  }>({});
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -70,6 +84,10 @@ function LoginPageContent() {
     if (error) {
       setErrors({ general: 'Authentication failed. Please check your credentials.' });
     }
+    const mode = searchParams.get('mode');
+    if (mode === 'signup') {
+      setIsLogin(false);
+    }
   }, [searchParams]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -77,20 +95,42 @@ function LoginPageContent() {
     setErrors({ ...errors, [e.target.name]: undefined, general: undefined });
   };
 
+  const toggleMode = () => {
+    setIsLogin(!isLogin);
+    setErrors({});
+    setFormData({ name: '', email: '', password: '', confirmPassword: '' });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrors({});
+    
+    // Validation
+    const newErrors: any = {};
+    if (!isLogin) {
+      if (!formData.name.trim()) newErrors.name = 'Full name is required';
+      const passwordValidation = validatePassword(formData.password);
+      if (!passwordValidation.isValid) newErrors.password = passwordValidation.errors[0];
+      if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = 'Passwords do not match';
+    }
+    
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
     setIsLoading(true);
 
     try {
-      await login(formData);
+      if (isLogin) {
+        await login({ email: formData.email, password: formData.password });
+      } else {
+        await register({ name: formData.name, email: formData.email, password: formData.password });
+      }
       router.push('/dashboard');
     } catch (error: unknown) {
       const apiError = error as { 
-        response?: { 
-          data?: { error?: { message: string } };
-          status?: number;
-        }; 
+        response?: { data?: { error?: { message: string } }; status?: number; }; 
         message?: string;
       };
       
@@ -98,7 +138,7 @@ function LoginPageContent() {
         const errorMessage = apiError.response?.data?.error?.message || 'Too many attempts. Please try again later.';
         setErrors({ general: errorMessage });
       } else {
-        const errorMessage = apiError.response?.data?.error?.message || apiError.message || 'Login failed. Check your credentials.';
+        const errorMessage = apiError.response?.data?.error?.message || apiError.message || (isLogin ? 'Login failed.' : 'Registration failed.');
         if (errorMessage.toLowerCase().includes('email')) {
           setErrors({ email: errorMessage });
         } else if (errorMessage.toLowerCase().includes('password')) {
@@ -115,7 +155,7 @@ function LoginPageContent() {
   return (
     <section className="h-screen w-screen overflow-hidden bg-white p-3 lg:p-5 text-black antialiased font-sans dark:bg-[#0c0b10] dark:text-white selection:bg-[#c5b0f4]">
       <div className="grid h-full w-full gap-4 lg:gap-6 lg:grid-cols-[0.92fr_1.08fr]">
-        {/* Left Side - Login Form */}
+        {/* Left Side - Auth Form */}
         <div className="flex h-full flex-col justify-center rounded-3xl border border-gray-200/80 bg-white px-6 py-8 dark:border-gray-800/80 dark:bg-[#161522] lg:px-12 lg:py-10 shadow-sm relative overflow-hidden overflow-y-auto">
           <div className="absolute top-0 left-0 right-0 h-1.5 bg-[#c5b0f4]" />
 
@@ -133,13 +173,13 @@ function LoginPageContent() {
 
             <div>
               <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-black dark:text-white">
-                Sign In to Your Account
+                {isLogin ? 'Sign In to Your Account' : 'Create an account'}
               </h1>
               <p className="mt-1.5 text-xs font-mono text-gray-500 dark:text-gray-400">
-                Don&apos;t have an account?{' '}
-                <Link href="/signup" className="font-bold text-black dark:text-white underline hover:opacity-80">
-                  Sign up free
-                </Link>
+                {isLogin ? "Don't have an account? " : "Already have an account? "}
+                <button type="button" onClick={toggleMode} className="font-bold text-black dark:text-white underline hover:opacity-80 transition-opacity">
+                  {isLogin ? 'Sign up free' : 'Sign in'}
+                </button>
               </p>
             </div>
 
@@ -149,6 +189,34 @@ function LoginPageContent() {
                   {errors.general}
                 </div>
               )}
+
+              <AnimatePresence initial={false}>
+                {!isLogin && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0, marginBottom: 0 }}
+                    animate={{ height: 'auto', opacity: 1, marginBottom: 16 }}
+                    exit={{ height: 0, opacity: 0, marginBottom: 0 }}
+                    transition={{ duration: 0.3, ease: 'easeInOut' }}
+                    className="overflow-hidden space-y-1.5 text-left w-full font-sans"
+                  >
+                    <label className="text-[11px] font-mono font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300">
+                      FULL NAME
+                    </label>
+                    <div className="relative flex h-11 items-center rounded-2xl border border-gray-200 dark:border-gray-800 bg-white px-3.5 dark:bg-gray-900 focus-within:ring-2 focus-within:ring-black dark:focus-within:ring-white transition-all">
+                      <input
+                        name="name"
+                        type="text"
+                        required={!isLogin}
+                        value={formData.name}
+                        onChange={handleChange}
+                        placeholder="John Doe"
+                        className="w-full bg-transparent text-sm text-black outline-none placeholder:text-gray-400 dark:text-white dark:placeholder:text-gray-500 font-sans"
+                      />
+                    </div>
+                    {errors.name && <p className="text-xs text-rose-500 font-mono mt-1">{errors.name}</p>}
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
               {/* Email */}
               <div className="space-y-1.5 text-left w-full font-sans">
@@ -175,9 +243,11 @@ function LoginPageContent() {
                   <label className="text-[11px] font-mono font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300">
                     PASSWORD
                   </label>
-                  <Link href="/forgot-password" className="text-[11px] font-mono text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white">
-                    Forgot password?
-                  </Link>
+                  {isLogin && (
+                    <button type="button" className="text-[11px] font-mono text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white">
+                      Forgot password?
+                    </button>
+                  )}
                 </div>
                 <div className="relative flex h-11 items-center rounded-2xl border border-gray-200 dark:border-gray-800 bg-white px-3.5 dark:bg-gray-900 focus-within:ring-2 focus-within:ring-black dark:focus-within:ring-white transition-all">
                   <input
@@ -200,12 +270,47 @@ function LoginPageContent() {
                 {errors.password && <p className="text-xs text-rose-500 font-mono mt-1">{errors.password}</p>}
               </div>
 
+              <AnimatePresence initial={false}>
+                {!isLogin && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0, marginTop: 0 }}
+                    animate={{ height: 'auto', opacity: 1, marginTop: 16 }}
+                    exit={{ height: 0, opacity: 0, marginTop: 0 }}
+                    transition={{ duration: 0.3, ease: 'easeInOut' }}
+                    className="overflow-hidden space-y-1.5 text-left w-full font-sans"
+                  >
+                    <label className="text-[11px] font-mono font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300">
+                      CONFIRM PASSWORD
+                    </label>
+                    <div className="relative flex h-11 items-center rounded-2xl border border-gray-200 dark:border-gray-800 bg-white px-3.5 dark:bg-gray-900 focus-within:ring-2 focus-within:ring-black dark:focus-within:ring-white transition-all">
+                      <input
+                        name="confirmPassword"
+                        type={showPassword ? 'text' : 'password'}
+                        required={!isLogin}
+                        value={formData.confirmPassword}
+                        onChange={handleChange}
+                        placeholder="••••••••"
+                        className="w-full bg-transparent text-sm text-black outline-none placeholder:text-gray-400 dark:text-white dark:placeholder:text-gray-500 font-sans"
+                      />
+                    </div>
+                    {errors.confirmPassword && <p className="text-xs text-rose-500 font-mono mt-1">{errors.confirmPassword}</p>}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
               <button
                 type="submit"
                 disabled={isLoading}
-                className="mt-6 flex h-11 w-full items-center justify-center rounded-full bg-black text-xs font-mono font-bold uppercase tracking-widest text-white transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 dark:bg-white dark:text-black shadow-sm"
+                className="w-full h-11 mt-2 inline-flex items-center justify-center rounded-2xl bg-black text-white dark:bg-white dark:text-black text-xs font-mono font-bold uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all shadow-sm disabled:opacity-70 disabled:hover:scale-100"
               >
-                {isLoading ? 'SIGNING IN…' : 'SIGN IN'}
+                {isLoading ? (
+                  <div className="flex items-center gap-2">
+                    <div className="w-3.5 h-3.5 border-2 border-white/30 dark:border-black/30 border-t-white dark:border-t-black rounded-full animate-spin" />
+                    <span>{isLogin ? 'SIGNING IN...' : 'CREATING ACCOUNT...'}</span>
+                  </div>
+                ) : (
+                  <span>{isLogin ? 'SIGN IN TO DASHBOARD' : 'CREATE ACCOUNT'}</span>
+                )}
               </button>
             </form>
           </div>
@@ -296,11 +401,11 @@ function LoginPageContent() {
 export default function LoginPage() {
   return (
     <Suspense fallback={
-      <div className="h-screen w-screen flex items-center justify-center bg-white dark:bg-[#0c0b10]">
-        <div className="animate-spin rounded-full h-8 w-8 border-2 border-black border-t-transparent dark:border-white dark:border-t-transparent" />
+      <div className="h-screen w-screen bg-white dark:bg-[#0c0b10] flex items-center justify-center">
+        <div className="animate-spin rounded-full h-10 w-10 border-2 border-black border-t-transparent dark:border-white dark:border-t-transparent" />
       </div>
     }>
-      <LoginPageContent />
+      <AuthPageContent />
     </Suspense>
   );
 }
