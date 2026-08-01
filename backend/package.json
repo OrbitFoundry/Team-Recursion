@@ -7,6 +7,7 @@
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
     "build:render": "npm install --include=dev && npm run build",
+    "postinstall": "tsc",
     "start": "node dist/index.js",
     "lint": "eslint src --ext .ts",
     "setup:env": "node scripts/setup-env.js",
@@ -38,7 +39,8 @@
     "multer": "^2.2.0",
     "nodemailer": "^6.9.7",
     "passport": "^0.7.0",
-    "passport-google-oauth20": "^2.0.0"
+    "passport-google-oauth20": "^2.0.0",
+    "typescript": "^5.3.3"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
@@ -55,8 +57,7 @@
     "@typescript-eslint/parser": "^6.15.0",
     "eslint": "^8.56.0",
     "mongodb-memory-server": "^11.2.0",
-    "tsx": "^4.7.0",
-    "typescript": "^5.3.3"
+    "tsx": "^4.7.0"
   },
   "engines": {
     "node": ">=18.0.0",
