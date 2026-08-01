@@ -116,17 +116,17 @@ function LoginPageContent() {
     <section className="h-screen w-screen overflow-hidden bg-white p-3 lg:p-5 text-black antialiased font-sans dark:bg-[#0c0b10] dark:text-white selection:bg-[#c5b0f4]">
       <div className="grid h-full w-full gap-4 lg:gap-6 lg:grid-cols-[0.92fr_1.08fr]">
         {/* Left Side - Login Form */}
-        <div className="flex h-full flex-col justify-center rounded-3xl border border-gray-200/80 bg-white px-6 py-8 dark:border-gray-800/80 dark:bg-[#161522] lg:px-12 lg:py-10 shadow-sm relative overflow-hidden overflow-y-auto">
+        <div className="flex h-full flex-col justify-center rounded-3xl border border-gray-200/80 bg-white px-6 py-6 dark:border-gray-800/80 dark:bg-[#161522] lg:px-12 lg:py-8 shadow-sm relative overflow-hidden">
           <div className="absolute top-0 left-0 right-0 h-1.5 bg-[#c5b0f4]" />
 
           <div className="mx-auto w-full max-w-[420px]">
             {/* Header Brand */}
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-full border border-gray-200 dark:border-gray-800 bg-black dark:bg-white flex items-center justify-center shrink-0 shadow-sm">
-                <CookedBrandIcon className="w-5 h-5 text-white dark:text-black" />
+            <div className="flex items-center gap-3 mb-5">
+              <div className="w-9 h-9 rounded-full border border-gray-200 dark:border-gray-800 bg-black dark:bg-white flex items-center justify-center shrink-0 shadow-sm">
+                <CookedBrandIcon className="w-4 h-4 text-white dark:text-black" />
               </div>
               <div>
-                <span className="font-extrabold text-xl tracking-tight block leading-none font-sans">cooked?</span>
+                <span className="font-extrabold text-lg tracking-tight block leading-none font-sans">cooked?</span>
                 <span className="text-[9px] font-mono tracking-widest text-gray-500 uppercase">CAREER &amp; PLACEMENT PORTAL</span>
               </div>
             </div>
@@ -135,7 +135,7 @@ function LoginPageContent() {
               <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-black dark:text-white">
                 Sign In to Your Account
               </h1>
-              <p className="mt-1.5 text-xs font-mono text-gray-500 dark:text-gray-400">
+              <p className="mt-1 text-xs font-mono text-gray-500 dark:text-gray-400">
                 Don&apos;t have an account?{' '}
                 <Link href="/signup" className="font-bold text-black dark:text-white underline hover:opacity-80">
                   Sign up free
@@ -143,19 +143,19 @@ function LoginPageContent() {
               </p>
             </div>
 
-            <form className="mt-6 space-y-4 font-sans" onSubmit={handleSubmit}>
+            <form className="mt-5 space-y-3.5 font-sans" onSubmit={handleSubmit}>
               {errors.general && (
-                <div className="bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/50 text-rose-700 dark:text-rose-300 text-xs font-mono p-3.5 rounded-2xl">
+                <div className="bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/50 text-rose-700 dark:text-rose-300 text-xs font-mono p-3 rounded-2xl">
                   {errors.general}
                 </div>
               )}
 
               {/* Email */}
-              <div className="space-y-1.5 text-left w-full font-sans">
-                <label className="text-[11px] font-mono font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300">
+              <div className="space-y-1 text-left w-full font-sans">
+                <label className="text-[10px] font-mono font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300">
                   EMAIL ADDRESS
                 </label>
-                <div className="relative flex h-11 items-center rounded-2xl border border-gray-200 dark:border-gray-800 bg-white px-3.5 dark:bg-gray-900 focus-within:ring-2 focus-within:ring-black dark:focus-within:ring-white transition-all">
+                <div className="relative flex h-10.5 items-center rounded-2xl border border-gray-200 dark:border-gray-800 bg-white px-3.5 dark:bg-gray-900 focus-within:ring-2 focus-within:ring-black dark:focus-within:ring-white transition-all">
                   <input
                     name="email"
                     type="email"
@@ -166,20 +166,20 @@ function LoginPageContent() {
                     className="w-full bg-transparent text-sm text-black outline-none placeholder:text-gray-400 dark:text-white dark:placeholder:text-gray-500 font-sans"
                   />
                 </div>
-                {errors.email && <p className="text-xs text-rose-500 font-mono mt-1">{errors.email}</p>}
+                {errors.email && <p className="text-xs text-rose-500 font-mono mt-0.5">{errors.email}</p>}
               </div>
 
               {/* Password */}
-              <div className="space-y-1.5 text-left w-full font-sans">
+              <div className="space-y-1 text-left w-full font-sans">
                 <div className="flex items-center justify-between">
-                  <label className="text-[11px] font-mono font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300">
+                  <label className="text-[10px] font-mono font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300">
                     PASSWORD
                   </label>
-                  <Link href="/forgot-password" className="text-[11px] font-mono text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white">
+                  <Link href="/forgot-password" className="text-[10px] font-mono text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white">
                     Forgot password?
                   </Link>
                 </div>
-                <div className="relative flex h-11 items-center rounded-2xl border border-gray-200 dark:border-gray-800 bg-white px-3.5 dark:bg-gray-900 focus-within:ring-2 focus-within:ring-black dark:focus-within:ring-white transition-all">
+                <div className="relative flex h-10.5 items-center rounded-2xl border border-gray-200 dark:border-gray-800 bg-white px-3.5 dark:bg-gray-900 focus-within:ring-2 focus-within:ring-black dark:focus-within:ring-white transition-all">
                   <input
                     name="password"
                     type={showPassword ? 'text' : 'password'}
@@ -197,13 +197,13 @@ function LoginPageContent() {
                     {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
                   </button>
                 </div>
-                {errors.password && <p className="text-xs text-rose-500 font-mono mt-1">{errors.password}</p>}
+                {errors.password && <p className="text-xs text-rose-500 font-mono mt-0.5">{errors.password}</p>}
               </div>
 
               <button
                 type="submit"
                 disabled={isLoading}
-                className="mt-6 flex h-11 w-full items-center justify-center rounded-full bg-black text-xs font-mono font-bold uppercase tracking-widest text-white transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 dark:bg-white dark:text-black shadow-sm"
+                className="mt-5 flex h-11 w-full items-center justify-center rounded-full bg-black text-xs font-mono font-bold uppercase tracking-widest text-white transition-all hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 dark:bg-white dark:text-black shadow-sm cursor-pointer"
               >
                 {isLoading ? 'SIGNING IN…' : 'SIGN IN'}
               </button>
