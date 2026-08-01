@@ -56,7 +56,7 @@ router.post('/', async (req: Request, res: Response) => {
       return res.status(400).json({ error: { message: 'Validation failed', errors: validation.errors } });
     }
 
-    const { companyName, role, applicationDate, status, notes } = req.body;
+    const { companyName, role, applicationDate, status, companyLink, notes } = req.body;
 
     const company = await Company.create({
       userId: new mongoose.Types.ObjectId(userId),
@@ -64,6 +64,7 @@ router.post('/', async (req: Request, res: Response) => {
       role: role.trim(),
       applicationDate: applicationDate ? new Date(applicationDate) : new Date(),
       status: status || 'Applied',
+      companyLink: companyLink?.trim(),
       notes: notes?.trim(),
     });
 

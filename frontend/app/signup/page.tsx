@@ -12,7 +12,7 @@ import { validatePassword } from '@/lib/password-validation';
 
 export default function SignupPage() {
   const router = useRouter();
-  const { register, isAuthenticated, isAdmin } = useAuth();
+  const { register, isAuthenticated } = useAuth();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -30,9 +30,9 @@ export default function SignupPage() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      router.push(isAdmin ? '/admin/dashboard' : '/dashboard');
+      router.push('/dashboard');
     }
-  }, [isAuthenticated, isAdmin, router]);
+  }, [isAuthenticated, router]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });

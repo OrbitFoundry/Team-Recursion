@@ -18,16 +18,10 @@ const studentNav: NavItem[] = [
   { href: '/profile', label: 'Profile', icon: '👤' },
 ];
 
-const adminNav: NavItem[] = [
-  { href: '/admin/dashboard', label: 'Admin Overview', icon: '📈' },
-  { href: '/admin/students', label: 'Students', icon: '🎓' },
-  { href: '/admin/companies', label: 'All Applications', icon: '🏢' },
-  { href: '/admin/resources', label: 'Resource Moderation', icon: '📚' },
-  { href: '/profile', label: 'Account Settings', icon: '👤' },
-];
+
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
-  const { user, logout, isAdmin } = useAuth();
+  const { user, logout } = useAuth();
   const pathname = usePathname();
   const router = useRouter();
   const [darkMode, setDarkMode] = useState(false);
@@ -57,7 +51,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     router.push('/login');
   };
 
-  const navItems = isAdmin ? adminNav : studentNav;
+  const navItems = studentNav;
 
   return (
     <div className="min-h-screen bg-gray-50/50 dark:bg-[#0f0e17] text-gray-900 dark:text-gray-100 flex font-sans selection:bg-[#c5b0f4]">
@@ -85,7 +79,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               PlacementPortal
             </div>
             <div className="text-[10px] font-mono uppercase tracking-widest text-gray-500 dark:text-gray-400">
-              {isAdmin ? 'ADMIN CONTROL' : 'STUDENT PORTAL'}
+              STUDENT PORTAL
             </div>
           </div>
         </div>
@@ -93,7 +87,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         {/* Nav list */}
         <nav className="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto">
           {navItems.map((item) => {
-            const active = pathname === item.href || (item.href !== '/dashboard' && item.href !== '/admin/dashboard' && item.href !== '/profile' && pathname.startsWith(item.href));
+            const active = pathname === item.href || (item.href !== '/dashboard' && item.href !== '/profile' && pathname.startsWith(item.href));
             return (
               <Link
                 key={item.href}
@@ -155,14 +149,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 ? 'Resource Center'
                 : pathname === '/profile'
                 ? 'Account Settings'
-                : pathname === '/admin/dashboard'
-                ? 'Admin Overview'
-                : pathname === '/admin/students'
-                ? 'Student Management'
-                : pathname === '/admin/companies'
-                ? 'Global Applications'
-                : pathname === '/admin/resources'
-                ? 'Resource Moderation'
                 : 'Placement Portal'}
             </h1>
           </div>

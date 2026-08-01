@@ -6,6 +6,7 @@ export interface ICompany extends Document {
   role: string; // job role applied for
   applicationDate: Date;
   status: 'Applied' | 'Online Assessment' | 'Technical Interview' | 'HR Interview' | 'Selected' | 'Rejected';
+  companyLink?: string;
   notes?: string;
   createdAt: Date;
   updatedAt: Date;
@@ -38,6 +39,10 @@ const CompanySchema = new Schema<ICompany>(
       type: String,
       enum: ['Applied', 'Online Assessment', 'Technical Interview', 'HR Interview', 'Selected', 'Rejected'],
       default: 'Applied',
+    },
+    companyLink: {
+      type: String,
+      trim: true,
     },
     notes: {
       type: String,

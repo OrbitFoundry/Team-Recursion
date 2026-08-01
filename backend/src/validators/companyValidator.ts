@@ -5,6 +5,7 @@ export const validateCreateCompany = (data: {
   role?: string;
   applicationDate?: string;
   status?: string;
+  companyLink?: string;
   notes?: string;
 }): { isValid: boolean; errors: string[] } => {
   const errors: string[] = [];
@@ -25,6 +26,10 @@ export const validateCreateCompany = (data: {
     errors.push('Application date must be a valid date');
   }
 
+  if (data.companyLink && !/^https?:\/\/.+/.test(data.companyLink)) {
+    errors.push('Company link must be a valid URL starting with http:// or https://');
+  }
+
   return { isValid: errors.length === 0, errors };
 };
 
@@ -33,6 +38,7 @@ export const validateUpdateCompany = (data: {
   role?: string;
   applicationDate?: string;
   status?: string;
+  companyLink?: string;
   notes?: string;
 }): { isValid: boolean; errors: string[] } => {
   const errors: string[] = [];
@@ -51,6 +57,10 @@ export const validateUpdateCompany = (data: {
 
   if (data.applicationDate && isNaN(Date.parse(data.applicationDate))) {
     errors.push('Application date must be a valid date');
+  }
+
+  if (data.companyLink && !/^https?:\/\/.+/.test(data.companyLink)) {
+    errors.push('Company link must be a valid URL starting with http:// or https://');
   }
 
   return { isValid: errors.length === 0, errors };

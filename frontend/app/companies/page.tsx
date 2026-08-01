@@ -35,6 +35,7 @@ function CompanyModal({
       ? new Date(initial.applicationDate).toISOString().split('T')[0]
       : new Date().toISOString().split('T')[0],
     status: (initial?.status || 'Applied') as CompanyStatus,
+    companyLink: initial?.companyLink || '',
     notes: initial?.notes || '',
   });
   const [saving, setSaving] = useState(false);
@@ -121,6 +122,18 @@ function CompanyModal({
                 {STATUSES.map(s => <option key={s} value={s}>{s}</option>)}
               </select>
             </div>
+          </div>
+          <div>
+            <label className="block text-[11px] font-mono font-semibold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-1.5">
+              COMPANY LINK (OPTIONAL)
+            </label>
+            <input
+              type="url"
+              className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-sm dark:text-white focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all"
+              value={form.companyLink}
+              onChange={(e) => setForm({ ...form, companyLink: e.target.value })}
+              placeholder="https://careers.google.com/..."
+            />
           </div>
           <div>
             <label className="block text-[11px] font-mono font-semibold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-1.5">
@@ -247,71 +260,101 @@ function CompaniesContent() {
         </select>
       </div>
 
-      {/* Table Container */}
-      <div className="bg-white dark:bg-[#161522] rounded-3xl border border-gray-200/80 dark:border-gray-800/80 shadow-sm overflow-hidden">
+      {/* Cards Container */}
+      <div className="w-full">
         {loading ? (
-          <div className="flex justify-center items-center h-48">
+          <div className="flex justify-center items-center h-48 bg-white dark:bg-[#161522] rounded-3xl border border-gray-200/80 dark:border-gray-800/80 shadow-sm">
             <div className="animate-spin rounded-full h-8 w-8 border-2 border-black border-t-transparent dark:border-white dark:border-t-transparent" />
           </div>
         ) : companies.length === 0 ? (
-          <div className="text-center py-20 text-gray-400 dark:text-gray-500 font-mono">
+          <div className="flex flex-col justify-center items-center h-64 bg-white dark:bg-[#161522] rounded-3xl border border-gray-200/80 dark:border-gray-800/80 shadow-sm text-center">
             <div className="text-5xl mb-3">🏢</div>
-            <div className="text-sm font-semibold">NO APPLICATIONS RECORDED</div>
-            <div className="text-xs text-gray-400 mt-1">Click &quot;Add Application&quot; to begin tracking</div>
+            <div className="text-sm font-semibold font-mono text-gray-500 dark:text-gray-400">NO APPLICATIONS RECORDED</div>
+            <div className="text-xs text-gray-400 mt-1 font-mono">Click &quot;Add Application&quot; to begin tracking</div>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="border-b border-gray-100 dark:border-gray-800/80 bg-gray-50/50 dark:bg-gray-900/40 text-[11px] font-mono uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                  <th className="px-6 py-4 font-semibold">COMPANY</th>
-                  <th className="px-6 py-4 font-semibold">ROLE</th>
-                  <th className="px-6 py-4 font-semibold">DATE</th>
-                  <th className="px-6 py-4 font-semibold">STAGE</th>
-                  <th className="px-6 py-4 font-semibold">NOTES</th>
-                  <th className="px-6 py-4 text-right">ACTIONS</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100 dark:divide-gray-800/60 text-sm">
-                {companies.map((c) => (
-                  <tr
-                    key={c._id}
-                    className="hover:bg-gray-50/80 dark:hover:bg-gray-900/40 transition-colors"
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {companies.map((c) => (
+              <div
+                key={c._id}
+                className="group relative flex flex-col bg-white dark:bg-[#161522] rounded-3xl border border-gray-200/80 dark:border-gray-800/80 shadow-sm hover:shadow-lg transition-all overflow-hidden p-6"
+              >
+                {/* Status Badge */}
+                <div className="flex items-start justify-between mb-4">
+                  <span className={`text-[10px] font-mono uppercase font-semibold px-2.5 py-1 rounded-md whitespace-nowrap ${STATUS_BADGE[c.status]}`}>
+                    {c.status}
+                  </span>
+                  
+                  {c.companyLink && (
+                    <a
+                      href={c.companyLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-gray-400 hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors"
+                      title="Visit Company Link"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                    </a>
+                  )}
+                </div>
+
+                <div className="mb-1">
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white truncate" title={c.companyName}>
+                    {c.companyName}
+                  </h3>
+                </div>
+                
+                <div className="text-sm font-medium text-gray-600 dark:text-gray-300 mb-4 truncate" title={c.role}>
+                  {c.role}
+                </div>
+
+                <div className="flex items-center gap-2 text-xs font-mono text-gray-500 dark:text-gray-400 mb-4">
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                  {new Date(c.applicationDate).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}
+                </div>
+
+                {c.notes && (
+                  <div className="mt-auto pt-4 border-t border-gray-100 dark:border-gray-800/80">
+                    <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-2" title={c.notes}>
+                      {c.notes}
+                    </p>
+                  </div>
+                )}
+                
+                {!c.notes && <div className="mt-auto" />}
+
+                {/* Actions overlay on hover */}
+                <div className="absolute bottom-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button
+                    onClick={() => setModal({ open: true, company: c })}
+                    className="p-2 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black rounded-full shadow-sm transition-all"
+                    title="Edit Application"
                   >
-                    <td className="px-6 py-4 font-bold text-gray-900 dark:text-white">{c.companyName}</td>
-                    <td className="px-6 py-4 text-gray-600 dark:text-gray-300 font-medium">{c.role}</td>
-                    <td className="px-6 py-4 font-mono text-xs text-gray-500 dark:text-gray-400">
-                      {new Date(c.applicationDate).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className={`text-[11px] font-mono uppercase font-semibold px-3 py-1 rounded-full whitespace-nowrap ${STATUS_BADGE[c.status]}`}>
-                        {c.status}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-xs text-gray-500 dark:text-gray-400 max-w-xs truncate">
-                      {c.notes || '—'}
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      <div className="flex gap-2 justify-end">
-                        <button
-                          onClick={() => setModal({ open: true, company: c })}
-                          className="px-3.5 py-1.5 text-xs font-mono font-medium bg-gray-100 dark:bg-gray-800 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black rounded-full transition-all"
-                        >
-                          EDIT
-                        </button>
-                        <button
-                          onClick={() => handleDelete(c._id)}
-                          disabled={deleting === c._id}
-                          className="px-3.5 py-1.5 text-xs font-mono font-medium bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 hover:bg-rose-600 hover:text-white rounded-full transition-all disabled:opacity-50"
-                        >
-                          {deleting === c._id ? '…' : 'DELETE'}
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                    </svg>
+                  </button>
+                  <button
+                    onClick={() => handleDelete(c._id)}
+                    disabled={deleting === c._id}
+                    className="p-2 bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 hover:bg-rose-600 hover:text-white rounded-full shadow-sm transition-all disabled:opacity-50"
+                    title="Delete Application"
+                  >
+                    {deleting === c._id ? (
+                      <span className="flex items-center justify-center w-4 h-4 font-mono text-[10px]">…</span>
+                    ) : (
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                    )}
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
         )}
       </div>

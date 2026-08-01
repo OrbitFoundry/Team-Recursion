@@ -20,18 +20,13 @@ export interface Company {
   role: string;
   applicationDate: string;
   status: CompanyStatus;
+  companyLink?: string;
   notes?: string;
   createdAt: string;
   updatedAt: string;
 }
 
-export interface AdminCompany extends Company {
-  student: {
-    _id: string;
-    name: string;
-    email: string;
-  };
-}
+
 
 export interface Resource {
   _id: string;
@@ -42,13 +37,7 @@ export interface Resource {
   createdAt: string;
 }
 
-export interface AdminResource extends Resource {
-  student: {
-    _id: string;
-    name: string;
-    email: string;
-  };
-}
+
 
 export interface DashboardStats {
   totalApplied: number;
@@ -60,23 +49,3 @@ export interface DashboardStats {
   recentApplications: Company[];
 }
 
-export interface AdminStudent {
-  _id: string;
-  name: string;
-  email: string;
-  createdAt: string;
-  applicationCount: number;
-  offerCount: number;
-  lastActivity: string | null;
-}
-
-export interface AdminDashboardStats {
-  totalStudents: number;
-  totalApplications: number;
-  totalOffers: number;
-  totalRejections: number;
-  statusBreakdown: Record<CompanyStatus, number>;
-  topCompanies: Array<{ companyName: string; count: number }>;
-  recentActivity: Array<AdminCompany & { student: { name: string; email: string } }>;
-  recentResources: AdminResource[];
-}

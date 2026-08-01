@@ -32,16 +32,16 @@ const STATUS_LIST = [
 ] as const;
 
 const COMPANIES_DATA = [
-  { companyName: 'Google', role: 'Software Engineer' },
-  { companyName: 'Microsoft', role: 'SDE-1' },
-  { companyName: 'Amazon', role: 'SDE-2' },
-  { companyName: 'Flipkart', role: 'Backend Developer' },
-  { companyName: 'Infosys', role: 'Systems Engineer' },
-  { companyName: 'TCS', role: 'Assistant System Engineer' },
-  { companyName: 'Wipro', role: 'Project Engineer' },
-  { companyName: 'Juspay', role: 'Software Developer' },
-  { companyName: 'Razorpay', role: 'Backend Engineer' },
-  { companyName: 'CRED', role: 'SDE-1' },
+  { companyName: 'Google', role: 'Software Engineer', companyLink: 'https://careers.google.com/' },
+  { companyName: 'Microsoft', role: 'SDE-1', companyLink: 'https://careers.microsoft.com/' },
+  { companyName: 'Amazon', role: 'SDE-2', companyLink: 'https://amazon.jobs/' },
+  { companyName: 'Flipkart', role: 'Backend Developer', companyLink: 'https://flipkartcareers.com/' },
+  { companyName: 'Infosys', role: 'Systems Engineer', companyLink: 'https://infosys.com/careers' },
+  { companyName: 'TCS', role: 'Assistant System Engineer', companyLink: 'https://tcs.com/careers' },
+  { companyName: 'Wipro', role: 'Project Engineer', companyLink: 'https://careers.wipro.com/' },
+  { companyName: 'Juspay', role: 'Software Developer', companyLink: 'https://juspay.in/careers' },
+  { companyName: 'Razorpay', role: 'Backend Engineer', companyLink: 'https://razorpay.com/jobs/' },
+  { companyName: 'CRED', role: 'SDE-1', companyLink: 'https://careers.cred.club/' },
 ];
 
 const RESOURCES_DATA = [

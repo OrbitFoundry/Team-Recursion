@@ -12,16 +12,16 @@ import { redirectToGoogleAuth } from '@/lib/auth-utils';
 function LoginPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { login, isAuthenticated, isAdmin } = useAuth();
+  const { login, isAuthenticated } = useAuth();
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [errors, setErrors] = useState<{ email?: string; password?: string; general?: string }>({});
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (isAuthenticated) {
-      router.push(isAdmin ? '/admin/dashboard' : '/dashboard');
+      router.push('/dashboard');
     }
-  }, [isAuthenticated, isAdmin, router]);
+  }, [isAuthenticated, router]);
 
   useEffect(() => {
     const error = searchParams.get('error');

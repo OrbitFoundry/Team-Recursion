@@ -3,7 +3,7 @@ import authRoutes from './auth';
 import companyRoutes from './companies';
 import resourceRoutes from './resources';
 import dashboardRoutes from './dashboard';
-import adminRoutes from './admin';
+
 
 const router = Router();
 
@@ -22,7 +22,6 @@ router.use('/companies', companyRoutes);
 router.use('/resources', resourceRoutes);
 router.use('/dashboard', dashboardRoutes);
 
-// Admin routes (protected by adminOnly middleware inside admin.ts)
-router.use('/admin', adminRoutes);
+
 
 export default router;
