@@ -9,20 +9,24 @@ const router = Router();
 // All routes require authentication
 router.use(authenticate);
 
-// GET /api/companies — student's own companies (search/filter/sort)
+// GET /api/companies — student's own companies or admin all
 router.get('/', async (req: Request, res: Response) => {
   try {
     const authReq = req as AuthRequest;
     const userId = authReq.user!.userId;
+    const isAdmin = authReq.user?.role === 'admin';
 
-    const { search, status, sort = 'desc' } = req.query as {
+    const { search, status, sort = 'desc', all } = req.query as {
       search?: string;
       status?: string;
       sort?: string;
+      all?: string;
     };
 
-    // Build query scoped to this user
-    const query: Record<string, unknown> = { userId: new mongoose.Types.ObjectId(userId) };
+    // Build query scoped to user or all if admin
+    const query: Record<string, unknown> = (isAdmin && all === 'true')
+      ? {}
+      : { userId: new mongoose.Types.ObjectId(userId) };
 
     if (search) {
       query.companyName = { $regex: search, $options: 'i' };
@@ -35,6 +39,7 @@ router.get('/', async (req: Request, res: Response) => {
     const sortOrder = sort === 'asc' ? 1 : -1;
 
     const companies = await Company.find(query)
+      .populate('userId', 'name email techStacks resumeUrl')
       .sort({ applicationDate: sortOrder })
       .lean();
 
@@ -76,7 +81,7 @@ router.post('/', async (req: Request, res: Response) => {
   }
 });
 
-// PUT /api/companies/:id — update own company only
+// PUT /api/companies/:id — update company (own or admin)
 router.put('/:id', async (req: Request, res: Response) => {
   try {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
@@ -85,15 +90,19 @@ router.put('/:id', async (req: Request, res: Response) => {
 
     const authReq = req as AuthRequest;
     const userId = authReq.user!.userId;
+    const isAdmin = authReq.user?.role === 'admin';
 
     const validation = validateUpdateCompany(req.body);
     if (!validation.isValid) {
       return res.status(400).json({ error: { message: 'Validation failed', errors: validation.errors } });
     }
 
-    // Enforce userId match — student can only update their own
+    const filter = isAdmin
+      ? { _id: req.params.id }
+      : { _id: req.params.id, userId: new mongoose.Types.ObjectId(userId) };
+
     const company = await Company.findOneAndUpdate(
-      { _id: req.params.id, userId: new mongoose.Types.ObjectId(userId) },
+      filter,
       { $set: req.body },
       { new: true, runValidators: true }
     );
@@ -109,7 +118,7 @@ router.put('/:id', async (req: Request, res: Response) => {
   }
 });
 
-// DELETE /api/companies/:id — delete own company only
+// DELETE /api/companies/:id — delete company (own or admin)
 router.delete('/:id', async (req: Request, res: Response) => {
   try {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
@@ -118,12 +127,13 @@ router.delete('/:id', async (req: Request, res: Response) => {
 
     const authReq = req as AuthRequest;
     const userId = authReq.user!.userId;
+    const isAdmin = authReq.user?.role === 'admin';
 
-    // Enforce userId match
-    const company = await Company.findOneAndDelete({
-      _id: req.params.id,
-      userId: new mongoose.Types.ObjectId(userId),
-    });
+    const filter = isAdmin
+      ? { _id: req.params.id }
+      : { _id: req.params.id, userId: new mongoose.Types.ObjectId(userId) };
+
+    const company = await Company.findOneAndDelete(filter);
 
     if (!company) {
       return res.status(404).json({ error: { message: 'Company not found or access denied' } });

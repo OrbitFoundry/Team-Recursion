@@ -13,16 +13,20 @@ import { ArrowRightIcon } from '@/components/ui/Icons';
 function LoginPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { login, isAuthenticated } = useAuth();
+  const { login, isAuthenticated, isAdmin, user } = useAuth();
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [errors, setErrors] = useState<{ email?: string; password?: string; general?: string }>({});
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (isAuthenticated) {
-      router.push('/dashboard');
+      if (isAdmin) {
+        router.push('/admin/dashboard');
+      } else {
+        router.push('/dashboard');
+      }
     }
-  }, [isAuthenticated, router]);
+  }, [isAuthenticated, isAdmin, router]);
 
   useEffect(() => {
     const error = searchParams.get('error');
@@ -42,8 +46,12 @@ function LoginPageContent() {
     setIsLoading(true);
 
     try {
-      await login(formData);
-      router.push('/dashboard');
+      const loggedUser = await login(formData);
+      if (loggedUser?.role === 'admin') {
+        router.push('/admin/dashboard');
+      } else {
+        router.push('/dashboard');
+      }
     } catch (error: unknown) {
       const apiError = error as { 
         response?: { 

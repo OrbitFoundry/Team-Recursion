@@ -13,7 +13,7 @@ import { ArrowRightIcon } from '@/components/ui/Icons';
 
 export default function SignupPage() {
   const router = useRouter();
-  const { register, isAuthenticated } = useAuth();
+  const { register, isAuthenticated, isAdmin } = useAuth();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -31,9 +31,13 @@ export default function SignupPage() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      router.push('/dashboard');
+      if (isAdmin) {
+        router.push('/admin/dashboard');
+      } else {
+        router.push('/dashboard');
+      }
     }
-  }, [isAuthenticated, router]);
+  }, [isAuthenticated, isAdmin, router]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -78,12 +82,16 @@ export default function SignupPage() {
     setIsLoading(true);
 
     try {
-      await register({
+      const registeredUser = await register({
         name: formData.name,
         email: formData.email,
         password: formData.password,
       });
-      router.push('/dashboard');
+      if (registeredUser?.role === 'admin') {
+        router.push('/admin/dashboard');
+      } else {
+        router.push('/dashboard');
+      }
     } catch (error: unknown) {
       const apiError = error as { response?: { data?: { error?: { message: string } } }; message?: string };
       const errorMessage = apiError.response?.data?.error?.message || apiError.message || 'Registration failed. Please try again.';

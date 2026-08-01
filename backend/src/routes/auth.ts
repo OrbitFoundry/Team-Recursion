@@ -249,6 +249,42 @@ router.post('/me/resume', authenticate, uploadResume.single('resume'), async (re
   }
 });
 
+// GET /api/auth/students — List all students for admin directory
+router.get('/students', authenticate, async (req: Request, res: Response) => {
+  try {
+    const authReq = req as AuthRequest;
+    if (authReq.user?.role !== 'admin') {
+      return res.status(403).json({ error: { message: 'Access denied. Admin role required.' } });
+    }
+
+    const students = await User.find({ role: 'student' })
+      .select('-password -passwordResetToken -passwordResetExpires')
+      .lean();
+
+    // Attach application counts for each student
+    const Company = (await import('../models/Company')).default;
+    const studentIds = students.map(s => s._id);
+    const appCounts = await Company.aggregate([
+      { $match: { userId: { $in: studentIds } } },
+      { $group: { _id: '$userId', total: { $sum: 1 }, selected: { $sum: { $cond: [{ $eq: ['$status', 'Selected'] }, 1, 0] } } } },
+    ]);
+
+    const countMap = new Map(appCounts.map(c => [c._id.toString(), c]));
+
+    const enrichedStudents = students.map(s => ({
+      ...s,
+      id: s._id.toString(),
+      totalApplications: countMap.get(s._id.toString())?.total || 0,
+      selectedOffers: countMap.get(s._id.toString())?.selected || 0,
+    }));
+
+    return res.status(200).json({ students: enrichedStudents });
+  } catch (error: unknown) {
+    const err = error as Error;
+    return res.status(500).json({ error: { message: err.message || 'Failed to fetch students' } });
+  }
+});
+
 export default router;
 
 

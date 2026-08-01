@@ -56,3 +56,29 @@ export interface DashboardStats {
   statusBreakdown: Record<CompanyStatus, number>;
   recentApplications: Company[];
 }
+
+export interface AdminStats {
+  totalStudents: number;
+  totalApplied: number;
+  totalActive: number;
+  totalOffers: number;
+  totalRejected: number;
+  successRate: number;
+  statusBreakdown: Record<CompanyStatus, number>;
+  recentApplications: (Company & { studentName?: string; studentEmail?: string })[];
+}
+
+export interface StudentUser {
+  _id: string;
+  id: string;
+  name: string;
+  email: string;
+  role: 'student';
+  isEmailVerified: boolean;
+  techStacks?: string[];
+  resumeUrl?: string;
+  totalApplications: number;
+  selectedOffers: number;
+  createdAt: string;
+}
+
