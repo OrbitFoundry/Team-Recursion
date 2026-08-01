@@ -70,11 +70,32 @@ export const resourcesApi = {
 };
 
 // ─────────────────────────────────────────
-// DASHBOARD — student
+// DASHBOARD — student & admin
 // ─────────────────────────────────────────
 export const dashboardApi = {
   getStats: async () => {
     const res = await apiClient.get<DashboardStats>('/dashboard/stats');
     return res.data;
   },
+
+  getAdminStats: async () => {
+    const res = await apiClient.get<import('@/types/placement').AdminStats>('/dashboard/admin-stats');
+    return res.data;
+  },
 };
+
+// ─────────────────────────────────────────
+// ADMIN API — student directory & master register
+// ─────────────────────────────────────────
+export const adminApi = {
+  getStudents: async () => {
+    const res = await apiClient.get<{ students: import('@/types/placement').StudentUser[] }>('/auth/students');
+    return res.data.students;
+  },
+
+  getMasterCompanies: async (params?: { search?: string; status?: string; sort?: string }) => {
+    const res = await apiClient.get<{ companies: Company[] }>('/companies', { params: { ...params, all: 'true' } });
+    return res.data.companies;
+  },
+};
+

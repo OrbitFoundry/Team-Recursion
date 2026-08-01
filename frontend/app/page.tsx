@@ -21,9 +21,13 @@ export default function LandingPage() {
 
   useEffect(() => {
     if (!loading && isAuthenticated) {
-      router.push('/dashboard');
+      if (isAdmin) {
+        router.push('/admin/dashboard');
+      } else {
+        router.push('/dashboard');
+      }
     }
-  }, [isAuthenticated, loading, router]);
+  }, [isAuthenticated, isAdmin, loading, router]);
 
   if (loading) {
     return (

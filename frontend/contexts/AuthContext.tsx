@@ -10,8 +10,8 @@ import { logger } from '@/lib/logger';
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  login: (data: LoginData) => Promise<void>;
-  register: (data: RegisterData) => Promise<void>;
+  login: (data: LoginData) => Promise<User>;
+  register: (data: RegisterData) => Promise<User>;
   updateProfile: (data: { name?: string; email?: string; techStacks?: string[] }) => Promise<void>;
   logout: () => void;
   isAuthenticated: boolean;
@@ -126,6 +126,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     setUser(response.user);
     showToast('Login successful!', 'success');
+    return response.user;
   };
 
   const register = async (data: RegisterData) => {
@@ -152,6 +153,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     setUser(response.user);
     showToast('Account created successfully!', 'success');
+    return response.user;
   };
 
   const updateProfile = async (data: { name?: string; email?: string; techStacks?: string[] }) => {

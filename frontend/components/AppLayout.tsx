@@ -157,7 +157,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </button>
-            <h1 className="text-base font-bold tracking-tight text-gray-900 dark:text-white">
+            <h1 className="text-base font-bold tracking-tight text-gray-900 dark:text-white font-sans">
               {pathname === '/dashboard'
                 ? 'Student Dashboard'
                 : pathname === '/companies'
@@ -166,6 +166,14 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 ? 'Resource Center'
                 : pathname === '/profile'
                 ? 'Account Settings'
+                : pathname === '/admin/dashboard'
+                ? 'Admin Control Room'
+                : pathname === '/admin/students'
+                ? 'Student Directory'
+                : pathname === '/admin/companies'
+                ? 'Master Register'
+                : pathname === '/admin/resources'
+                ? 'Resource Moderation'
                 : 'Placement Portal'}
             </h1>
           </div>
