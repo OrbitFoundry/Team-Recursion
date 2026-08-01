@@ -327,40 +327,46 @@ function CompaniesContent() {
                 </div>
                 
                 {/* Tech Stacks & Match % */}
-                {c.techStacks && c.techStacks.length > 0 && (
-                  <div className="mb-4">
-                    <div className="flex flex-wrap gap-1.5 mb-2">
-                      {c.techStacks.map(stack => (
-                        <span key={stack} className="inline-block px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-300">
-                          {stack}
-                        </span>
-                      ))}
-                    </div>
-                    {(() => {
-                      const userStacks = user?.techStacks || [];
-                      const matchingStacks = c.techStacks.filter(t => userStacks.includes(t));
-                      const matchPercentage = Math.round((matchingStacks.length / c.techStacks.length) * 100);
-                      const isHighMatch = matchPercentage >= 75;
-                      const isMediumMatch = matchPercentage >= 40 && matchPercentage < 75;
-                      
-                      let colorClass = 'text-rose-600 dark:text-rose-400';
-                      if (isHighMatch) colorClass = 'text-emerald-600 dark:text-emerald-400';
-                      else if (isMediumMatch) colorClass = 'text-amber-600 dark:text-amber-400';
+                <div className="mb-4">
+                  {c.techStacks && c.techStacks.length > 0 ? (
+                    <>
+                      <div className="flex flex-wrap gap-1.5 mb-2">
+                        {c.techStacks.map(stack => (
+                          <span key={stack} className="inline-block px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-300">
+                            {stack}
+                          </span>
+                        ))}
+                      </div>
+                      {(() => {
+                        const userStacks = user?.techStacks || [];
+                        const matchingStacks = c.techStacks.filter(t => userStacks.includes(t));
+                        const matchPercentage = Math.round((matchingStacks.length / c.techStacks.length) * 100);
+                        const isHighMatch = matchPercentage >= 75;
+                        const isMediumMatch = matchPercentage >= 40 && matchPercentage < 75;
+                        
+                        let colorClass = 'text-rose-600 dark:text-rose-400';
+                        if (isHighMatch) colorClass = 'text-emerald-600 dark:text-emerald-400';
+                        else if (isMediumMatch) colorClass = 'text-amber-600 dark:text-amber-400';
 
-                      return (
-                        <div 
-                          className={`text-xs font-bold font-mono ${colorClass} inline-flex items-center gap-1 cursor-help`}
-                          title={`You match ${matchingStacks.length} out of ${c.techStacks.length} required tech stacks: ${matchingStacks.join(', ') || 'None'}`}
-                        >
-                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                          </svg>
-                          {matchPercentage}% MATCH
-                        </div>
-                      );
-                    })()}
-                  </div>
-                )}
+                        return (
+                          <div 
+                            className={`text-xs font-bold font-mono ${colorClass} inline-flex items-center gap-1 cursor-help`}
+                            title={`You match ${matchingStacks.length} out of ${c.techStacks.length} required tech stacks: ${matchingStacks.join(', ') || 'None'}`}
+                          >
+                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                            {matchPercentage}% MATCH
+                          </div>
+                        );
+                      })()}
+                    </>
+                  ) : (
+                    <div className="text-[10px] text-gray-400 dark:text-gray-500 font-mono italic">
+                      NO TECH STACKS SPECIFIED
+                    </div>
+                  )}
+                </div>
 
                 <div className="flex items-center gap-2 text-xs font-mono text-gray-500 dark:text-gray-400 mb-4">
                   <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
