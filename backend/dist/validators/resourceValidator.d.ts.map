@@ -1,0 +1,1 @@
+{"version":3,"file":"resourceValidator.d.ts","sourceRoot":"","sources":["../../src/validators/resourceValidator.ts"],"names":[],"mappings":"AAEA,eAAO,MAAM,sBAAsB,GAAI,MAAM;IAC3C,KAAK,CAAC,EAAE,MAAM,CAAC;IACf,QAAQ,CAAC,EAAE,MAAM,CAAC;IAClB,IAAI,CAAC,EAAE,MAAM,CAAC;CACf,KAAG;IAAE,OAAO,EAAE,OAAO,CAAC;IAAC,MAAM,EAAE,MAAM,EAAE,CAAA;CAsBvC,CAAC"}

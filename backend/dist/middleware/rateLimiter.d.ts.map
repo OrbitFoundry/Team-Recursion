@@ -1,0 +1,1 @@
+{"version":3,"file":"rateLimiter.d.ts","sourceRoot":"","sources":["../../src/middleware/rateLimiter.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,OAAO,EAAE,QAAQ,EAAE,YAAY,EAAE,MAAM,SAAS,CAAC;AAE1D;;GAEG;AACH,eAAO,MAAM,WAAW,GAAI,MAAM,OAAO,EAAE,MAAM,QAAQ,EAAE,MAAM,YAAY,SAE5E,CAAC;AAEF,eAAO,MAAM,oBAAoB,GAAI,MAAM,OAAO,EAAE,MAAM,QAAQ,EAAE,MAAM,YAAY,SAErF,CAAC"}
