@@ -174,31 +174,7 @@ export default function SignupPage() {
               </p>
             </div>
 
-            {/* Social Signup Buttons */}
-            <div className="mt-8 grid gap-3 sm:grid-cols-2 sm:gap-4">
-              <button
-                type="button"
-                onClick={handleGoogleLogin}
-                className="flex h-11 w-full min-w-0 items-center justify-center gap-2 rounded-full border border-gray-300 dark:border-gray-700 bg-white px-4 text-xs font-mono font-bold uppercase tracking-wider text-black transition-all hover:bg-black hover:text-white dark:bg-gray-900 dark:text-white dark:hover:bg-white dark:hover:text-black shadow-sm"
-              >
-                <GoogleIcon />
-                <span className="whitespace-nowrap">Sign up with Google</span>
-              </button>
-              <button
-                type="button"
-                onClick={handleGoogleLogin}
-                className="flex h-11 w-full min-w-0 items-center justify-center gap-2 rounded-full border border-gray-300 dark:border-gray-700 bg-white px-4 text-xs font-mono font-bold uppercase tracking-wider text-black transition-all hover:bg-black hover:text-white dark:bg-gray-900 dark:text-white dark:hover:bg-white dark:hover:text-black shadow-sm"
-              >
-                <AppleIcon />
-                <span className="whitespace-nowrap">Sign up with Apple</span>
-              </button>
-            </div>
-
-            <div className="my-6 flex items-center gap-4 text-xs font-mono font-bold uppercase tracking-wider text-gray-400">
-              <div className="h-px flex-1 bg-gray-200 dark:bg-gray-800" />
-              OR EMAIL
-              <div className="h-px flex-1 bg-gray-200 dark:bg-gray-800" />
-            </div>
+            <div className="mt-8" />
 
             <form className="space-y-4 font-sans" onSubmit={handleSubmit}>
               {errors.general && (
