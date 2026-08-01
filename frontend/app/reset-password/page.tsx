@@ -9,6 +9,7 @@ import { authApi } from '@/lib/auth-api';
 import { showToast } from '@/components/ToastProvider';
 import { validatePassword } from '@/lib/password-validation';
 import Cookies from 'js-cookie';
+import { CheckIcon } from '@/components/ui/Icons';
 
 function ResetPasswordPageContent() {
   const router = useRouter();
@@ -134,11 +135,12 @@ function ResetPasswordPageContent() {
   if (isSuccess) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white dark:bg-[#0c0b10] py-12 px-4 sm:px-6 lg:px-8 font-sans selection:bg-[#c5b0f4] selection:text-black">
-        <div className="max-w-md w-full space-y-8 bg-white dark:bg-[#161522] p-8 md:p-10 rounded-3xl border border-gray-200/80 dark:border-gray-800/80 shadow-sm text-center">
-          <div className="mx-auto w-14 h-14 rounded-full bg-[#c8e6cd] text-emerald-950 flex items-center justify-center font-bold text-xl shadow-sm">
-            ✓
+        <div className="max-w-md w-full space-y-8 bg-white dark:bg-[#161522] p-8 md:p-10 rounded-3xl border border-gray-200/80 dark:border-gray-800/80 shadow-sm text-center relative overflow-hidden">
+          <div className="absolute top-0 left-0 right-0 h-2 bg-[#c8e6cd]" />
+          <div className="mx-auto w-14 h-14 rounded-full bg-[#c8e6cd] text-emerald-950 flex items-center justify-center shadow-sm">
+            <CheckIcon className="w-7 h-7 text-emerald-950" />
           </div>
-          <div className="text-[11px] font-mono font-bold uppercase tracking-widest text-gray-500 mb-1 font-mono">CREDENTIALS UPDATED</div>
+          <div className="text-[11px] font-mono font-bold uppercase tracking-widest text-gray-500 mb-1">CREDENTIALS UPDATED</div>
           <h2 className="text-2xl font-bold tracking-tight dark:text-white">
             Password Reset Successful!
           </h2>
@@ -155,15 +157,19 @@ function ResetPasswordPageContent() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-white dark:bg-[#0c0b10] py-12 px-4 sm:px-6 lg:px-8 font-sans selection:bg-[#c5b0f4] selection:text-black">
-      <div className="max-w-md w-full space-y-8 bg-white dark:bg-[#161522] p-8 md:p-10 rounded-3xl border border-gray-200/80 dark:border-gray-800/80 shadow-sm">
+      <div className="max-w-md w-full space-y-8 bg-white dark:bg-[#161522] p-8 md:p-10 rounded-3xl border border-gray-200/80 dark:border-gray-800/80 shadow-sm relative overflow-hidden">
+        
+        {/* Accent Editorial Ribbon */}
+        <div className="absolute top-0 left-0 right-0 h-2 bg-[#efd4d4]" />
+
         {/* Brand Header */}
-        <div className="text-center">
-          <div className="mx-auto w-12 h-12 rounded-full bg-black text-white dark:bg-white dark:text-black font-bold flex items-center justify-center text-sm font-sans tracking-tight mb-4 shadow-sm">
+        <div className="text-center pt-2">
+          <div className="mx-auto w-12 h-12 rounded-full bg-black text-white dark:bg-white dark:text-black font-extrabold flex items-center justify-center text-sm font-sans tracking-tight mb-4 shadow-sm">
             TR
           </div>
-          <div className="text-[11px] font-mono font-bold uppercase tracking-widest text-gray-500 mb-1">SECURITY</div>
-          <h2 className="text-2xl font-bold tracking-tight dark:text-white">
-            Reset Password
+          <div className="text-[10px] font-mono font-bold uppercase tracking-widest text-gray-500 mb-1">SECURITY RECOVERY</div>
+          <h2 className="text-2xl font-extrabold tracking-tight dark:text-white">
+            Reset Your Password
           </h2>
           <p className="mt-2 text-xs font-mono text-gray-500 dark:text-gray-400">
             Enter your new secure password below
@@ -199,7 +205,7 @@ function ResetPasswordPageContent() {
               name="confirmPassword"
               autoComplete="new-password"
               required
-              value={formData.confirmPassword}
+              value={formData.password}
               onChange={handleChange}
               error={errors.confirmPassword}
               placeholder="Repeat new password"
