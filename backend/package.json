@@ -6,10 +6,10 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
-    "build:render": "npm install --include=dev && npm run build",
+    "build:render": "npm install && tsc",
     "postinstall": "tsc",
     "prestart": "tsc",
-    "start": "node dist/index.js",
+    "start": "tsc && node dist/index.js",
     "lint": "eslint src --ext .ts",
     "setup:env": "node scripts/setup-env.js",
     "seed": "npx tsx src/seeds/seed.ts"
