@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import AppLayout from '@/components/AppLayout';
 import { companiesApi } from '@/lib/placement-api';
+import { PlusIcon, CompanyIcon } from '@/components/ui/Icons';
 import type { Company, CompanyStatus } from '@/types/placement';
 
 const STATUSES: CompanyStatus[] = [
@@ -217,7 +218,7 @@ function CompaniesContent() {
           onClick={() => setModal({ open: true })}
           className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-black text-white dark:bg-white dark:text-black font-mono text-xs font-bold uppercase tracking-wider rounded-full hover:scale-105 active:scale-95 transition-all shadow-sm"
         >
-          <span>＋</span> ADD APPLICATION
+          <PlusIcon className="w-4 h-4" /> ADD APPLICATION
         </button>
       </div>
 
@@ -255,7 +256,9 @@ function CompaniesContent() {
           </div>
         ) : companies.length === 0 ? (
           <div className="text-center py-20 text-gray-400 dark:text-gray-500 font-mono">
-            <div className="text-5xl mb-3">🏢</div>
+            <div className="w-12 h-12 mx-auto mb-3 text-gray-400 dark:text-gray-500">
+              <CompanyIcon className="w-full h-full" />
+            </div>
             <div className="text-sm font-semibold">NO APPLICATIONS RECORDED</div>
             <div className="text-xs text-gray-400 mt-1">Click &quot;Add Application&quot; to begin tracking</div>
           </div>

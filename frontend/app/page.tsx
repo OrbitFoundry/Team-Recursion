@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link';
+import { ClipboardIcon, ResourceIcon, AnalyticsIcon, ArrowRightIcon } from '@/components/ui/Icons';
 
 export default function LandingPage() {
   const router = useRouter();
@@ -71,9 +72,9 @@ export default function LandingPage() {
             <div className="flex flex-wrap items-center gap-4 font-mono text-xs font-bold uppercase tracking-wider">
               <Link
                 href="/signup"
-                className="px-8 py-4 rounded-full bg-black text-white hover:scale-105 active:scale-95 transition-all shadow-md"
+                className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-black text-white hover:scale-105 active:scale-95 transition-all shadow-md"
               >
-                CREATE ACCOUNT FREE →
+                CREATE ACCOUNT FREE <ArrowRightIcon className="w-4 h-4" />
               </Link>
               <Link
                 href="/login"
@@ -92,7 +93,9 @@ export default function LandingPage() {
         <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Lime Card */}
           <div className="rounded-3xl bg-[#dceeb1] text-black p-8 transition-all hover-lift border border-black/5 shadow-sm">
-            <div className="text-3xl mb-4">📋</div>
+            <div className="w-8 h-8 mb-4">
+              <ClipboardIcon className="w-full h-full text-black" />
+            </div>
             <div className="text-[11px] font-mono font-bold uppercase tracking-widest text-black/60 mb-2">MODULE 01</div>
             <h3 className="text-2xl font-bold tracking-tight mb-3">Application Pipeline</h3>
             <p className="text-sm text-black/80 leading-relaxed font-sans">
@@ -102,7 +105,9 @@ export default function LandingPage() {
 
           {/* Cream Card */}
           <div className="rounded-3xl bg-[#f4ecd6] text-black p-8 transition-all hover-lift border border-black/5 shadow-sm">
-            <div className="text-3xl mb-4">📚</div>
+            <div className="w-8 h-8 mb-4">
+              <ResourceIcon className="w-full h-full text-black" />
+            </div>
             <div className="text-[11px] font-mono font-bold uppercase tracking-widest text-black/60 mb-2">MODULE 02</div>
             <h3 className="text-2xl font-bold tracking-tight mb-3">Prep Resource Hub</h3>
             <p className="text-sm text-black/80 leading-relaxed font-sans">
@@ -112,7 +117,9 @@ export default function LandingPage() {
 
           {/* Mint Card */}
           <div className="rounded-3xl bg-[#c8e6cd] text-black p-8 transition-all hover-lift border border-black/5 shadow-sm">
-            <div className="text-3xl mb-4">📈</div>
+            <div className="w-8 h-8 mb-4">
+              <AnalyticsIcon className="w-full h-full text-black" />
+            </div>
             <div className="text-[11px] font-mono font-bold uppercase tracking-widest text-black/60 mb-2">MODULE 03</div>
             <h3 className="text-2xl font-bold tracking-tight mb-3">Admin Intelligence</h3>
             <p className="text-sm text-black/80 leading-relaxed font-sans">

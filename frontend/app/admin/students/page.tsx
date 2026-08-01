@@ -5,6 +5,7 @@ import Link from 'next/link';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import AppLayout from '@/components/AppLayout';
 import { adminApi } from '@/lib/placement-api';
+import { StudentsIcon, ArrowRightIcon } from '@/components/ui/Icons';
 import type { AdminStudent } from '@/types/placement';
 
 function StudentsContent() {
@@ -22,8 +23,8 @@ function StudentsContent() {
 
   const filtered = students.filter(
     s =>
-      s.name.toLowerCase().includes(search.toLowerCase()) ||
-      s.email.toLowerCase().includes(search.toLowerCase())
+      (s.name || '').toLowerCase().includes(search.toLowerCase()) ||
+      (s.email || '').toLowerCase().includes(search.toLowerCase())
   );
 
   return (
@@ -60,7 +61,9 @@ function StudentsContent() {
           </div>
         ) : filtered.length === 0 ? (
           <div className="text-center py-20 text-gray-400 dark:text-gray-500 font-mono">
-            <div className="text-5xl mb-3">🎓</div>
+            <div className="w-12 h-12 mx-auto mb-3 text-gray-400 dark:text-gray-500">
+              <StudentsIcon className="w-full h-full" />
+            </div>
             <div className="text-sm font-semibold">NO STUDENTS FOUND</div>
             <div className="text-xs text-gray-400 mt-1">Try adjusting your search criteria</div>
           </div>
@@ -104,7 +107,7 @@ function StudentsContent() {
                         href={`/admin/students/${s._id}`}
                         className="inline-flex items-center gap-1.5 px-4 py-1.5 text-xs font-mono font-bold bg-black text-white dark:bg-white dark:text-black rounded-full hover:scale-105 active:scale-95 transition-all shadow-sm"
                       >
-                        VIEW PROFILE →
+                        VIEW PROFILE <ArrowRightIcon className="w-3.5 h-3.5" />
                       </Link>
                     </td>
                   </tr>

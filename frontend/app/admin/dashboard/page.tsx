@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell,
@@ -9,6 +9,7 @@ import {
 import ProtectedRoute from '@/components/ProtectedRoute';
 import AppLayout from '@/components/AppLayout';
 import { adminApi } from '@/lib/placement-api';
+import { StudentsIcon, CompanyIcon, ClipboardIcon, AnalyticsIcon } from '@/components/ui/Icons';
 import type { AdminDashboardStats, CompanyStatus } from '@/types/placement';
 
 const STATUS_COLORS: Record<CompanyStatus, string> = {
@@ -29,10 +30,10 @@ const STATUS_BADGE: Record<CompanyStatus, string> = {
   'Rejected': 'bg-rose-100 text-rose-950 dark:bg-rose-950/60 dark:text-rose-300',
 };
 
-function GlobalStatCard({ label, value, icon, bgClass, textClass }: { label: string; value: number; icon: string; bgClass: string; textClass: string }) {
+function GlobalStatCard({ label, value, icon, bgClass, textClass }: { label: string; value: number; icon: React.ReactNode; bgClass: string; textClass: string }) {
   return (
     <div className={`rounded-3xl p-6 transition-all hover-lift ${bgClass} border border-black/5 shadow-sm`}>
-      <div className="text-3xl mb-2">{icon}</div>
+      <div className="w-8 h-8 mb-2 flex items-center justify-center text-black/80">{icon}</div>
       <div className="text-4xl font-extrabold tracking-tight font-sans mb-1">{value.toLocaleString()}</div>
       <div className={`text-xs font-mono font-bold uppercase tracking-wider ${textClass}`}>{label}</div>
     </div>
@@ -84,7 +85,7 @@ function AdminDashboardContent() {
       {/* Admin Hero Section */}
       <div className="mb-8 p-8 rounded-3xl bg-[#1f1d3d] text-white relative overflow-hidden shadow-sm">
         <div className="relative z-10 max-w-2xl">
-          <div className="inline-block px-3 py-1 rounded-full bg-white text-black text-[11px] font-mono uppercase tracking-widest mb-3">
+          <div className="inline-block px-3 py-1 rounded-full bg-white text-black text-[11px] font-mono uppercase tracking-widest mb-3 font-semibold">
             ADMINISTRATIVE CONTROL
           </div>
           <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-white">
@@ -103,7 +104,7 @@ function AdminDashboardContent() {
       )}
 
       {error && (
-        <div className="bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 p-4 rounded-2xl text-sm font-medium mb-6 border border-rose-200 dark:border-rose-900/50">
+        <div className="bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 p-4 rounded-2xl text-sm font-medium mb-6 border border-rose-200 dark:border-rose-900/50 font-mono">
           {error}
         </div>
       )}
@@ -115,28 +116,28 @@ function AdminDashboardContent() {
             <GlobalStatCard
               label="TOTAL REGISTERED STUDENTS"
               value={stats.totalStudents}
-              icon="🎓"
+              icon={<StudentsIcon className="w-6 h-6" />}
               bgClass="bg-[#c5b0f4] text-black"
               textClass="text-black/70"
             />
             <GlobalStatCard
               label="TOTAL APPLICATIONS"
               value={stats.totalApplications}
-              icon="📋"
+              icon={<ClipboardIcon className="w-6 h-6" />}
               bgClass="bg-[#dceeb1] text-black"
               textClass="text-black/70"
             />
             <GlobalStatCard
               label="TOTAL OFFERS (SELECTED)"
               value={stats.totalOffers}
-              icon="🎉"
+              icon={<CompanyIcon className="w-6 h-6" />}
               bgClass="bg-[#c8e6cd] text-black"
               textClass="text-black/70"
             />
             <GlobalStatCard
               label="TOTAL REJECTIONS"
               value={stats.totalRejections}
-              icon="📉"
+              icon={<AnalyticsIcon className="w-6 h-6" />}
               bgClass="bg-[#efd4d4] text-black"
               textClass="text-black/70"
             />
@@ -189,7 +190,7 @@ function AdminDashboardContent() {
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-8">
             {/* Top companies */}
             <div className="bg-white dark:bg-[#161522] rounded-3xl p-6 border border-gray-200/80 dark:border-gray-800/80 shadow-sm">
-              <h3 className="text-lg font-bold tracking-tight dark:text-white mb-1">🏆 Most Applied Companies</h3>
+              <h3 className="text-lg font-bold tracking-tight dark:text-white mb-1">Most Applied Companies</h3>
               <p className="text-xs font-mono text-gray-500 dark:text-gray-400 mb-6">Top recruiters by student interest</p>
               <div className="space-y-3.5">
                 {stats.topCompanies.map((c, i) => (
@@ -219,7 +220,7 @@ function AdminDashboardContent() {
 
             {/* Recent activity */}
             <div className="bg-white dark:bg-[#161522] rounded-3xl p-6 border border-gray-200/80 dark:border-gray-800/80 shadow-sm">
-              <h3 className="text-lg font-bold tracking-tight dark:text-white mb-1">⚡ Recent Student Submissions</h3>
+              <h3 className="text-lg font-bold tracking-tight dark:text-white mb-1">Recent Student Submissions</h3>
               <p className="text-xs font-mono text-gray-500 dark:text-gray-400 mb-6">Latest activity log across campus</p>
               <div className="space-y-2.5">
                 {stats.recentActivity.slice(0, 5).map((a) => (
@@ -229,7 +230,7 @@ function AdminDashboardContent() {
                   >
                     <div className="min-w-0 pr-2">
                       <div className="text-sm font-bold dark:text-white truncate">{a.companyName}</div>
-                      <div className="text-xs font-mono text-gray-500 dark:text-gray-400 truncate">{a.student.name} ({a.student.email})</div>
+                      <div className="text-xs font-mono text-gray-500 dark:text-gray-400 truncate">{a.student?.name || 'Student'} ({a.student?.email || 'N/A'})</div>
                     </div>
                     <span className={`shrink-0 text-[10px] font-mono font-bold uppercase px-3 py-1 rounded-full whitespace-nowrap ${STATUS_BADGE[a.status]}`}>
                       {a.status}
@@ -244,7 +245,7 @@ function AdminDashboardContent() {
           <div className="bg-white dark:bg-[#161522] rounded-3xl p-6 border border-gray-200/80 dark:border-gray-800/80 shadow-sm mb-8">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h3 className="text-lg font-bold tracking-tight dark:text-white">🔍 Resource Moderation Feed</h3>
+                <h3 className="text-lg font-bold tracking-tight dark:text-white">Resource Moderation Feed</h3>
                 <p className="text-xs font-mono text-gray-500 dark:text-gray-400">Review student uploaded prep materials</p>
               </div>
               <Link href="/admin/resources" className="text-xs font-mono uppercase font-bold text-black dark:text-white hover:underline">
@@ -257,7 +258,7 @@ function AdminDashboardContent() {
                   <div className="min-w-0 flex-1 pr-3">
                     <div className="text-sm font-bold dark:text-white truncate">{r.title}</div>
                     <div className="text-xs font-mono text-gray-500 dark:text-gray-400">
-                      BY {r.student.name.toUpperCase()} · CATEGORY: {r.category.toUpperCase()}
+                      BY {(r.student?.name || 'STUDENT').toUpperCase()} · CATEGORY: {r.category.toUpperCase()}
                     </div>
                   </div>
                   <button
@@ -278,10 +279,10 @@ function AdminDashboardContent() {
           {/* Quick Action Navigation */}
           <div className="flex flex-wrap gap-3">
             <Link href="/admin/students" className="inline-flex items-center gap-2 px-6 py-3 bg-black text-white dark:bg-white dark:text-black font-mono text-xs font-bold uppercase tracking-wider rounded-full hover:scale-105 active:scale-95 transition-all shadow-sm">
-              <span>🎓</span> VIEW ALL STUDENTS
+              <StudentsIcon className="w-4 h-4" /> VIEW ALL STUDENTS
             </Link>
             <Link href="/admin/companies" className="inline-flex items-center gap-2 px-6 py-3 bg-[#dceeb1] text-black font-mono text-xs font-bold uppercase tracking-wider rounded-full hover:scale-105 active:scale-95 transition-all shadow-sm">
-              <span>🏢</span> MANAGE ALL APPLICATIONS
+              <CompanyIcon className="w-4 h-4" /> MANAGE ALL APPLICATIONS
             </Link>
           </div>
         </>

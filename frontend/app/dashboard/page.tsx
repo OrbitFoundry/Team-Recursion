@@ -9,6 +9,7 @@ import ProtectedRoute from '@/components/ProtectedRoute';
 import AppLayout from '@/components/AppLayout';
 import { dashboardApi } from '@/lib/placement-api';
 import { useAuth } from '@/contexts/AuthContext';
+import { PlusIcon, ResourceIcon, ArrowRightIcon } from '@/components/ui/Icons';
 import type { DashboardStats, CompanyStatus } from '@/types/placement';
 
 const STATUS_COLORS: Record<CompanyStatus, string> = {
@@ -71,7 +72,7 @@ function DashboardContent() {
             PLACEMENT PULSE
           </div>
           <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-black">
-            Welcome back, {user?.name?.split(' ')[0]} 👋
+            Welcome back, {user?.name?.split(' ')[0]}
           </h2>
           <p className="text-black/80 mt-2 text-sm leading-relaxed font-sans">
             Here is your live placement story. Track interview pipelines, monitor application statuses, and accelerate your prep.
@@ -158,8 +159,8 @@ function DashboardContent() {
                   <h3 className="text-lg font-bold tracking-tight dark:text-white">Recent Submissions</h3>
                   <p className="text-xs font-mono text-gray-500 dark:text-gray-400">Latest 5 company entries</p>
                 </div>
-                <Link href="/companies" className="text-xs font-mono uppercase tracking-wider text-black dark:text-white hover:underline">
-                  VIEW ALL →
+                <Link href="/companies" className="inline-flex items-center gap-1 text-xs font-mono uppercase tracking-wider text-black dark:text-white hover:underline font-bold">
+                  VIEW ALL <ArrowRightIcon className="w-3.5 h-3.5" />
                 </Link>
               </div>
 
@@ -194,13 +195,13 @@ function DashboardContent() {
               href="/companies"
               className="inline-flex items-center gap-2 px-6 py-3 bg-black text-white dark:bg-white dark:text-black text-xs font-mono uppercase tracking-wider font-bold rounded-full hover:scale-105 active:scale-95 transition-all shadow-sm"
             >
-              <span>＋</span> ADD NEW APPLICATION
+              <PlusIcon className="w-4 h-4" /> ADD NEW APPLICATION
             </Link>
             <Link
               href="/resources"
               className="inline-flex items-center gap-2 px-6 py-3 bg-[#f4ecd6] text-black text-xs font-mono uppercase tracking-wider font-bold rounded-full hover:scale-105 active:scale-95 transition-all shadow-sm"
             >
-              <span>📚</span> BROWSE PREP RESOURCES
+              <ResourceIcon className="w-4 h-4" /> BROWSE PREP RESOURCES
             </Link>
           </div>
         </>
