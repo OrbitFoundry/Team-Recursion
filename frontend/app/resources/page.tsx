@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import AppLayout from '@/components/AppLayout';
 import { resourcesApi } from '@/lib/placement-api';
+import { PlusIcon, ResourceIcon, ExternalLinkIcon } from '@/components/ui/Icons';
 import type { Resource, ResourceCategory } from '@/types/placement';
 
 const CATEGORIES: ResourceCategory[] = [
@@ -177,7 +178,7 @@ function ResourcesContent() {
           onClick={() => setShowModal(true)}
           className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-black text-white dark:bg-white dark:text-black font-mono text-xs font-bold uppercase tracking-wider rounded-full hover:scale-105 active:scale-95 transition-all shadow-sm"
         >
-          <span>＋</span> ADD RESOURCE
+          <PlusIcon className="w-4 h-4" /> ADD RESOURCE
         </button>
       </div>
 
@@ -215,7 +216,9 @@ function ResourcesContent() {
         </div>
       ) : resources.length === 0 ? (
         <div className="text-center py-20 text-gray-400 dark:text-gray-500 font-mono">
-          <div className="text-5xl mb-3">📚</div>
+          <div className="w-12 h-12 mx-auto mb-3 text-gray-400 dark:text-gray-500">
+            <ResourceIcon className="w-full h-full" />
+          </div>
           <div className="text-sm font-semibold">NO PREP RESOURCES FOUND</div>
           <div className="text-xs text-gray-400 mt-1">Be the first to share a resource link</div>
         </div>
@@ -248,7 +251,7 @@ function ResourcesContent() {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold text-black dark:text-white hover:underline truncate max-w-full"
                 >
-                  <span>🔗</span>
+                  <ExternalLinkIcon className="w-3.5 h-3.5 shrink-0" />
                   <span className="truncate">{r.link.replace(/^https?:\/\//, '')}</span>
                 </a>
                 <div className="text-[10px] font-mono text-gray-400 dark:text-gray-500 mt-2">

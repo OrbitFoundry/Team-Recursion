@@ -4,20 +4,30 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
+import {
+  DashboardIcon,
+  CompanyIcon,
+  ResourceIcon,
+  ProfileIcon,
+  AnalyticsIcon,
+  StudentsIcon,
+  LogoutIcon,
+  SunIcon,
+  MoonIcon,
+} from '@/components/ui/Icons';
 
 interface NavItem {
   href: string;
   label: string;
-  icon: string;
+  icon: React.ReactNode;
 }
 
 const studentNav: NavItem[] = [
-  { href: '/dashboard', label: 'Dashboard', icon: '📊' },
-  { href: '/companies', label: 'My Applications', icon: '🏢' },
-  { href: '/resources', label: 'Resources', icon: '📚' },
-  { href: '/profile', label: 'Profile', icon: '👤' },
+  { href: '/dashboard', label: 'Dashboard', icon: <DashboardIcon className="w-4 h-4" /> },
+  { href: '/companies', label: 'My Applications', icon: <CompanyIcon className="w-4 h-4" /> },
+  { href: '/resources', label: 'Resources', icon: <ResourceIcon className="w-4 h-4" /> },
+  { href: '/profile', label: 'Profile', icon: <ProfileIcon className="w-4 h-4" /> },
 ];
-
 
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
@@ -99,7 +109,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                     : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800/60 hover:text-gray-900 dark:hover:text-white'
                 }`}
               >
-                <span className="text-base">{item.icon}</span>
+                <span className="shrink-0">{item.icon}</span>
                 {item.label}
               </Link>
             );
@@ -121,7 +131,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             onClick={handleLogout}
             className="w-full flex items-center justify-center gap-2 px-4 py-2.5 text-xs font-medium font-mono text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 rounded-full transition-colors"
           >
-            <span>🚪</span> SIGN OUT
+            <LogoutIcon className="w-4 h-4" /> SIGN OUT
           </button>
         </div>
       </aside>
@@ -159,11 +169,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             </div>
             <button
               onClick={toggleDark}
-              className="p-2.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-base transition-colors"
+              className="p-2.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-300 transition-colors"
               title="Toggle theme"
               aria-label="Toggle dark mode"
             >
-              {darkMode ? '☀️' : '🌙'}
+              {darkMode ? <SunIcon className="w-4 h-4" /> : <MoonIcon className="w-4 h-4" />}
             </button>
           </div>
         </header>
