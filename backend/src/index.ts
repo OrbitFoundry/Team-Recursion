@@ -49,36 +49,35 @@ app.use(helmet({
 // CORS middleware
 const allowedOrigins = [
   config.frontend.url,
+  'https://kalviumiscooked.netlify.app',
+  'https://team-recursion-placement-portal.netlify.app',
   ...(config.nodeEnv === 'development' ? ['http://localhost:3000', 'http://127.0.0.1:3000'] : []),
   ...(process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',').map(o => o.trim()) : [])
-].filter(Boolean); // Remove any empty strings
+].filter(Boolean);
 
 app.use(cors({
   origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
-    // Allow requests with no origin in development (for testing with Postman, curl, etc.)
     if (!origin) {
-      if (config.nodeEnv === 'development') {
-        return callback(null, true);
-      }
-      // In production, allow requests without origin only for health checks and similar endpoints
-      // This is needed for monitoring services, health checks, etc.
-      // The actual API endpoints will still be protected by proper authentication
       return callback(null, true);
     }
     
-    // Check if origin is in allowed list
-    if (allowedOrigins.includes(origin)) {
+    // Check if origin is in allowed list or is a Netlify domain
+    if (
+      allowedOrigins.includes(origin) ||
+      origin.endsWith('.netlify.app') ||
+      config.nodeEnv === 'development'
+    ) {
       callback(null, true);
     } else {
       logger.warn(`CORS: Blocked request from origin: ${origin}`);
-      callback(new Error('Not allowed by CORS'));
+      callback(null, false);
     }
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS', 'HEAD'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Request-ID'],
   exposedHeaders: ['X-Request-ID'],
-  maxAge: config.nodeEnv === 'production' ? 86400 : 0, // 24 hours in production, no cache in dev
+  maxAge: 86400,
 }));
 
 // Body parsing middleware
