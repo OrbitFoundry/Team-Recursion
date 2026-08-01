@@ -284,5 +284,3 @@ process.on('uncaughtException', (error: Error) => {
 });
 
 export default app;
- 
- 
