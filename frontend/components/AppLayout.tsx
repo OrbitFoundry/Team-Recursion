@@ -88,15 +88,16 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       >
         {/* Logo */}
         <div className="flex items-center gap-3 px-6 py-5 border-b border-gray-100 dark:border-gray-800/80">
-          <div className="w-9 h-9 rounded-full bg-black dark:bg-white flex items-center justify-center text-white dark:text-black font-bold text-sm tracking-tighter shadow-sm">
-            TR
+          <div className="w-10 h-10 rounded-full overflow-hidden border border-gray-200 dark:border-gray-800 shadow-sm bg-black dark:bg-white flex items-center justify-center shrink-0">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logo.png" alt="Team Recursion" className="w-full h-full object-cover" />
           </div>
           <div>
-            <div className="font-bold text-sm text-gray-900 dark:text-white tracking-tight">
+            <div className="font-bold text-sm text-gray-900 dark:text-white tracking-tight flex items-center gap-1">
               PlacementPortal
             </div>
             <div className="text-[10px] font-mono uppercase tracking-widest text-gray-500 dark:text-gray-400">
-              STUDENT PORTAL
+              {user?.role === 'admin' ? 'ADMIN CONTROL' : 'STUDENT PORTAL'}
             </div>
           </div>
         </div>

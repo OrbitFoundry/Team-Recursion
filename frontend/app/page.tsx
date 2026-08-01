@@ -43,12 +43,13 @@ export default function LandingPage() {
       <header className="sticky top-0 z-50 bg-white/90 dark:bg-[#0c0b10]/90 backdrop-blur-md border-b border-[#e6e6e6] dark:border-gray-800">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-black text-white dark:bg-white dark:text-black font-extrabold flex items-center justify-center text-xs tracking-tight shadow-sm">
-              TR
+            <div className="w-10 h-10 rounded-full overflow-hidden border border-gray-200 dark:border-gray-800 shadow-sm bg-black dark:bg-white flex items-center justify-center shrink-0">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/logo.png" alt="Team Recursion Logo" className="w-full h-full object-cover" />
             </div>
             <div>
-              <span className="font-extrabold text-base tracking-tight block leading-none">TEAM RECURSION</span>
-              <span className="text-[9px] font-mono tracking-widest text-gray-500 uppercase">PLACEMENT SYSTEM</span>
+              <span className="font-extrabold text-base tracking-tight block leading-none font-sans">TEAM RECURSION</span>
+              <span className="text-[9px] font-mono tracking-widest text-gray-500 uppercase">PLACEMENT PORTAL</span>
             </div>
           </div>
           <div className="flex items-center gap-3 font-mono text-xs font-bold uppercase tracking-wider">

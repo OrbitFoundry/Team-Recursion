@@ -22,6 +22,10 @@ export const metadata: Metadata = {
   description: "Track your job applications, manage placement resources, and monitor your career journey with an ultra-clean editorial design.",
   keywords: ["placement", "jobs", "applications", "career", "interview prep", "DSA", "team recursion"],
   authors: [{ name: "Team Recursion" }],
+  icons: {
+    icon: "/logo.png",
+    apple: "/logo.png",
+  },
   robots: {
     index: true,
     follow: true,
