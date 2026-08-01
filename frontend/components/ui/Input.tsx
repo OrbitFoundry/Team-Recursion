@@ -14,20 +14,19 @@ export default function Input({
   return (
     <div className="w-full">
       {label && (
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-xs font-semibold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-1.5 font-mono">
           {label}
         </label>
       )}
       <input
-        className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-          error ? 'border-red-500' : 'border-gray-300'
+        className={`w-full px-4 py-2.5 bg-white dark:bg-gray-900 border rounded-xl text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all ${
+          error ? 'border-rose-500 focus:ring-rose-500' : 'border-gray-200 dark:border-gray-800'
         } ${className}`}
         {...props}
       />
       {error && (
-        <p className="mt-1 text-sm text-red-600">{error}</p>
+        <p className="mt-1 text-xs text-rose-600 dark:text-rose-400 font-medium">{error}</p>
       )}
     </div>
   );
 }
-

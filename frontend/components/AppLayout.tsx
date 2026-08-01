@@ -22,7 +22,7 @@ const adminNav: NavItem[] = [
   { href: '/admin/dashboard', label: 'Admin Dashboard', icon: '📈' },
   { href: '/admin/students', label: 'Students', icon: '🎓' },
   { href: '/admin/companies', label: 'All Applications', icon: '🏢' },
-  { href: '/admin/resources', label: 'Resources', icon: '📚' },
+  { href: '/admin/resources', label: 'Resource Moderation', icon: '📚' },
 ];
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
@@ -32,7 +32,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const [darkMode, setDarkMode] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  // Load dark mode preference
   useEffect(() => {
     const stored = localStorage.getItem('darkMode');
     if (stored === 'true') {
@@ -60,47 +59,49 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const navItems = isAdmin ? adminNav : studentNav;
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 flex">
-      {/* Sidebar overlay (mobile) */}
+    <div className="min-h-screen bg-gray-50/50 dark:bg-[#0f0e17] text-gray-900 dark:text-gray-100 flex font-sans selection:bg-[#c5b0f4]">
+      {/* Mobile overlay */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 z-20 bg-black/50 lg:hidden"
+          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden animate-fade-in-up"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 h-full z-30 flex flex-col w-64 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 shadow-xl transform transition-transform duration-300 lg:translate-x-0 lg:static lg:shadow-none ${
+        className={`fixed top-0 left-0 h-full z-50 flex flex-col w-64 bg-white dark:bg-[#161522] border-r border-gray-200 dark:border-gray-800/80 shadow-2xl lg:shadow-none transform transition-transform duration-300 lg:translate-x-0 lg:static ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         {/* Logo */}
-        <div className="flex items-center gap-3 px-6 py-5 border-b border-gray-200 dark:border-gray-800">
-          <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-bold text-sm">
-            PP
+        <div className="flex items-center gap-3 px-6 py-5 border-b border-gray-100 dark:border-gray-800/80">
+          <div className="w-9 h-9 rounded-full bg-black dark:bg-white flex items-center justify-center text-white dark:text-black font-bold text-sm tracking-tighter">
+            TR
           </div>
           <div>
-            <div className="font-bold text-sm text-gray-900 dark:text-white">PlacementPortal</div>
-            <div className="text-xs text-gray-500 dark:text-gray-400">
-              {isAdmin ? 'Admin View' : 'Student View'}
+            <div className="font-bold text-sm text-gray-900 dark:text-white tracking-tight">
+              PlacementPortal
+            </div>
+            <div className="text-[10px] font-mono uppercase tracking-widest text-gray-500 dark:text-gray-400">
+              {isAdmin ? 'ADMIN CONTROL' : 'STUDENT PORTAL'}
             </div>
           </div>
         </div>
 
-        {/* Nav */}
-        <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+        {/* Nav list */}
+        <nav className="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto">
           {navItems.map((item) => {
-            const active = pathname === item.href || pathname.startsWith(item.href + '/');
+            const active = pathname === item.href || (item.href !== '/dashboard' && item.href !== '/admin/dashboard' && pathname.startsWith(item.href));
             return (
               <Link
                 key={item.href}
                 href={item.href}
                 onClick={() => setSidebarOpen(false)}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 ${
+                className={`flex items-center gap-3.5 px-4 py-3 rounded-full text-sm font-medium transition-all ${
                   active
-                    ? 'bg-indigo-50 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300'
-                    : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'
+                    ? 'bg-black text-white dark:bg-white dark:text-black shadow-sm font-semibold'
+                    : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800/60 hover:text-gray-900 dark:hover:text-white'
                 }`}
               >
                 <span className="text-base">{item.icon}</span>
@@ -110,73 +111,76 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           })}
         </nav>
 
-        {/* User info + logout */}
-        <div className="p-3 border-t border-gray-200 dark:border-gray-800">
-          <div className="flex items-center gap-3 px-3 py-2 mb-2">
-            <div className="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center text-indigo-700 dark:text-indigo-300 font-semibold text-sm">
+        {/* User Card & Logout */}
+        <div className="p-4 border-t border-gray-100 dark:border-gray-800/80">
+          <div className="flex items-center gap-3 px-3 py-2.5 mb-2 rounded-2xl bg-gray-50 dark:bg-gray-900/60">
+            <div className="w-8 h-8 rounded-full bg-[#c5b0f4] flex items-center justify-center text-black font-bold text-xs">
               {user?.name?.[0]?.toUpperCase() || '?'}
             </div>
             <div className="flex-1 min-w-0">
-              <div className="text-sm font-medium truncate dark:text-white">{user?.name}</div>
-              <div className="text-xs text-gray-500 dark:text-gray-400 truncate">{user?.email}</div>
+              <div className="text-xs font-semibold truncate text-gray-900 dark:text-white">{user?.name}</div>
+              <div className="text-[11px] text-gray-500 dark:text-gray-400 truncate font-mono">{user?.email}</div>
             </div>
           </div>
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 text-xs font-medium font-mono text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 rounded-full transition-colors"
           >
-            <span>🚪</span> Sign Out
+            <span>🚪</span> SIGN OUT
           </button>
         </div>
       </aside>
 
-      {/* Main content */}
+      {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0">
-        {/* Topbar */}
-        <header className="sticky top-0 z-10 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-4 py-3 flex items-center justify-between">
-          {/* Hamburger */}
-          <button
-            className="lg:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-            onClick={() => setSidebarOpen(true)}
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
-
-          {/* Page title — from pathname */}
-          <div className="flex-1 lg:flex lg:items-center ml-2 lg:ml-0">
-            <h1 className="text-base font-semibold capitalize dark:text-white">
+        {/* Header bar */}
+        <header className="sticky top-0 z-30 bg-white/80 dark:bg-[#161522]/80 backdrop-blur-md border-b border-gray-200/80 dark:border-gray-800/80 px-4 md:px-6 py-3.5 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <button
+              className="lg:hidden p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-300 transition-colors"
+              onClick={() => setSidebarOpen(true)}
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+            <h1 className="text-base font-bold tracking-tight text-gray-900 dark:text-white">
               {pathname === '/dashboard'
-                ? 'My Dashboard'
+                ? 'Student Dashboard'
                 : pathname === '/companies'
-                ? 'My Applications'
+                ? 'Applications Tracker'
                 : pathname === '/resources'
-                ? 'My Resources'
+                ? 'Resource Center'
+                : pathname === '/profile'
+                ? 'Account Settings'
                 : pathname === '/admin/dashboard'
-                ? 'Admin Dashboard'
+                ? 'Admin Overview'
                 : pathname === '/admin/students'
-                ? 'Students'
+                ? 'Student Management'
                 : pathname === '/admin/companies'
-                ? 'All Applications'
+                ? 'Global Applications'
                 : pathname === '/admin/resources'
                 ? 'Resource Moderation'
                 : 'Placement Portal'}
             </h1>
           </div>
 
-          {/* Dark mode toggle */}
-          <button
-            onClick={toggleDark}
-            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-lg"
-            title="Toggle dark mode"
-          >
-            {darkMode ? '☀️' : '🌙'}
-          </button>
+          <div className="flex items-center gap-3">
+            <div className="hidden sm:inline-flex items-center px-3 py-1 rounded-full text-xs font-mono bg-[#dceeb1] text-black font-semibold">
+              TEAM RECURSION
+            </div>
+            <button
+              onClick={toggleDark}
+              className="p-2.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-base transition-colors"
+              title="Toggle theme"
+            >
+              {darkMode ? '☀️' : '🌙'}
+            </button>
+          </div>
         </header>
 
-        {/* Page content */}
-        <main className="flex-1 p-4 md:p-6 lg:p-8 overflow-auto">
+        {/* Page Content Container */}
+        <main className="flex-1 p-4 md:p-8 max-w-7xl w-full mx-auto animate-fade-in-up">
           {children}
         </main>
       </div>

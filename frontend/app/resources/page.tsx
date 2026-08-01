@@ -11,11 +11,11 @@ const CATEGORIES: ResourceCategory[] = [
 ];
 
 const CATEGORY_COLORS: Record<ResourceCategory, string> = {
-  'DSA': 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300',
-  'Aptitude': 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300',
-  'Resume': 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300',
-  'Interview Experience': 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300',
-  'Core Subjects': 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300',
+  'DSA': 'bg-[#1f1d3d] text-white dark:bg-white dark:text-black',
+  'Aptitude': 'bg-[#f4ecd6] text-black',
+  'Resume': 'bg-[#c8e6cd] text-black',
+  'Interview Experience': 'bg-[#c5b0f4] text-black',
+  'Core Subjects': 'bg-[#dceeb1] text-black',
 };
 
 function AddResourceModal({
@@ -37,38 +37,43 @@ function AddResourceModal({
       await onSave(form);
       onClose();
     } catch {
-      setError('Failed to save. Check the URL and try again.');
+      setError('Failed to save resource. Please check the URL format.');
     } finally {
       setSaving(false);
     }
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-      <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-full max-w-md border border-gray-200 dark:border-gray-700">
-        <div className="p-6 border-b border-gray-100 dark:border-gray-800">
-          <h2 className="text-lg font-semibold dark:text-white">Add Resource</h2>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-fade-in-up">
+      <div className="bg-white dark:bg-[#161522] rounded-3xl shadow-2xl w-full max-w-md border border-gray-200/80 dark:border-gray-800/80 overflow-hidden font-sans">
+        <div className="p-6 border-b border-gray-100 dark:border-gray-800/80 bg-gray-50/50 dark:bg-gray-900/40">
+          <div className="text-[11px] font-mono uppercase tracking-widest text-gray-500 mb-1">REPOSITORIES</div>
+          <h2 className="text-xl font-bold tracking-tight dark:text-white">Add Prep Resource</h2>
         </div>
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           {error && (
-            <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-sm p-3 rounded-lg">
+            <div className="bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-300 text-xs font-mono p-3.5 rounded-2xl border border-rose-200 dark:border-rose-900/50">
               {error}
             </div>
           )}
           <div>
-            <label className="text-xs font-medium text-gray-700 dark:text-gray-300 mb-1 block">Title *</label>
+            <label className="block text-[11px] font-mono font-semibold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-1.5">
+              RESOURCE TITLE *
+            </label>
             <input
-              className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-sm dark:text-white focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all"
               value={form.title}
               onChange={(e) => setForm({ ...form, title: e.target.value })}
               required
-              placeholder="Striver A-Z DSA Sheet…"
+              placeholder="Striver A-Z DSA Sheet, NeetCode 150…"
             />
           </div>
           <div>
-            <label className="text-xs font-medium text-gray-700 dark:text-gray-300 mb-1 block">Category *</label>
+            <label className="block text-[11px] font-mono font-semibold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-1.5">
+              CATEGORY *
+            </label>
             <select
-              className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-sm dark:text-white focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all"
               value={form.category}
               onChange={(e) => setForm({ ...form, category: e.target.value as ResourceCategory })}
             >
@@ -76,30 +81,32 @@ function AddResourceModal({
             </select>
           </div>
           <div>
-            <label className="text-xs font-medium text-gray-700 dark:text-gray-300 mb-1 block">Link *</label>
+            <label className="block text-[11px] font-mono font-semibold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-1.5">
+              URL / DOCUMENT LINK *
+            </label>
             <input
               type="url"
-              className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-sm dark:text-white focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all"
               value={form.link}
               onChange={(e) => setForm({ ...form, link: e.target.value })}
               required
-              placeholder="https://…"
+              placeholder="https://takeuforward.org/…"
             />
           </div>
-          <div className="flex gap-3 pt-2">
+          <div className="flex gap-3 pt-3">
             <button
               type="submit"
               disabled={saving}
-              className="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 text-white text-sm font-medium rounded-xl transition-colors"
+              className="flex-1 py-3 bg-black text-white dark:bg-white dark:text-black font-mono text-xs font-bold uppercase tracking-wider rounded-full hover:scale-105 active:scale-95 disabled:opacity-50 transition-all shadow-sm"
             >
-              {saving ? 'Saving…' : 'Add Resource'}
+              {saving ? 'SAVING…' : 'ADD RESOURCE'}
             </button>
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 py-2.5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm font-medium rounded-xl transition-colors"
+              className="flex-1 py-3 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 font-mono text-xs font-bold uppercase tracking-wider rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
             >
-              Cancel
+              CANCEL
             </button>
           </div>
         </form>
@@ -128,7 +135,7 @@ function ResourcesContent() {
   useEffect(() => { load(); }, [filterCategory]);
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Delete this resource?')) return;
+    if (!confirm('Delete this resource entry?')) return;
     setDeleting(id);
     try {
       await resourcesApi.delete(id);
@@ -149,64 +156,93 @@ function ResourcesContent() {
         <AddResourceModal onSave={handleAdd} onClose={() => setShowModal(false)} />
       )}
 
-      {/* Toolbar */}
-      <div className="flex flex-col sm:flex-row gap-3 mb-6">
-        <select
-          className="flex-1 sm:flex-none sm:w-52 px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-sm dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          value={filterCategory}
-          onChange={(e) => setFilterCategory(e.target.value)}
-        >
-          <option value="">All Categories</option>
-          {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
-        </select>
+      {/* Header Banner */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+        <div>
+          <h2 className="text-2xl font-bold tracking-tight dark:text-white">Placement Resource Hub</h2>
+          <p className="text-xs font-mono text-gray-500 dark:text-gray-400 mt-1">Curated links for DSA, core CS fundamentals, and interview prep</p>
+        </div>
         <button
           onClick={() => setShowModal(true)}
-          className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-xl transition-colors whitespace-nowrap ml-auto"
+          className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-black text-white dark:bg-white dark:text-black font-mono text-xs font-bold uppercase tracking-wider rounded-full hover:scale-105 active:scale-95 transition-all shadow-sm"
         >
-          ＋ Add Resource
+          <span>＋</span> ADD RESOURCE
         </button>
       </div>
 
-      {/* Cards */}
+      {/* Category Filter Pills */}
+      <div className="flex flex-wrap items-center gap-2 mb-6">
+        <button
+          onClick={() => setFilterCategory('')}
+          className={`px-4 py-2 rounded-full text-xs font-mono font-bold transition-all ${
+            filterCategory === ''
+              ? 'bg-black text-white dark:bg-white dark:text-black shadow-sm'
+              : 'bg-white dark:bg-[#161522] border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+          }`}
+        >
+          ALL CATEGORIES
+        </button>
+        {CATEGORIES.map((c) => (
+          <button
+            key={c}
+            onClick={() => setFilterCategory(c)}
+            className={`px-4 py-2 rounded-full text-xs font-mono font-bold transition-all ${
+              filterCategory === c
+                ? 'bg-black text-white dark:bg-white dark:text-black shadow-sm'
+                : 'bg-white dark:bg-[#161522] border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+            }`}
+          >
+            {c.toUpperCase()}
+          </button>
+        ))}
+      </div>
+
+      {/* Resource Grid */}
       {loading ? (
-        <div className="flex justify-center items-center h-40">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600" />
+        <div className="flex justify-center items-center h-48">
+          <div className="animate-spin rounded-full h-8 w-8 border-2 border-black border-t-transparent dark:border-white dark:border-t-transparent" />
         </div>
       ) : resources.length === 0 ? (
-        <div className="text-center py-16 text-gray-400 dark:text-gray-500">
-          <div className="text-4xl mb-3">📚</div>
-          <div className="text-sm">No resources found. Add your first one!</div>
+        <div className="text-center py-20 text-gray-400 dark:text-gray-500 font-mono">
+          <div className="text-5xl mb-3">📚</div>
+          <div className="text-sm font-semibold">NO PREP RESOURCES FOUND</div>
+          <div className="text-xs text-gray-400 mt-1">Be the first to share a resource link</div>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
           {resources.map((r) => (
             <div
               key={r._id}
-              className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm p-5 hover:shadow-md transition-shadow group"
+              className="bg-white dark:bg-[#161522] rounded-3xl border border-gray-200/80 dark:border-gray-800/80 shadow-sm p-6 hover-lift flex flex-col justify-between group transition-all"
             >
-              <div className="flex items-start justify-between gap-3 mb-3">
-                <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${CATEGORY_COLORS[r.category]}`}>
-                  {r.category}
-                </span>
-                <button
-                  onClick={() => handleDelete(r._id)}
-                  disabled={deleting === r._id}
-                  className="opacity-0 group-hover:opacity-100 text-red-400 hover:text-red-600 dark:hover:text-red-400 transition-all text-xs px-2 py-1 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20"
-                >
-                  {deleting === r._id ? '…' : 'Delete'}
-                </button>
+              <div>
+                <div className="flex items-center justify-between gap-3 mb-4">
+                  <span className={`text-[11px] font-mono font-bold uppercase tracking-wider px-3 py-1 rounded-full ${CATEGORY_COLORS[r.category]}`}>
+                    {r.category}
+                  </span>
+                  <button
+                    onClick={() => handleDelete(r._id)}
+                    disabled={deleting === r._id}
+                    className="opacity-0 group-hover:opacity-100 text-rose-500 hover:text-rose-700 dark:hover:text-rose-400 font-mono text-[11px] font-bold uppercase transition-all"
+                  >
+                    {deleting === r._id ? '…' : 'DELETE'}
+                  </button>
+                </div>
+                <h3 className="font-bold text-base dark:text-white mb-2 line-clamp-2 leading-snug">{r.title}</h3>
               </div>
-              <h3 className="font-medium text-sm dark:text-white mb-2 line-clamp-2">{r.title}</h3>
-              <a
-                href={r.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-xs text-indigo-600 dark:text-indigo-400 hover:underline truncate block"
-              >
-                {r.link}
-              </a>
-              <div className="text-xs text-gray-400 dark:text-gray-500 mt-2">
-                Added {new Date(r.createdAt).toLocaleDateString()}
+              <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-800/60">
+                <a
+                  href={r.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold text-black dark:text-white hover:underline truncate max-w-full"
+                >
+                  <span>🔗</span>
+                  <span className="truncate">{r.link.replace(/^https?:\/\//, '')}</span>
+                </a>
+                <div className="text-[10px] font-mono text-gray-400 dark:text-gray-500 mt-2">
+                  ADDED {new Date(r.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }).toUpperCase()}
+                </div>
               </div>
             </div>
           ))}

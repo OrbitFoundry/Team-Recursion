@@ -11,12 +11,12 @@ const STATUSES: CompanyStatus[] = [
 ];
 
 const STATUS_BADGE: Record<CompanyStatus, string> = {
-  'Applied': 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300',
-  'Online Assessment': 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300',
-  'Technical Interview': 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300',
-  'HR Interview': 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300',
-  'Selected': 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300',
-  'Rejected': 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300',
+  'Applied': 'bg-[#1f1d3d] text-white dark:bg-white dark:text-black',
+  'Online Assessment': 'bg-amber-100 text-amber-900 dark:bg-amber-950/60 dark:text-amber-300',
+  'Technical Interview': 'bg-blue-100 text-blue-900 dark:bg-blue-950/60 dark:text-blue-300',
+  'HR Interview': 'bg-purple-100 text-purple-900 dark:bg-purple-950/60 dark:text-purple-300',
+  'Selected': 'bg-[#c8e6cd] text-emerald-950 dark:bg-emerald-950/60 dark:text-emerald-300',
+  'Rejected': 'bg-rose-100 text-rose-900 dark:bg-rose-950/60 dark:text-rose-300',
 };
 
 function CompanyModal({
@@ -48,62 +48,73 @@ function CompanyModal({
       await onSave(form);
       onClose();
     } catch {
-      setError('Failed to save. Please try again.');
+      setError('Failed to save application. Please verify parameters.');
     } finally {
       setSaving(false);
     }
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-      <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-full max-w-lg border border-gray-200 dark:border-gray-700">
-        <div className="p-6 border-b border-gray-100 dark:border-gray-800">
-          <h2 className="text-lg font-semibold dark:text-white">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-fade-in-up">
+      <div className="bg-white dark:bg-[#161522] rounded-3xl shadow-2xl w-full max-w-lg border border-gray-200/80 dark:border-gray-800/80 overflow-hidden">
+        <div className="p-6 border-b border-gray-100 dark:border-gray-800/80 bg-gray-50/50 dark:bg-gray-900/40">
+          <div className="text-[11px] font-mono uppercase tracking-widest text-gray-500 mb-1">
+            {initial?._id ? 'UPDATE APPLICATION' : 'NEW ENTRY'}
+          </div>
+          <h2 className="text-xl font-bold tracking-tight dark:text-white">
             {initial?._id ? 'Edit Application' : 'Add Application'}
           </h2>
         </div>
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+        <form onSubmit={handleSubmit} className="p-6 space-y-4 font-sans">
           {error && (
-            <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-sm p-3 rounded-lg">
+            <div className="bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-300 text-xs font-mono p-3.5 rounded-2xl border border-rose-200 dark:border-rose-900/50">
               {error}
             </div>
           )}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="text-xs font-medium text-gray-700 dark:text-gray-300 mb-1 block">Company Name *</label>
+              <label className="block text-[11px] font-mono font-semibold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-1.5">
+                COMPANY NAME *
+              </label>
               <input
-                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-sm dark:text-white focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all"
                 value={form.companyName}
                 onChange={(e) => setForm({ ...form, companyName: e.target.value })}
                 required
-                placeholder="Google, Amazon…"
+                placeholder="Google, Microsoft, Amazon…"
               />
             </div>
             <div>
-              <label className="text-xs font-medium text-gray-700 dark:text-gray-300 mb-1 block">Job Role *</label>
+              <label className="block text-[11px] font-mono font-semibold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-1.5">
+                JOB ROLE *
+              </label>
               <input
-                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-sm dark:text-white focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all"
                 value={form.role}
                 onChange={(e) => setForm({ ...form, role: e.target.value })}
                 required
-                placeholder="SDE-1, Backend Developer…"
+                placeholder="SDE-1, Software Engineer…"
               />
             </div>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="text-xs font-medium text-gray-700 dark:text-gray-300 mb-1 block">Application Date</label>
+              <label className="block text-[11px] font-mono font-semibold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-1.5">
+                APPLICATION DATE
+              </label>
               <input
                 type="date"
-                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-sm dark:text-white focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all"
                 value={form.applicationDate}
                 onChange={(e) => setForm({ ...form, applicationDate: e.target.value })}
               />
             </div>
             <div>
-              <label className="text-xs font-medium text-gray-700 dark:text-gray-300 mb-1 block">Status</label>
+              <label className="block text-[11px] font-mono font-semibold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-1.5">
+                CURRENT STATUS
+              </label>
               <select
-                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-sm dark:text-white focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all"
                 value={form.status}
                 onChange={(e) => setForm({ ...form, status: e.target.value as CompanyStatus })}
               >
@@ -112,29 +123,31 @@ function CompanyModal({
             </div>
           </div>
           <div>
-            <label className="text-xs font-medium text-gray-700 dark:text-gray-300 mb-1 block">Notes (optional)</label>
+            <label className="block text-[11px] font-mono font-semibold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-1.5">
+              NOTES & PREP RECAP
+            </label>
             <textarea
-              className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"
+              className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-sm dark:text-white focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all resize-none"
               rows={3}
               value={form.notes}
               onChange={(e) => setForm({ ...form, notes: e.target.value })}
-              placeholder="Applied via LinkedIn, referral, etc."
+              placeholder="Referral source, key round prep notes, compensation details…"
             />
           </div>
-          <div className="flex gap-3 pt-2">
+          <div className="flex gap-3 pt-3">
             <button
               type="submit"
               disabled={saving}
-              className="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 text-white text-sm font-medium rounded-xl transition-colors"
+              className="flex-1 py-3 bg-black text-white dark:bg-white dark:text-black font-mono text-xs font-bold uppercase tracking-wider rounded-full hover:scale-105 active:scale-95 disabled:opacity-50 transition-all shadow-sm"
             >
-              {saving ? 'Saving…' : 'Save'}
+              {saving ? 'SAVING…' : 'SAVE ENTRY'}
             </button>
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 py-2.5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm font-medium rounded-xl transition-colors"
+              className="flex-1 py-3 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 font-mono text-xs font-bold uppercase tracking-wider rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
             >
-              Cancel
+              CANCEL
             </button>
           </div>
         </form>
@@ -174,7 +187,7 @@ function CompaniesContent() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Delete this application?')) return;
+    if (!confirm('Delete this application entry?')) return;
     setDeleting(id);
     try {
       await companiesApi.delete(id);
@@ -194,95 +207,104 @@ function CompaniesContent() {
         />
       )}
 
-      {/* Toolbar */}
-      <div className="flex flex-col sm:flex-row gap-3 mb-6">
+      {/* Header Banner */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+        <div>
+          <h2 className="text-2xl font-bold tracking-tight dark:text-white">Applications Tracker</h2>
+          <p className="text-xs font-mono text-gray-500 dark:text-gray-400 mt-1">Manage and track your active job application pipelines</p>
+        </div>
+        <button
+          onClick={() => setModal({ open: true })}
+          className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-black text-white dark:bg-white dark:text-black font-mono text-xs font-bold uppercase tracking-wider rounded-full hover:scale-105 active:scale-95 transition-all shadow-sm"
+        >
+          <span>＋</span> ADD APPLICATION
+        </button>
+      </div>
+
+      {/* Toolbar Filter */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
         <input
-          className="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-sm dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          placeholder="Search companies…"
+          className="px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#161522] text-sm dark:text-white focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all placeholder-gray-400"
+          placeholder="Search by company or role…"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
         <select
-          className="px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-sm dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#161522] text-sm dark:text-white focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all font-sans"
           value={filterStatus}
           onChange={(e) => setFilterStatus(e.target.value)}
         >
-          <option value="">All Statuses</option>
+          <option value="">All Application Stages</option>
           {STATUSES.map(s => <option key={s} value={s}>{s}</option>)}
         </select>
         <select
-          className="px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-sm dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#161522] text-sm dark:text-white focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all font-sans"
           value={sort}
           onChange={(e) => setSort(e.target.value as 'asc' | 'desc')}
         >
-          <option value="desc">Newest First</option>
-          <option value="asc">Oldest First</option>
+          <option value="desc">Sort: Newest First</option>
+          <option value="asc">Sort: Oldest First</option>
         </select>
-        <button
-          onClick={() => setModal({ open: true })}
-          className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-xl transition-colors whitespace-nowrap"
-        >
-          ＋ Add Application
-        </button>
       </div>
 
-      {/* Table */}
-      <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm overflow-hidden">
+      {/* Table Container */}
+      <div className="bg-white dark:bg-[#161522] rounded-3xl border border-gray-200/80 dark:border-gray-800/80 shadow-sm overflow-hidden">
         {loading ? (
-          <div className="flex justify-center items-center h-40">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600" />
+          <div className="flex justify-center items-center h-48">
+            <div className="animate-spin rounded-full h-8 w-8 border-2 border-black border-t-transparent dark:border-white dark:border-t-transparent" />
           </div>
         ) : companies.length === 0 ? (
-          <div className="text-center py-16 text-gray-400 dark:text-gray-500">
-            <div className="text-4xl mb-3">📋</div>
-            <div className="text-sm">No applications found. Start tracking!</div>
+          <div className="text-center py-20 text-gray-400 dark:text-gray-500 font-mono">
+            <div className="text-5xl mb-3">🏢</div>
+            <div className="text-sm font-semibold">NO APPLICATIONS RECORDED</div>
+            <div className="text-xs text-gray-400 mt-1">Click &quot;Add Application&quot; to begin tracking</div>
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+            <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50">
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400">Company</th>
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400">Role</th>
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400">Date</th>
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400">Status</th>
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400">Notes</th>
-                  <th className="px-5 py-3" />
+                <tr className="border-b border-gray-100 dark:border-gray-800/80 bg-gray-50/50 dark:bg-gray-900/40 text-[11px] font-mono uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                  <th className="px-6 py-4 font-semibold">COMPANY</th>
+                  <th className="px-6 py-4 font-semibold">ROLE</th>
+                  <th className="px-6 py-4 font-semibold">DATE</th>
+                  <th className="px-6 py-4 font-semibold">STAGE</th>
+                  <th className="px-6 py-4 font-semibold">NOTES</th>
+                  <th className="px-6 py-4 text-right">ACTIONS</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="divide-y divide-gray-100 dark:divide-gray-800/60 text-sm">
                 {companies.map((c) => (
                   <tr
                     key={c._id}
-                    className="border-b border-gray-50 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/40 transition-colors"
+                    className="hover:bg-gray-50/80 dark:hover:bg-gray-900/40 transition-colors"
                   >
-                    <td className="px-5 py-3 font-medium dark:text-white">{c.companyName}</td>
-                    <td className="px-5 py-3 text-gray-600 dark:text-gray-400">{c.role}</td>
-                    <td className="px-5 py-3 text-gray-600 dark:text-gray-400">
-                      {new Date(c.applicationDate).toLocaleDateString()}
+                    <td className="px-6 py-4 font-bold text-gray-900 dark:text-white">{c.companyName}</td>
+                    <td className="px-6 py-4 text-gray-600 dark:text-gray-300 font-medium">{c.role}</td>
+                    <td className="px-6 py-4 font-mono text-xs text-gray-500 dark:text-gray-400">
+                      {new Date(c.applicationDate).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}
                     </td>
-                    <td className="px-5 py-3">
-                      <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${STATUS_BADGE[c.status]}`}>
+                    <td className="px-6 py-4">
+                      <span className={`text-[11px] font-mono uppercase font-semibold px-3 py-1 rounded-full whitespace-nowrap ${STATUS_BADGE[c.status]}`}>
                         {c.status}
                       </span>
                     </td>
-                    <td className="px-5 py-3 text-gray-500 dark:text-gray-500 max-w-xs truncate">
+                    <td className="px-6 py-4 text-xs text-gray-500 dark:text-gray-400 max-w-xs truncate">
                       {c.notes || '—'}
                     </td>
-                    <td className="px-5 py-3">
+                    <td className="px-6 py-4 text-right">
                       <div className="flex gap-2 justify-end">
                         <button
                           onClick={() => setModal({ open: true, company: c })}
-                          className="px-3 py-1.5 text-xs bg-gray-100 dark:bg-gray-800 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 rounded-lg transition-colors"
+                          className="px-3.5 py-1.5 text-xs font-mono font-medium bg-gray-100 dark:bg-gray-800 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black rounded-full transition-all"
                         >
-                          Edit
+                          EDIT
                         </button>
                         <button
                           onClick={() => handleDelete(c._id)}
                           disabled={deleting === c._id}
-                          className="px-3 py-1.5 text-xs bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/40 text-red-600 dark:text-red-400 rounded-lg transition-colors disabled:opacity-50"
+                          className="px-3.5 py-1.5 text-xs font-mono font-medium bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 hover:bg-rose-600 hover:text-white rounded-full transition-all disabled:opacity-50"
                         >
-                          {deleting === c._id ? '…' : 'Delete'}
+                          {deleting === c._id ? '…' : 'DELETE'}
                         </button>
                       </div>
                     </td>
@@ -294,10 +316,10 @@ function CompaniesContent() {
         )}
       </div>
 
-      {/* Summary */}
+      {/* Summary count */}
       {companies.length > 0 && (
-        <div className="mt-4 text-sm text-gray-500 dark:text-gray-400">
-          Showing {companies.length} application{companies.length !== 1 ? 's' : ''}
+        <div className="mt-4 text-xs font-mono text-gray-500 dark:text-gray-400 text-right">
+          TOTAL APPLICATIONS: {companies.length}
         </div>
       )}
     </AppLayout>

@@ -53,7 +53,7 @@ export default function SignupPage() {
     if (formData.password) {
       const passwordValidation = validatePassword(formData.password);
       if (!passwordValidation.isValid) {
-        newErrors.password = passwordValidation.errors[0]; // Show first error
+        newErrors.password = passwordValidation.errors[0];
       }
     } else {
       newErrors.password = 'Password is required';
@@ -86,7 +86,7 @@ export default function SignupPage() {
     } catch (error: unknown) {
       const apiError = error as { response?: { data?: { error?: { message: string } } }; message?: string };
       const errorMessage = apiError.response?.data?.error?.message || apiError.message || 'Registration failed. Please try again.';
-      if (errorMessage.includes('email') || errorMessage.includes('Email')) {
+      if (errorMessage.toLowerCase().includes('email')) {
         setErrors({ email: errorMessage });
       } else {
         setErrors({ general: errorMessage });
@@ -100,32 +100,38 @@ export default function SignupPage() {
     redirectToGoogleAuth();
   };
 
-  // Check if Google OAuth is enabled
   const isGoogleAuthEnabled = !!process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Create your account
+    <div className="min-h-screen flex items-center justify-center bg-white dark:bg-[#0c0b10] py-12 px-4 sm:px-6 lg:px-8 font-sans selection:bg-[#c5b0f4] selection:text-black">
+      <div className="max-w-md w-full space-y-8 bg-white dark:bg-[#161522] p-8 md:p-10 rounded-3xl border border-gray-200/80 dark:border-gray-800/80 shadow-sm">
+        {/* Brand Header */}
+        <div className="text-center">
+          <div className="mx-auto w-12 h-12 rounded-full bg-black text-white dark:bg-white dark:text-black font-bold flex items-center justify-center text-sm font-sans tracking-tight mb-4 shadow-sm">
+            TR
+          </div>
+          <div className="text-[11px] font-mono font-bold uppercase tracking-widest text-gray-500 mb-1">TEAM RECURSION</div>
+          <h2 className="text-2xl font-bold tracking-tight dark:text-white">
+            Create an Account
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            Or{' '}
-            <Link href="/login" className="font-medium text-blue-600 hover:text-blue-500">
-              sign in to your existing account
+          <p className="mt-2 text-xs font-mono text-gray-500 dark:text-gray-400">
+            Already registered?{' '}
+            <Link href="/login" className="font-bold text-black dark:text-white underline hover:opacity-80">
+              Sign in
             </Link>
           </p>
         </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+
+        <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
           {errors.general && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+            <div className="bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/50 text-rose-700 dark:text-rose-300 text-xs font-mono p-4 rounded-2xl">
               {errors.general}
             </div>
           )}
+
           <div className="space-y-4">
             <Input
-              label="Full name"
+              label="FULL NAME"
               name="name"
               type="text"
               autoComplete="name"
@@ -133,10 +139,10 @@ export default function SignupPage() {
               value={formData.name}
               onChange={handleChange}
               error={errors.name}
-              placeholder="Enter your full name"
+              placeholder="Gaurav Sharma"
             />
             <Input
-              label="Email address"
+              label="EMAIL ADDRESS"
               name="email"
               type="email"
               autoComplete="email"
@@ -144,34 +150,34 @@ export default function SignupPage() {
               value={formData.email}
               onChange={handleChange}
               error={errors.email}
-              placeholder="Enter your email"
+              placeholder="name@company.com"
             />
             <PasswordInput
-              label="Password"
+              label="PASSWORD"
               name="password"
               autoComplete="new-password"
               required
               value={formData.password}
               onChange={handleChange}
               error={errors.password}
-              placeholder="Enter your password (min. 8 characters, uppercase, lowercase, number, special char)"
+              placeholder="Min. 8 characters"
               showStrength={true}
             />
             <PasswordInput
-              label="Confirm password"
+              label="CONFIRM PASSWORD"
               name="confirmPassword"
               autoComplete="new-password"
               required
               value={formData.confirmPassword}
               onChange={handleChange}
               error={errors.confirmPassword}
-              placeholder="Confirm your password"
+              placeholder="Repeat password"
             />
           </div>
 
           <div>
-            <Button type="submit" className="w-full" isLoading={isLoading}>
-              Create account
+            <Button type="submit" variant="primary" className="w-full py-3.5 mt-2" isLoading={isLoading}>
+              CREATE ACCOUNT
             </Button>
           </div>
 
@@ -179,10 +185,10 @@ export default function SignupPage() {
             <div className="mt-6">
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-gray-300" />
+                  <div className="w-full border-t border-gray-200 dark:border-gray-800" />
                 </div>
-                <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-gray-50 text-gray-500">Or continue with</span>
+                <div className="relative flex justify-center text-[10px] font-mono uppercase tracking-wider">
+                  <span className="px-3 bg-white dark:bg-[#161522] text-gray-500">OR CONTINUE WITH</span>
                 </div>
               </div>
 
@@ -190,10 +196,10 @@ export default function SignupPage() {
                 <Button
                   type="button"
                   variant="outline"
-                  className="w-full flex items-center justify-center"
+                  className="w-full flex items-center justify-center gap-2 py-3"
                   onClick={handleGoogleLogin}
                 >
-                  <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4" viewBox="0 0 24 24">
                     <path
                       fill="currentColor"
                       d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -211,7 +217,7 @@ export default function SignupPage() {
                       d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                     />
                   </svg>
-                  Sign up with Google
+                  GOOGLE SIGN UP
                 </Button>
               </div>
             </div>
@@ -221,4 +227,3 @@ export default function SignupPage() {
     </div>
   );
 }
-

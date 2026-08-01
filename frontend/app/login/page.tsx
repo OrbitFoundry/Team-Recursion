@@ -26,7 +26,7 @@ function LoginPageContent() {
   useEffect(() => {
     const error = searchParams.get('error');
     if (error) {
-      setErrors({ general: 'Authentication failed. Please try again.' });
+      setErrors({ general: 'Authentication failed. Please check your credentials.' });
     }
   }, [searchParams]);
 
@@ -42,7 +42,6 @@ function LoginPageContent() {
 
     try {
       await login(formData);
-      // AuthContext sets user state, useEffect will redirect or fallback below
       router.push('/dashboard');
     } catch (error: unknown) {
       const apiError = error as { 
@@ -53,15 +52,14 @@ function LoginPageContent() {
         message?: string;
       };
       
-      // Handle rate limiting (429 status)
       if (apiError.response?.status === 429) {
         const errorMessage = apiError.response?.data?.error?.message || 'Too many authentication attempts. Please try again later.';
         setErrors({ general: errorMessage });
       } else {
         const errorMessage = apiError.response?.data?.error?.message || apiError.message || 'Login failed. Please try again.';
-        if (errorMessage.includes('email') || errorMessage.includes('Email')) {
+        if (errorMessage.toLowerCase().includes('email')) {
           setErrors({ email: errorMessage });
-        } else if (errorMessage.includes('password') || errorMessage.includes('Password')) {
+        } else if (errorMessage.toLowerCase().includes('password')) {
           setErrors({ password: errorMessage });
         } else {
           setErrors({ general: errorMessage });
@@ -76,32 +74,38 @@ function LoginPageContent() {
     redirectToGoogleAuth();
   };
 
-  // Check if Google OAuth is enabled
   const isGoogleAuthEnabled = !!process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Sign in to your account
+    <div className="min-h-screen flex items-center justify-center bg-white dark:bg-[#0c0b10] py-12 px-4 sm:px-6 lg:px-8 font-sans selection:bg-[#c5b0f4] selection:text-black">
+      <div className="max-w-md w-full space-y-8 bg-white dark:bg-[#161522] p-8 md:p-10 rounded-3xl border border-gray-200/80 dark:border-gray-800/80 shadow-sm">
+        {/* Brand Header */}
+        <div className="text-center">
+          <div className="mx-auto w-12 h-12 rounded-full bg-black text-white dark:bg-white dark:text-black font-bold flex items-center justify-center text-sm font-sans tracking-tight mb-4 shadow-sm">
+            TR
+          </div>
+          <div className="text-[11px] font-mono font-bold uppercase tracking-widest text-gray-500 mb-1">TEAM RECURSION</div>
+          <h2 className="text-2xl font-bold tracking-tight dark:text-white">
+            Welcome back
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            Or{' '}
-            <Link href="/signup" className="font-medium text-blue-600 hover:text-blue-500">
-              create a new account
+          <p className="mt-2 text-xs font-mono text-gray-500 dark:text-gray-400">
+            Don&apos;t have an account?{' '}
+            <Link href="/signup" className="font-bold text-black dark:text-white underline hover:opacity-80">
+              Sign up free
             </Link>
           </p>
         </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+
+        <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
           {errors.general && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+            <div className="bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/50 text-rose-700 dark:text-rose-300 text-xs font-mono p-4 rounded-2xl">
               {errors.general}
             </div>
           )}
+
           <div className="space-y-4">
             <Input
-              label="Email address"
+              label="EMAIL ADDRESS"
               name="email"
               type="email"
               autoComplete="email"
@@ -109,31 +113,29 @@ function LoginPageContent() {
               value={formData.email}
               onChange={handleChange}
               error={errors.email}
-              placeholder="Enter your email"
+              placeholder="name@company.com"
             />
             <PasswordInput
-              label="Password"
+              label="PASSWORD"
               name="password"
               autoComplete="current-password"
               required
               value={formData.password}
               onChange={handleChange}
               error={errors.password}
-              placeholder="Enter your password"
+              placeholder="••••••••"
             />
           </div>
 
-          <div className="flex items-center justify-between">
-            <div className="text-sm">
-              <Link href="/forgot-password" className="font-medium text-blue-600 hover:text-blue-500">
-                Forgot your password?
-              </Link>
-            </div>
+          <div className="flex items-center justify-end">
+            <Link href="/forgot-password" className="text-xs font-mono text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors">
+              Forgot password?
+            </Link>
           </div>
 
           <div>
-            <Button type="submit" className="w-full" isLoading={isLoading}>
-              Sign in
+            <Button type="submit" variant="primary" className="w-full py-3.5" isLoading={isLoading}>
+              SIGN IN
             </Button>
           </div>
 
@@ -141,10 +143,10 @@ function LoginPageContent() {
             <div className="mt-6">
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-gray-300" />
+                  <div className="w-full border-t border-gray-200 dark:border-gray-800" />
                 </div>
-                <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-gray-50 text-gray-500">Or continue with</span>
+                <div className="relative flex justify-center text-[10px] font-mono uppercase tracking-wider">
+                  <span className="px-3 bg-white dark:bg-[#161522] text-gray-500">OR CONTINUE WITH</span>
                 </div>
               </div>
 
@@ -152,10 +154,10 @@ function LoginPageContent() {
                 <Button
                   type="button"
                   variant="outline"
-                  className="w-full flex items-center justify-center"
+                  className="w-full flex items-center justify-center gap-2 py-3"
                   onClick={handleGoogleLogin}
                 >
-                  <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4" viewBox="0 0 24 24">
                     <path
                       fill="currentColor"
                       d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -173,7 +175,7 @@ function LoginPageContent() {
                       d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                     />
                   </svg>
-                  Sign in with Google
+                  GOOGLE SIGN IN
                 </Button>
               </div>
             </div>
@@ -187,12 +189,11 @@ function LoginPageContent() {
 export default function LoginPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-[#0c0b10]">
+        <div className="animate-spin rounded-full h-10 w-10 border-2 border-black border-t-transparent dark:border-white dark:border-t-transparent"></div>
       </div>
     }>
       <LoginPageContent />
     </Suspense>
   );
 }
-

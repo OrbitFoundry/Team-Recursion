@@ -3,7 +3,6 @@
 import { Suspense, useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import Input from '@/components/ui/Input';
 import PasswordInput from '@/components/ui/PasswordInput';
 import Button from '@/components/ui/Button';
 import { authApi } from '@/lib/auth-api';
@@ -47,7 +46,7 @@ function ResetPasswordPageContent() {
     if (formData.password) {
       const passwordValidation = validatePassword(formData.password);
       if (!passwordValidation.isValid) {
-        newErrors.password = passwordValidation.errors[0]; // Show first error
+        newErrors.password = passwordValidation.errors[0];
       }
     } else {
       newErrors.password = 'Password is required';
@@ -86,11 +85,9 @@ function ResetPasswordPageContent() {
         throw new Error('Invalid response from server');
       }
 
-      // Show success message
       setIsSuccess(true);
       showToast('Password reset successful! Logging you in...', 'success');
 
-      // Set the token cookie with proper security settings
       const cookieOptions = {
         expires: 7,
         sameSite: 'lax' as const,
@@ -99,12 +96,7 @@ function ResetPasswordPageContent() {
       };
 
       Cookies.set('token', response.token, cookieOptions);
-      
-      // The token is now set. When the user navigates to /home,
-      // AuthContext will automatically verify the token and set the user state.
-      // ProtectedRoute will handle the authentication check.
 
-      // Small delay to show success message before redirect
       setTimeout(() => {
         router.push('/dashboard');
       }, 1500);
@@ -119,12 +111,11 @@ function ResetPasswordPageContent() {
       
       let errorMessage = apiError.response?.data?.error?.message || apiError.message || 'Password reset failed. Please try again.';
       
-      // Handle specific error cases
       if (apiError.response?.status === 400) {
-        if (errorMessage.includes('token') || errorMessage.includes('expired') || errorMessage.includes('Invalid')) {
+        if (errorMessage.toLowerCase().includes('token') || errorMessage.toLowerCase().includes('expired') || errorMessage.toLowerCase().includes('invalid')) {
           errorMessage = 'This password reset link is invalid or has expired. Please request a new one.';
           setErrors({ general: errorMessage });
-        } else if (errorMessage.includes('password') || errorMessage.includes('Password')) {
+        } else if (errorMessage.toLowerCase().includes('password')) {
           setErrors({ password: errorMessage });
         } else {
           setErrors({ general: errorMessage });
@@ -140,28 +131,22 @@ function ResetPasswordPageContent() {
     }
   };
 
-  // Show success state
   if (isSuccess) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-md w-full space-y-8">
-          <div className="text-center">
-            <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
-              <svg className="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-            </div>
-            <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-              Password Reset Successful!
-            </h2>
-            <p className="mt-2 text-center text-sm text-gray-600">
-              Your password has been reset successfully. You are being logged in...
-            </p>
-            <div className="mt-6">
-              <div className="flex justify-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-              </div>
-            </div>
+      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-[#0c0b10] py-12 px-4 sm:px-6 lg:px-8 font-sans selection:bg-[#c5b0f4] selection:text-black">
+        <div className="max-w-md w-full space-y-8 bg-white dark:bg-[#161522] p-8 md:p-10 rounded-3xl border border-gray-200/80 dark:border-gray-800/80 shadow-sm text-center">
+          <div className="mx-auto w-14 h-14 rounded-full bg-[#c8e6cd] text-emerald-950 flex items-center justify-center font-bold text-xl shadow-sm">
+            ✓
+          </div>
+          <div className="text-[11px] font-mono font-bold uppercase tracking-widest text-gray-500 mb-1 font-mono">CREDENTIALS UPDATED</div>
+          <h2 className="text-2xl font-bold tracking-tight dark:text-white">
+            Password Reset Successful!
+          </h2>
+          <p className="text-xs font-mono text-gray-600 dark:text-gray-400">
+            Your credentials have been updated securely. Redirecting to your dashboard...
+          </p>
+          <div className="pt-4 flex justify-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-2 border-black border-t-transparent dark:border-white dark:border-t-transparent"></div>
           </div>
         </div>
       </div>
@@ -169,60 +154,67 @@ function ResetPasswordPageContent() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Reset your password
+    <div className="min-h-screen flex items-center justify-center bg-white dark:bg-[#0c0b10] py-12 px-4 sm:px-6 lg:px-8 font-sans selection:bg-[#c5b0f4] selection:text-black">
+      <div className="max-w-md w-full space-y-8 bg-white dark:bg-[#161522] p-8 md:p-10 rounded-3xl border border-gray-200/80 dark:border-gray-800/80 shadow-sm">
+        {/* Brand Header */}
+        <div className="text-center">
+          <div className="mx-auto w-12 h-12 rounded-full bg-black text-white dark:bg-white dark:text-black font-bold flex items-center justify-center text-sm font-sans tracking-tight mb-4 shadow-sm">
+            TR
+          </div>
+          <div className="text-[11px] font-mono font-bold uppercase tracking-widest text-gray-500 mb-1">SECURITY</div>
+          <h2 className="text-2xl font-bold tracking-tight dark:text-white">
+            Reset Password
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            Enter your new password below
+          <p className="mt-2 text-xs font-mono text-gray-500 dark:text-gray-400">
+            Enter your new secure password below
           </p>
           {!token && (
-            <p className="mt-2 text-center text-sm text-red-600">
-              No reset token found. Please use the link from your email.
+            <p className="mt-2 text-xs font-mono text-rose-500 font-medium">
+              No reset token detected. Please use the link sent to your email.
             </p>
           )}
         </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+
+        <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
           {errors.general && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+            <div className="bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/50 text-rose-700 dark:text-rose-300 text-xs font-mono p-4 rounded-2xl">
               {errors.general}
             </div>
           )}
+
           <div className="space-y-4">
             <PasswordInput
-              label="New password"
+              label="NEW PASSWORD"
               name="password"
               autoComplete="new-password"
               required
               value={formData.password}
               onChange={handleChange}
               error={errors.password}
-              placeholder="Enter your new password (min. 8 characters, uppercase, lowercase, number, special char)"
+              placeholder="Min. 8 characters"
               showStrength={true}
             />
             <PasswordInput
-              label="Confirm new password"
+              label="CONFIRM NEW PASSWORD"
               name="confirmPassword"
               autoComplete="new-password"
               required
               value={formData.confirmPassword}
               onChange={handleChange}
               error={errors.confirmPassword}
-              placeholder="Confirm your new password"
+              placeholder="Repeat new password"
             />
           </div>
 
           <div>
-            <Button type="submit" className="w-full" isLoading={isLoading} disabled={!token}>
-              Reset password
+            <Button type="submit" variant="primary" className="w-full py-3.5 mt-2" isLoading={isLoading} disabled={!token}>
+              SET NEW PASSWORD
             </Button>
           </div>
 
           <div className="text-center">
-            <Link href="/login" className="font-medium text-blue-600 hover:text-blue-500">
-              Back to login
+            <Link href="/login" className="text-xs font-mono text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors">
+              ← Back to Sign In
             </Link>
           </div>
         </form>
@@ -234,12 +226,11 @@ function ResetPasswordPageContent() {
 export default function ResetPasswordPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-[#0c0b10]">
+        <div className="animate-spin rounded-full h-10 w-10 border-2 border-black border-t-transparent dark:border-white dark:border-t-transparent"></div>
       </div>
     }>
       <ResetPasswordPageContent />
     </Suspense>
   );
 }
-
