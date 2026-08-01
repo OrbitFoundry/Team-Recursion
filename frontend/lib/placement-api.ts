@@ -5,6 +5,7 @@ import type {
   DashboardStats,
   CompanyStatus,
   ResourceCategory,
+  TimelineEvent,
 } from '@/types/placement';
 
 // ─────────────────────────────────────────
@@ -76,5 +77,24 @@ export const dashboardApi = {
   getStats: async () => {
     const res = await apiClient.get<DashboardStats>('/dashboard/stats');
     return res.data;
+  },
+};
+
+// ─────────────────────────────────────────
+// TIMELINE — student
+// ─────────────────────────────────────────
+export const timelineApi = {
+  getAll: async (): Promise<TimelineEvent[]> => {
+    const res = await apiClient.get<{ events: TimelineEvent[] }>('/timeline');
+    return res.data.events;
+  },
+
+  create: async (data: Partial<TimelineEvent>): Promise<TimelineEvent> => {
+    const res = await apiClient.post<{ event: TimelineEvent }>('/timeline', data);
+    return res.data.event;
+  },
+
+  delete: async (id: string): Promise<void> => {
+    await apiClient.delete(`/timeline/${id}`);
   },
 };

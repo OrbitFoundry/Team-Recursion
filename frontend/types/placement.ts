@@ -38,6 +38,15 @@ export interface Resource {
   createdAt: string;
 }
 
+export interface TimelineEvent {
+  _id: string;
+  userId: string;
+  title: string;
+  description?: string;
+  date: string;
+  createdAt: string;
+}
+
 export interface DashboardStats {
   totalApplied: number;
   totalActive: number;

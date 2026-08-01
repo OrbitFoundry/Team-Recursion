@@ -11,6 +11,7 @@ import { dashboardApi } from '@/lib/placement-api';
 import { useAuth } from '@/contexts/AuthContext';
 import { PlusIcon, ResourceIcon, ArrowRightIcon } from '@/components/ui/Icons';
 import type { DashboardStats, CompanyStatus } from '@/types/placement';
+import { TimelineSection } from '@/components/ui/TimelineSection';
 
 const STATUS_COLORS: Record<CompanyStatus, string> = {
   'Applied': '#1f1d3d',
@@ -204,6 +205,9 @@ function DashboardContent() {
               <ResourceIcon className="w-4 h-4" /> BROWSE PREP RESOURCES
             </Link>
           </div>
+
+          {/* Timeline Section */}
+          <TimelineSection />
         </>
       )}
     </AppLayout>
