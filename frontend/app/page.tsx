@@ -17,17 +17,13 @@ import {
 
 export default function LandingPage() {
   const router = useRouter();
-  const { isAuthenticated, isAdmin, loading } = useAuth();
+  const { isAuthenticated, loading } = useAuth();
 
   useEffect(() => {
     if (!loading && isAuthenticated) {
-      if (isAdmin) {
-        router.push('/admin/dashboard');
-      } else {
-        router.push('/dashboard');
-      }
+      router.push('/dashboard');
     }
-  }, [isAuthenticated, isAdmin, loading, router]);
+  }, [isAuthenticated, loading, router]);
 
   if (loading) {
     return (

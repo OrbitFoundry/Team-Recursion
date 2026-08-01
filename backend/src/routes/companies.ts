@@ -14,7 +14,6 @@ router.get('/', async (req: Request, res: Response) => {
   try {
     const authReq = req as AuthRequest;
     const userId = authReq.user!.userId;
-    const isAdmin = authReq.user?.role === 'admin';
 
     const { search, status, sort = 'desc', all } = req.query as {
       search?: string;
@@ -23,8 +22,8 @@ router.get('/', async (req: Request, res: Response) => {
       all?: string;
     };
 
-    // Build query scoped to user or all if admin
-    const query: Record<string, unknown> = (isAdmin && all === 'true')
+    // Build query scoped to user or all if requested
+    const query: Record<string, unknown> = (all === 'true')
       ? {}
       : { userId: new mongoose.Types.ObjectId(userId) };
 
@@ -88,18 +87,12 @@ router.put('/:id', async (req: Request, res: Response) => {
       return res.status(400).json({ error: { message: 'Invalid company ID format' } });
     }
 
-    const authReq = req as AuthRequest;
-    const userId = authReq.user!.userId;
-    const isAdmin = authReq.user?.role === 'admin';
-
     const validation = validateUpdateCompany(req.body);
     if (!validation.isValid) {
       return res.status(400).json({ error: { message: 'Validation failed', errors: validation.errors } });
     }
 
-    const filter = isAdmin
-      ? { _id: req.params.id }
-      : { _id: req.params.id, userId: new mongoose.Types.ObjectId(userId) };
+    const filter = { _id: req.params.id };
 
     const company = await Company.findOneAndUpdate(
       filter,
@@ -118,20 +111,14 @@ router.put('/:id', async (req: Request, res: Response) => {
   }
 });
 
-// DELETE /api/companies/:id — delete company (own or admin)
+// DELETE /api/companies/:id — delete company
 router.delete('/:id', async (req: Request, res: Response) => {
   try {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
       return res.status(400).json({ error: { message: 'Invalid company ID format' } });
     }
 
-    const authReq = req as AuthRequest;
-    const userId = authReq.user!.userId;
-    const isAdmin = authReq.user?.role === 'admin';
-
-    const filter = isAdmin
-      ? { _id: req.params.id }
-      : { _id: req.params.id, userId: new mongoose.Types.ObjectId(userId) };
+    const filter = { _id: req.params.id };
 
     const company = await Company.findOneAndDelete(filter);
 

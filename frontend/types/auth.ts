@@ -2,7 +2,7 @@ export interface User {
   id: string;
   name: string;
   email: string;
-  role: 'student' | 'admin';
+  role?: string;
   isEmailVerified: boolean;
   techStacks?: string[];
   resumeUrl?: string;

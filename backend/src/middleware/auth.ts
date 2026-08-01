@@ -60,23 +60,12 @@ export const authenticate = (
 };
 
 /**
- * adminOnly — must be used AFTER authenticate middleware.
- * Rejects request unless the verified token has role === 'admin'.
+ * adminOnly — pass-through for any authenticated user since roles are removed
  */
 export const adminOnly = (
-  req: Request,
-  res: Response,
+  _req: Request,
+  _res: Response,
   next: NextFunction
 ): void => {
-  const authReq = req as AuthRequest;
-  if (!authReq.user || authReq.user.role !== 'admin') {
-    res.status(403).json({
-      error: {
-        message: 'Access denied. Admin role required.',
-        code: 'FORBIDDEN',
-      },
-    });
-    return;
-  }
   next();
 };

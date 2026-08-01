@@ -4,7 +4,7 @@ export interface IUser extends Document {
   name: string;
   email: string;
   password?: string;
-  role: 'student' | 'admin';
+  role?: string;
   googleId?: string;
   isEmailVerified: boolean;
   resetPasswordToken?: string;
@@ -34,11 +34,6 @@ const UserSchema = new Schema<IUser>(
       minlength: 6,
       select: false, // Don't return password by default
     },
-    role: {
-      type: String,
-      enum: ['student', 'admin'],
-      default: 'student',
-    },
     googleId: {
       type: String,
       sparse: true, // Allows multiple null values
@@ -63,7 +58,6 @@ const UserSchema = new Schema<IUser>(
 // Add indexes for better query performance
 UserSchema.index({ resetPasswordToken: 1 });
 UserSchema.index({ resetPasswordExpires: 1 });
-UserSchema.index({ role: 1 });
 
 export default mongoose.model<IUser>('User', UserSchema);
 

@@ -249,15 +249,10 @@ router.post('/me/resume', authenticate, uploadResume.single('resume'), async (re
   }
 });
 
-// GET /api/auth/students — List all students for admin directory
-router.get('/students', authenticate, async (req: Request, res: Response) => {
+// GET /api/auth/students — List all students directory
+router.get('/students', authenticate, async (_req: Request, res: Response) => {
   try {
-    const authReq = req as AuthRequest;
-    if (authReq.user?.role !== 'admin') {
-      return res.status(403).json({ error: { message: 'Access denied. Admin role required.' } });
-    }
-
-    const students = await User.find({ role: 'student' })
+    const students = await User.find()
       .select('-password -passwordResetToken -passwordResetExpires')
       .lean();
 

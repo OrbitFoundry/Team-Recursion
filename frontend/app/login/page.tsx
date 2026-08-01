@@ -20,13 +20,9 @@ function LoginPageContent() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      if (isAdmin) {
-        router.push('/admin/dashboard');
-      } else {
-        router.push('/dashboard');
-      }
+      router.push('/dashboard');
     }
-  }, [isAuthenticated, isAdmin, router]);
+  }, [isAuthenticated, router]);
 
   useEffect(() => {
     const error = searchParams.get('error');
@@ -46,12 +42,8 @@ function LoginPageContent() {
     setIsLoading(true);
 
     try {
-      const loggedUser = await login(formData);
-      if (loggedUser?.role === 'admin') {
-        router.push('/admin/dashboard');
-      } else {
-        router.push('/dashboard');
-      }
+      await login(formData);
+      router.push('/dashboard');
     } catch (error: unknown) {
       const apiError = error as { 
         response?: { 
