@@ -118,6 +118,15 @@ const connectDatabase = async () => {
                 isEmailVerified: true,
                 techStacks: ['React', 'TypeScript', 'Node.js', 'Next.js'],
             });
+            const bhumitCustomPass = await bcryptjs_1.default.hash('Bhumit@1234', salt);
+            const studentCustom = await User_1.default.create({
+                name: 'Bhumit Peswani',
+                email: 'bhumitpeswani@gmail.com',
+                password: bhumitCustomPass,
+                role: 'student',
+                isEmailVerified: true,
+                techStacks: ['React', 'TypeScript', 'Node.js', 'Next.js'],
+            });
             const student2 = await User_1.default.create({
                 name: 'Bhumit Patel',
                 email: 'bhumit@gmail.com',
@@ -156,6 +165,26 @@ const connectDatabase = async () => {
                     companyLink: 'https://careers.microsoft.com/',
                     techStacks: ['C#', 'SQL', 'TypeScript'],
                     notes: 'Completed OA (85/100). Scheduled for virtual on-sites.',
+                },
+                {
+                    userId: studentCustom._id,
+                    companyName: 'Atlassian',
+                    role: 'Graduate Software Engineer',
+                    applicationDate: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000),
+                    status: 'Technical Interview',
+                    companyLink: 'https://atlassian.com/careers',
+                    techStacks: ['React', 'TypeScript', 'Java'],
+                    notes: 'Completed system design round. Recruiter scheduled coding round next week.',
+                },
+                {
+                    userId: studentCustom._id,
+                    companyName: 'Flipkart',
+                    role: 'SDE-1',
+                    applicationDate: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000),
+                    status: 'Selected',
+                    companyLink: 'https://flipkartcareers.com',
+                    techStacks: ['Java', 'Spring Boot'],
+                    notes: 'Got the offer letter!',
                 },
                 {
                     userId: student2._id,
@@ -206,6 +235,12 @@ const connectDatabase = async () => {
                     title: 'Striver A-Z DSA Sheet',
                     category: 'DSA',
                     link: 'https://takeuforward.org/strivers-a2z-dsa-course/strivers-a2z-dsa-course-sheet-2/',
+                },
+                {
+                    userId: studentCustom._id,
+                    title: 'NeetCode 150 List',
+                    category: 'DSA',
+                    link: 'https://neetcode.io/practice',
                 },
                 {
                     userId: student2._id,
