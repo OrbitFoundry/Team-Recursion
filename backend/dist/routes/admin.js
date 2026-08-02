@@ -19,11 +19,21 @@ router.use(auth_1.authenticate, auth_1.adminOnly);
 router.get('/students', async (req, res) => {
     try {
         const { search } = req.query;
-        const matchStage = { role: 'student' };
+        const matchStage = {
+            $or: [
+                { role: 'student' },
+                { role: { $exists: false } },
+                { role: null },
+            ],
+        };
         if (search) {
-            matchStage.$or = [
-                { name: { $regex: search, $options: 'i' } },
-                { email: { $regex: search, $options: 'i' } },
+            matchStage.$and = [
+                {
+                    $or: [
+                        { name: { $regex: search, $options: 'i' } },
+                        { email: { $regex: search, $options: 'i' } },
+                    ],
+                },
             ];
         }
         const students = await User_1.default.aggregate([
@@ -109,7 +119,7 @@ router.get('/companies', async (req, res) => {
                     as: 'student',
                 },
             },
-            { $unwind: '$student' },
+            { $unwind: { path: '$student', preserveNullAndEmptyArrays: true } },
             // Filter by student name/email if requested
             ...(studentSearch
                 ? [
@@ -166,7 +176,7 @@ router.get('/resources', async (req, res) => {
                     as: 'student',
                 },
             },
-            { $unwind: '$student' },
+            { $unwind: { path: '$student', preserveNullAndEmptyArrays: true } },
             {
                 $project: {
                     title: 1,
@@ -213,7 +223,13 @@ router.get('/dashboard/stats', async (_req, res) => {
         // Run all aggregations in parallel
         const [totalStudents, globalStatusBreakdown, topCompanies, recentActivity, recentResources,] = await Promise.all([
             // Total registered students
-            User_1.default.countDocuments({ role: 'student' }),
+            User_1.default.countDocuments({
+                $or: [
+                    { role: 'student' },
+                    { role: { $exists: false } },
+                    { role: null },
+                ],
+            }),
             // Global status breakdown
             Company_1.default.aggregate([
                 { $group: { _id: '$status', count: { $sum: 1 } } },
@@ -237,7 +253,7 @@ router.get('/dashboard/stats', async (_req, res) => {
                         as: 'student',
                     },
                 },
-                { $unwind: '$student' },
+                { $unwind: { path: '$student', preserveNullAndEmptyArrays: true } },
                 {
                     $project: {
                         companyName: 1,
@@ -262,7 +278,7 @@ router.get('/dashboard/stats', async (_req, res) => {
                         as: 'student',
                     },
                 },
-                { $unwind: '$student' },
+                { $unwind: { path: '$student', preserveNullAndEmptyArrays: true } },
                 {
                     $project: {
                         title: 1,

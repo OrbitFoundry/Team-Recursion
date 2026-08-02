@@ -76,7 +76,12 @@ router.put('/:id', async (req, res) => {
         if (!validation.isValid) {
             return res.status(400).json({ error: { message: 'Validation failed', errors: validation.errors } });
         }
+        const authReq = req;
+        const userId = authReq.user?.userId;
         const filter = { _id: req.params.id };
+        if (authReq.user?.role === 'student' && userId) {
+            filter.userId = new mongoose_1.default.Types.ObjectId(userId);
+        }
         const company = await Company_1.default.findOneAndUpdate(filter, { $set: req.body }, { new: true, runValidators: true });
         if (!company) {
             return res.status(404).json({ error: { message: 'Company not found or access denied' } });
@@ -94,7 +99,12 @@ router.delete('/:id', async (req, res) => {
         if (!mongoose_1.default.Types.ObjectId.isValid(req.params.id)) {
             return res.status(400).json({ error: { message: 'Invalid company ID format' } });
         }
+        const authReq = req;
+        const userId = authReq.user?.userId;
         const filter = { _id: req.params.id };
+        if (authReq.user?.role === 'student' && userId) {
+            filter.userId = new mongoose_1.default.Types.ObjectId(userId);
+        }
         const company = await Company_1.default.findOneAndDelete(filter);
         if (!company) {
             return res.status(404).json({ error: { message: 'Company not found or access denied' } });

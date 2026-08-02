@@ -63,14 +63,14 @@ const UserSchema = new mongoose_1.Schema({
     resetPasswordToken: String,
     resetPasswordExpires: Date,
     resumeUrl: String,
-    techStacks: {
-        type: [String],
-        default: [],
-    },
     role: {
         type: String,
         enum: ['student', 'admin'],
         default: 'student',
+    },
+    techStacks: {
+        type: [String],
+        default: [],
     },
 }, {
     timestamps: true,

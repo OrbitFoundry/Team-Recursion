@@ -54,11 +54,6 @@ const UserSchema = new Schema<IUser>(
       type: [String],
       default: [],
     },
-    role: {
-      type: String,
-      enum: ['student', 'admin'],
-      default: 'student',
-    },
   },
   {
     timestamps: true,
