@@ -20,6 +20,7 @@ const notFound_1 = require("./middleware/notFound");
 const requestId_1 = require("./middleware/requestId");
 const path_1 = __importDefault(require("path"));
 const logger_1 = require("./utils/logger");
+const keepAliveService_1 = require("./services/keepAliveService");
 // Validate environment variables on startup
 try {
     (0, env_validator_1.validateEnv)();
@@ -205,10 +206,13 @@ const server = app.listen(PORT, () => {
             logger_1.logger.info(`   config.email.pass: ${config_1.config.email.pass ? 'SET (hidden)' : 'empty'}`);
         }
     }
+    // Start Keep-Alive Service to keep Render instance awake
+    (0, keepAliveService_1.startKeepAlive)(PORT);
 });
 // Graceful shutdown handler for production
 const gracefulShutdown = (signal) => {
     logger_1.logger.info(`${signal} received. Starting graceful shutdown...`);
+    (0, keepAliveService_1.stopKeepAlive)();
     server.close(() => {
         logger_1.logger.info('HTTP server closed.');
         // Close database connection

@@ -15,6 +15,7 @@ import { notFound } from './middleware/notFound';
 import { requestId } from './middleware/requestId';
 import path from 'path';
 import { logger } from './utils/logger';
+import { startKeepAlive, stopKeepAlive } from './services/keepAliveService';
 
 // Validate environment variables on startup
 try {
@@ -229,12 +230,17 @@ const server = app.listen(PORT, () => {
       logger.info(`   config.email.pass: ${config.email.pass ? 'SET (hidden)' : 'empty'}`);
     }
   }
+
+  // Start Keep-Alive Service to keep Render instance awake
+  startKeepAlive(PORT);
 });
 
 // Graceful shutdown handler for production
 const gracefulShutdown = (signal: string): void => {
   logger.info(`${signal} received. Starting graceful shutdown...`);
   
+  stopKeepAlive();
+
   server.close(() => {
     logger.info('HTTP server closed.');
     

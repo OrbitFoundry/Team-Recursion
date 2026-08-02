@@ -25,6 +25,10 @@ const envConfig: EnvConfig = {
     'EMAIL_PASS',
     'JWT_EXPIRES_IN',
     'SESSION_SECRET',
+    'KEEP_ALIVE_URL',
+    'KEEP_ALIVE_ENABLED',
+    'RENDER_EXTERNAL_URL',
+    'BACKEND_URL',
   ],
 };
 

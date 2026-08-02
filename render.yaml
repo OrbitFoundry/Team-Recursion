@@ -16,3 +16,6 @@ services:
         generateValue: true
       - key: FRONTEND_URL
         value: https://cooked-placement.netlify.app
+      - key: KEEP_ALIVE_ENABLED
+        value: "true"
+
