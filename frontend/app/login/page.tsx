@@ -53,7 +53,7 @@ function SafeFlutedGlass() {
 function AuthPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { login, register, isAuthenticated } = useAuth();
+  const { login, register, isAuthenticated, isAdmin } = useAuth();
   
   const [isLogin, setIsLogin] = useState(true);
   
@@ -75,9 +75,13 @@ function AuthPageContent() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      router.push('/dashboard');
+      if (isAdmin) {
+        router.push('/admin/dashboard');
+      } else {
+        router.push('/dashboard');
+      }
     }
-  }, [isAuthenticated, router]);
+  }, [isAuthenticated, isAdmin, router]);
 
   useEffect(() => {
     const error = searchParams.get('error');
@@ -123,11 +127,20 @@ function AuthPageContent() {
 
     try {
       if (isLogin) {
-        await login({ email: formData.email, password: formData.password });
+        const u = await login({ email: formData.email, password: formData.password });
+        if (u?.role === 'admin') {
+          router.push('/admin/dashboard');
+        } else {
+          router.push('/dashboard');
+        }
       } else {
-        await register({ name: formData.name, email: formData.email, password: formData.password });
+        const u = await register({ name: formData.name, email: formData.email, password: formData.password });
+        if (u?.role === 'admin') {
+          router.push('/admin/dashboard');
+        } else {
+          router.push('/dashboard');
+        }
       }
-      router.push('/dashboard');
     } catch (error: unknown) {
       const apiError = error as { 
         response?: { data?: { error?: { message: string } }; status?: number; }; 
