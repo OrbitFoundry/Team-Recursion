@@ -45,6 +45,11 @@ const UserSchema = new Schema<IUser>(
     resetPasswordToken: String,
     resetPasswordExpires: Date,
     resumeUrl: String,
+    role: {
+      type: String,
+      enum: ['student', 'admin'],
+      default: 'student',
+    },
     techStacks: {
       type: [String],
       default: [],

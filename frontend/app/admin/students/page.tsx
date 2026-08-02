@@ -7,6 +7,7 @@ import AppLayout from '@/components/AppLayout';
 import { adminApi } from '@/lib/placement-api';
 import { StudentsIcon } from '@/components/ui/Icons';
 import { TechStackBadge } from '@/components/ui/TechStackSelector';
+import { getMediaUrl } from '@/lib/utils';
 import type { StudentUser } from '@/types/placement';
 
 function AdminStudentsContent() {
@@ -156,7 +157,7 @@ function AdminStudentsContent() {
                         <td className="py-4 px-6 text-right" onClick={(e) => e.stopPropagation()}>
                           {s.resumeUrl ? (
                             <a
-                              href={`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}${s.resumeUrl}`}
+                              href={getMediaUrl(s.resumeUrl)}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="inline-flex items-center gap-1.5 px-3 py-1 bg-black text-white dark:bg-white dark:text-black font-mono text-[10px] font-bold uppercase tracking-wider rounded-full hover:scale-105 transition-all"
