@@ -6,6 +6,8 @@ import type {
   CompanyStatus,
   ResourceCategory,
   TimelineEvent,
+  StudentUser,
+  AdminStats,
 } from '@/types/placement';
 
 // ─────────────────────────────────────────
@@ -119,13 +121,32 @@ export const timelineApi = {
 // ADMIN API — student directory & master register
 // ─────────────────────────────────────────
 export const adminApi = {
-  getStudents: async () => {
-    const res = await apiClient.get<{ students: import('@/types/placement').StudentUser[] }>('/auth/students');
+  getStudents: async (params?: { search?: string }) => {
+    const res = await apiClient.get<{ students: StudentUser[] }>('/admin/students', { params });
     return res.data.students;
   },
 
-  getMasterCompanies: async (params?: { search?: string; status?: string; sort?: string }) => {
-    const res = await apiClient.get<{ companies: Company[] }>('/companies', { params: { ...params, all: 'true' } });
+  getStudentDetail: async (id: string): Promise<{ student: StudentUser; companies: Company[] }> => {
+    const res = await apiClient.get<{ student: StudentUser; companies: Company[] }>(`/admin/students/${id}`);
+    return res.data;
+  },
+
+  getMasterCompanies: async (params?: { search?: string; status?: string; sort?: string; studentSearch?: string }) => {
+    const res = await apiClient.get<{ companies: Company[] }>('/admin/companies', { params });
     return res.data.companies;
+  },
+
+  getStats: async (): Promise<AdminStats> => {
+    const res = await apiClient.get<AdminStats>('/admin/dashboard/stats');
+    return res.data;
+  },
+
+  getResources: async (params?: { category?: string }): Promise<(Resource & { student: { name: string; email: string } })[]> => {
+    const res = await apiClient.get<{ resources: (Resource & { student: { name: string; email: string } })[] }>('/admin/resources', { params });
+    return res.data.resources;
+  },
+
+  deleteResource: async (id: string): Promise<void> => {
+    await apiClient.delete(`/admin/resources/${id}`);
   },
 };

@@ -30,8 +30,15 @@ const navItems: NavItem[] = [
   { href: '/profile', label: 'Profile', icon: <ProfileIcon className="w-4 h-4" /> },
 ];
 
+const adminItems: NavItem[] = [
+  { href: '/admin/dashboard', label: 'Admin Control', icon: <AnalyticsIcon className="w-4 h-4" /> },
+  { href: '/admin/students', label: 'Cohort Roster', icon: <StudentsIcon className="w-4 h-4" /> },
+  { href: '/admin/companies', label: 'Master Register', icon: <CompanyIcon className="w-4 h-4" /> },
+  { href: '/admin/resources', label: 'Moderation Hub', icon: <ResourceIcon className="w-4 h-4" /> },
+];
+
 export default function AppLayout({ children }: { children: React.ReactNode }) {
-  const { user, logout } = useAuth();
+  const { user, logout, isAdmin } = useAuth();
   const pathname = usePathname();
   const router = useRouter();
   const [darkMode, setDarkMode] = useState(false);
@@ -93,25 +100,56 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         </div>
 
         {/* Nav list */}
-        <nav className="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto">
-          {navItems.map((item) => {
-            const active = pathname === item.href || (item.href !== '/dashboard' && item.href !== '/profile' && pathname.startsWith(item.href));
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setSidebarOpen(false)}
-                className={`flex items-center gap-3.5 px-4 py-3 rounded-full text-sm font-medium transition-all ${
-                  active
-                    ? 'bg-black text-white dark:bg-white dark:text-black shadow-sm font-semibold'
-                    : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800/60 hover:text-gray-900 dark:hover:text-white'
-                }`}
-              >
-                <span className="shrink-0">{item.icon}</span>
-                {item.label}
-              </Link>
-            );
-          })}
+        <nav className="flex-1 px-4 py-6 space-y-6 overflow-y-auto">
+          <div className="space-y-1.5">
+            <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 px-4 mb-2">
+              Student Space
+            </div>
+            {navItems.map((item) => {
+              const active = pathname === item.href || (item.href !== '/dashboard' && item.href !== '/profile' && !pathname.startsWith('/admin') && pathname.startsWith(item.href));
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setSidebarOpen(false)}
+                  className={`flex items-center gap-3.5 px-4 py-3 rounded-full text-sm font-medium transition-all ${
+                    active
+                      ? 'bg-black text-white dark:bg-white dark:text-black shadow-sm font-semibold'
+                      : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800/60 hover:text-gray-900 dark:hover:text-white'
+                  }`}
+                >
+                  <span className="shrink-0">{item.icon}</span>
+                  {item.label}
+                </Link>
+              );
+            })}
+          </div>
+
+          {isAdmin && (
+            <div className="space-y-1.5">
+              <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 px-4 mb-2">
+                Admin Panel
+              </div>
+              {adminItems.map((item) => {
+                const active = pathname === item.href || (item.href !== '/admin/dashboard' && pathname.startsWith(item.href));
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setSidebarOpen(false)}
+                    className={`flex items-center gap-3.5 px-4 py-3 rounded-full text-sm font-medium transition-all ${
+                      active
+                        ? 'bg-black text-white dark:bg-white dark:text-black shadow-sm font-semibold'
+                        : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800/60 hover:text-gray-900 dark:hover:text-white'
+                    }`}
+                  >
+                    <span className="shrink-0">{item.icon}</span>
+                    {item.label}
+                  </Link>
+                );
+              })}
+            </div>
+          )}
         </nav>
 
         {/* User Card & Logout */}

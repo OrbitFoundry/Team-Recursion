@@ -59,13 +59,13 @@ export interface DashboardStats {
 
 export interface AdminStats {
   totalStudents: number;
-  totalApplied: number;
-  totalActive: number;
+  totalApplications: number;
   totalOffers: number;
-  totalRejected: number;
-  successRate: number;
+  totalRejections: number;
   statusBreakdown: Record<CompanyStatus, number>;
-  recentApplications: (Company & { studentName?: string; studentEmail?: string })[];
+  topCompanies: { companyName: string; count: number }[];
+  recentActivity: (Company & { student?: { name: string; email: string } })[];
+  recentResources: (Resource & { student?: { name: string; email: string } })[];
 }
 
 export interface StudentUser {
@@ -80,5 +80,6 @@ export interface StudentUser {
   totalApplications: number;
   selectedOffers: number;
   createdAt: string;
+  lastActivity?: string;
 }
 

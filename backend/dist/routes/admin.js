@@ -9,18 +9,25 @@ const auth_1 = require("../middleware/auth");
 const User_1 = __importDefault(require("../models/User"));
 const Company_1 = __importDefault(require("../models/Company"));
 const Resource_1 = __importDefault(require("../models/Resource"));
-const companyValidator_1 = require("../validators/companyValidator");
 const router = (0, express_1.Router)();
-// All admin routes require authentication + admin role
+// All admin routes require authentication + admin check (which is currently a pass-through)
 router.use(auth_1.authenticate, auth_1.adminOnly);
 // ─────────────────────────────────────────
 // STUDENTS
 // ─────────────────────────────────────────
-// GET /api/admin/students — list all students with application count
-router.get('/students', async (_req, res) => {
+// GET /api/admin/students — list all students with application count and optional search
+router.get('/students', async (req, res) => {
     try {
+        const { search } = req.query;
+        const matchStage = { role: 'student' };
+        if (search) {
+            matchStage.$or = [
+                { name: { $regex: search, $options: 'i' } },
+                { email: { $regex: search, $options: 'i' } },
+            ];
+        }
         const students = await User_1.default.aggregate([
-            { $match: { role: 'student' } },
+            { $match: matchStage },
             {
                 $lookup: {
                     from: 'companies',
@@ -56,15 +63,15 @@ router.get('/students', async (_req, res) => {
         return res.status(500).json({ error: { message: err.message || 'Failed to fetch students' } });
     }
 });
-// GET /api/admin/students/:id/companies — view a specific student's applications
-router.get('/students/:id/companies', async (req, res) => {
+// GET /api/admin/students/:id — view a specific student's details and their applications
+router.get('/students/:id', async (req, res) => {
     try {
         if (!mongoose_1.default.Types.ObjectId.isValid(req.params.id)) {
             return res.status(400).json({ error: { message: 'Invalid student ID format' } });
         }
         const studentId = new mongoose_1.default.Types.ObjectId(req.params.id);
-        const student = await User_1.default.findById(studentId).select('name email role');
-        if (!student || student.role !== 'student') {
+        const student = await User_1.default.findById(studentId).select('name email role resumeLink techStacks');
+        if (!student) {
             return res.status(404).json({ error: { message: 'Student not found' } });
         }
         const companies = await Company_1.default.find({ userId: studentId })
@@ -74,7 +81,7 @@ router.get('/students/:id/companies', async (req, res) => {
     }
     catch (error) {
         const err = error;
-        return res.status(500).json({ error: { message: err.message || 'Failed to fetch student companies' } });
+        return res.status(500).json({ error: { message: err.message || 'Failed to fetch student details' } });
     }
 });
 // ─────────────────────────────────────────
@@ -138,51 +145,19 @@ router.get('/companies', async (req, res) => {
         return res.status(500).json({ error: { message: err.message || 'Failed to fetch companies' } });
     }
 });
-// PUT /api/admin/companies/:id — edit any student's application
-router.put('/companies/:id', async (req, res) => {
-    try {
-        if (!mongoose_1.default.Types.ObjectId.isValid(req.params.id)) {
-            return res.status(400).json({ error: { message: 'Invalid company ID format' } });
-        }
-        const validation = (0, companyValidator_1.validateUpdateCompany)(req.body);
-        if (!validation.isValid) {
-            return res.status(400).json({ error: { message: 'Validation failed', errors: validation.errors } });
-        }
-        const company = await Company_1.default.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true, runValidators: true });
-        if (!company) {
-            return res.status(404).json({ error: { message: 'Company not found' } });
-        }
-        return res.status(200).json({ company });
-    }
-    catch (error) {
-        const err = error;
-        return res.status(500).json({ error: { message: err.message || 'Failed to update company' } });
-    }
-});
-// DELETE /api/admin/companies/:id — delete any student's application
-router.delete('/companies/:id', async (req, res) => {
-    try {
-        if (!mongoose_1.default.Types.ObjectId.isValid(req.params.id)) {
-            return res.status(400).json({ error: { message: 'Invalid company ID format' } });
-        }
-        const company = await Company_1.default.findByIdAndDelete(req.params.id);
-        if (!company) {
-            return res.status(404).json({ error: { message: 'Company not found' } });
-        }
-        return res.status(200).json({ message: 'Company deleted successfully' });
-    }
-    catch (error) {
-        const err = error;
-        return res.status(500).json({ error: { message: err.message || 'Failed to delete company' } });
-    }
-});
 // ─────────────────────────────────────────
 // RESOURCES (admin global)
 // ─────────────────────────────────────────
-// GET /api/admin/resources — ALL resources across all students
-router.get('/resources', async (_req, res) => {
+// GET /api/admin/resources — ALL resources across all students with optional category filter
+router.get('/resources', async (req, res) => {
     try {
+        const { category } = req.query;
+        const matchStage = {};
+        if (category) {
+            matchStage.category = category;
+        }
         const resources = await Resource_1.default.aggregate([
+            ...(category ? [{ $match: matchStage }] : []),
             {
                 $lookup: {
                     from: 'users',
@@ -313,7 +288,9 @@ router.get('/dashboard/stats', async (_req, res) => {
         let totalOffers = 0;
         let totalRejections = 0;
         for (const item of globalStatusBreakdown) {
-            statusBreakdown[item._id] = item.count;
+            if (item._id && item._id in statusBreakdown) {
+                statusBreakdown[item._id] = item.count;
+            }
             totalApplications += item.count;
             if (item._id === 'Selected')
                 totalOffers += item.count;

@@ -9,6 +9,7 @@ const companies_1 = __importDefault(require("./companies"));
 const resources_1 = __importDefault(require("./resources"));
 const dashboard_1 = __importDefault(require("./dashboard"));
 const timeline_1 = __importDefault(require("./timeline"));
+const admin_1 = __importDefault(require("./admin"));
 const router = (0, express_1.Router)();
 router.get('/', (_req, res) => {
     res.json({
@@ -23,5 +24,7 @@ router.use('/companies', companies_1.default);
 router.use('/resources', resources_1.default);
 router.use('/dashboard', dashboard_1.default);
 router.use('/timeline', timeline_1.default);
+// Admin routes
+router.use('/admin', admin_1.default);
 exports.default = router;
 //# sourceMappingURL=index.js.map
