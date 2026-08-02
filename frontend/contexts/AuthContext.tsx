@@ -172,7 +172,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const isAuthenticated = !!user || hasToken;
-  const isAdmin = true; // All authenticated users have full access as roles are removed
+  const isAdmin = user?.role === 'admin';
 
   return (
     <AuthContext.Provider

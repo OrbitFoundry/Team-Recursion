@@ -9,7 +9,7 @@ interface AdminRouteProps {
 }
 
 export default function AdminRoute({ children }: AdminRouteProps) {
-  const { isAuthenticated, loading } = useAuth();
+  const { isAuthenticated, isAdmin, loading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
@@ -17,10 +17,12 @@ export default function AdminRoute({ children }: AdminRouteProps) {
 
     if (!isAuthenticated) {
       router.push('/login');
+    } else if (!isAdmin) {
+      router.push('/dashboard');
     }
-  }, [isAuthenticated, loading, router]);
+  }, [isAuthenticated, isAdmin, loading, router]);
 
-  if (loading || !isAuthenticated) {
+  if (loading || !isAuthenticated || !isAdmin) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-white dark:bg-[#0c0b10]">
         <div className="flex flex-col items-center gap-4 font-mono">

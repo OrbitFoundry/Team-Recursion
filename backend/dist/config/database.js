@@ -38,8 +38,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.connectDatabase = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const index_1 = require("./index");
 const logger_1 = require("../utils/logger");
+const User_1 = __importDefault(require("../models/User"));
 const connectDatabase = async () => {
     const mongoUri = index_1.config.database.uri;
     const maskedUri = mongoUri.replace(/\/\/[^:]+:[^@]+@/, '//***:***@');
@@ -84,6 +86,26 @@ const connectDatabase = async () => {
     if (!connected) {
         logger_1.logger.error('Failed to establish MongoDB connection.');
         process.exit(1);
+    }
+    // Auto-seed admin user if not exists
+    try {
+        const adminEmail = 'admin@gmail.com';
+        const adminExists = await User_1.default.findOne({ email: adminEmail });
+        if (!adminExists) {
+            const salt = await bcryptjs_1.default.genSalt(10);
+            const hashedPassword = await bcryptjs_1.default.hash('admin@1234', salt);
+            await User_1.default.create({
+                name: 'Administrator',
+                email: adminEmail,
+                password: hashedPassword,
+                role: 'admin',
+                isEmailVerified: true,
+            });
+            logger_1.logger.info(`Auto-created Admin account: ${adminEmail}`);
+        }
+    }
+    catch (err) {
+        logger_1.logger.error('Error auto-creating admin account:', err);
     }
     // Attach connection health listeners after successful initial connection
     mongoose_1.default.connection.on('disconnected', () => {

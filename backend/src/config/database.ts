@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs';
 import { config } from './index';
 import { logger } from '../utils/logger';
+import User from '../models/User';
 
 export const connectDatabase = async (): Promise<void> => {
   const mongoUri = config.database.uri;
@@ -49,6 +51,26 @@ export const connectDatabase = async (): Promise<void> => {
   if (!connected) {
     logger.error('Failed to establish MongoDB connection.');
     process.exit(1);
+  }
+
+  // Auto-seed admin user if not exists
+  try {
+    const adminEmail = 'admin@gmail.com';
+    const adminExists = await User.findOne({ email: adminEmail });
+    if (!adminExists) {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash('admin@1234', salt);
+      await User.create({
+        name: 'Administrator',
+        email: adminEmail,
+        password: hashedPassword,
+        role: 'admin',
+        isEmailVerified: true,
+      });
+      logger.info(`Auto-created Admin account: ${adminEmail}`);
+    }
+  } catch (err) {
+    logger.error('Error auto-creating admin account:', err);
   }
 
   // Attach connection health listeners after successful initial connection

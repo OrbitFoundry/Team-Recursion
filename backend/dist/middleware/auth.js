@@ -48,10 +48,17 @@ const authenticate = (req, res, next) => {
     }
 };
 exports.authenticate = authenticate;
-/**
- * adminOnly — pass-through for any authenticated user since roles are removed
- */
-const adminOnly = (_req, _res, next) => {
+const adminOnly = (req, res, next) => {
+    const authReq = req;
+    if (!authReq.user || authReq.user.role !== 'admin') {
+        res.status(403).json({
+            error: {
+                message: 'Access denied. Administrator privileges required.',
+                code: 'FORBIDDEN',
+            },
+        });
+        return;
+    }
     next();
 };
 exports.adminOnly = adminOnly;
