@@ -42,6 +42,8 @@ const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const index_1 = require("./index");
 const logger_1 = require("../utils/logger");
 const User_1 = __importDefault(require("../models/User"));
+const Company_1 = __importDefault(require("../models/Company"));
+const Resource_1 = __importDefault(require("../models/Resource"));
 const connectDatabase = async () => {
     const mongoUri = index_1.config.database.uri;
     const maskedUri = mongoUri.replace(/\/\/[^:]+:[^@]+@/, '//***:***@');
@@ -87,14 +89,14 @@ const connectDatabase = async () => {
         logger_1.logger.error('Failed to establish MongoDB connection.');
         process.exit(1);
     }
-    // Auto-seed admin user if not exists
+    // Auto-seed admin user and sample student data if not exists
     try {
         const adminEmail = 'admin@gmail.com';
-        const adminExists = await User_1.default.findOne({ email: adminEmail });
-        if (!adminExists) {
-            const salt = await bcryptjs_1.default.genSalt(10);
+        let admin = await User_1.default.findOne({ email: adminEmail });
+        const salt = await bcryptjs_1.default.genSalt(10);
+        if (!admin) {
             const hashedPassword = await bcryptjs_1.default.hash('admin@1234', salt);
-            await User_1.default.create({
+            admin = await User_1.default.create({
                 name: 'Administrator',
                 email: adminEmail,
                 password: hashedPassword,
@@ -103,9 +105,126 @@ const connectDatabase = async () => {
             });
             logger_1.logger.info(`Auto-created Admin account: ${adminEmail}`);
         }
+        const studentCount = await User_1.default.countDocuments({ role: 'student' });
+        if (studentCount === 0) {
+            logger_1.logger.info('No students found in DB. Commencing auto-seeding of sample students and applications...');
+            const pass = await bcryptjs_1.default.hash('student@1234', salt);
+            // Create Students
+            const student1 = await User_1.default.create({
+                name: 'Ayush Sharma',
+                email: 'ayush@gmail.com',
+                password: pass,
+                role: 'student',
+                isEmailVerified: true,
+                techStacks: ['React', 'TypeScript', 'Node.js', 'Next.js'],
+            });
+            const student2 = await User_1.default.create({
+                name: 'Bhumit Patel',
+                email: 'bhumit@gmail.com',
+                password: pass,
+                role: 'student',
+                isEmailVerified: true,
+                techStacks: ['AWS', 'Java', 'Python', 'Docker'],
+            });
+            const student3 = await User_1.default.create({
+                name: 'Gaurav Khandelwal',
+                email: 'gaurav@gmail.com',
+                password: pass,
+                role: 'student',
+                isEmailVerified: true,
+                techStacks: ['Go', 'Rust', 'Kubernetes', 'PostgreSQL'],
+            });
+            logger_1.logger.info('Sample students created successfully.');
+            // Seed Company Applications
+            await Company_1.default.create([
+                {
+                    userId: student1._id,
+                    companyName: 'Google',
+                    role: 'Software Engineer Intern',
+                    applicationDate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
+                    status: 'Selected',
+                    companyLink: 'https://careers.google.com/',
+                    techStacks: ['React', 'TypeScript', 'Go'],
+                    notes: 'Matched with standard referral. 3 rounds of technical coding interview.',
+                },
+                {
+                    userId: student1._id,
+                    companyName: 'Microsoft',
+                    role: 'SDE-1',
+                    applicationDate: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000),
+                    status: 'Technical Interview',
+                    companyLink: 'https://careers.microsoft.com/',
+                    techStacks: ['C#', 'SQL', 'TypeScript'],
+                    notes: 'Completed OA (85/100). Scheduled for virtual on-sites.',
+                },
+                {
+                    userId: student2._id,
+                    companyName: 'Amazon',
+                    role: 'Cloud Architect Intern',
+                    applicationDate: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000),
+                    status: 'HR Interview',
+                    companyLink: 'https://amazon.jobs/',
+                    techStacks: ['AWS', 'Java', 'Python'],
+                    notes: 'Completed system design interview. Waiting for feedback.',
+                },
+                {
+                    userId: student2._id,
+                    companyName: 'Netflix',
+                    role: 'Frontend UI Engineer',
+                    applicationDate: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
+                    status: 'Applied',
+                    companyLink: 'https://jobs.netflix.com/',
+                    techStacks: ['React', 'Tailwind'],
+                    notes: 'Resume screening stage.',
+                },
+                {
+                    userId: student3._id,
+                    companyName: 'Apple',
+                    role: 'Systems Software Engineer',
+                    applicationDate: new Date(Date.now() - 40 * 24 * 60 * 60 * 1000),
+                    status: 'Rejected',
+                    companyLink: 'https://apple.com/careers/',
+                    techStacks: ['C++', 'Rust'],
+                    notes: 'Rejected after round 2 technical panel.',
+                },
+                {
+                    userId: student3._id,
+                    companyName: 'Razorpay',
+                    role: 'Backend Platform Engineer',
+                    applicationDate: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
+                    status: 'Online Assessment',
+                    companyLink: 'https://razorpay.com/jobs/',
+                    techStacks: ['Node.js', 'Go', 'Docker'],
+                    notes: 'OA active. Need to complete by Sunday.',
+                }
+            ]);
+            logger_1.logger.info('Sample company applications seeded.');
+            // Seed Resources
+            await Resource_1.default.create([
+                {
+                    userId: student1._id,
+                    title: 'Striver A-Z DSA Sheet',
+                    category: 'DSA',
+                    link: 'https://takeuforward.org/strivers-a2z-dsa-course/strivers-a2z-dsa-course-sheet-2/',
+                },
+                {
+                    userId: student2._id,
+                    title: 'DBMS Revision Notes — Gate Smashers',
+                    category: 'Core Subjects',
+                    link: 'https://www.youtube.com/playlist?list=PLxCzCOWd3aioz9LCce4m4JpSdCYIuovj3',
+                },
+                {
+                    userId: student3._id,
+                    title: 'System Design Interview Guide',
+                    category: 'Interview Experience',
+                    link: 'https://github.com/donnemartin/system-design-primer',
+                }
+            ]);
+            logger_1.logger.info('Sample study resources seeded.');
+        }
     }
     catch (err) {
-        logger_1.logger.error('Error auto-creating admin account:', err);
+        logger_1.logger.error('Error auto-seeding database:', err);
     }
     // Attach connection health listeners after successful initial connection
     mongoose_1.default.connection.on('disconnected', () => {
