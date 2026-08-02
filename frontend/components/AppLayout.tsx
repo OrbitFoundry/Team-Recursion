@@ -101,29 +101,31 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
         {/* Nav list */}
         <nav className="flex-1 px-4 py-6 space-y-6 overflow-y-auto">
-          <div className="space-y-1.5">
-            <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 px-4 mb-2">
-              Student Space
+          {!isAdmin && (
+            <div className="space-y-1.5">
+              <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 px-4 mb-2">
+                Student Space
+              </div>
+              {navItems.map((item) => {
+                const active = pathname === item.href || (item.href !== '/dashboard' && item.href !== '/profile' && !pathname.startsWith('/admin') && pathname.startsWith(item.href));
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setSidebarOpen(false)}
+                    className={`flex items-center gap-3.5 px-4 py-3 rounded-full text-sm font-medium transition-all ${
+                      active
+                        ? 'bg-black text-white dark:bg-white dark:text-black shadow-sm font-semibold'
+                        : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800/60 hover:text-gray-900 dark:hover:text-white'
+                    }`}
+                  >
+                    <span className="shrink-0">{item.icon}</span>
+                    {item.label}
+                  </Link>
+                );
+              })}
             </div>
-            {navItems.map((item) => {
-              const active = pathname === item.href || (item.href !== '/dashboard' && item.href !== '/profile' && !pathname.startsWith('/admin') && pathname.startsWith(item.href));
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setSidebarOpen(false)}
-                  className={`flex items-center gap-3.5 px-4 py-3 rounded-full text-sm font-medium transition-all ${
-                    active
-                      ? 'bg-black text-white dark:bg-white dark:text-black shadow-sm font-semibold'
-                      : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800/60 hover:text-gray-900 dark:hover:text-white'
-                  }`}
-                >
-                  <span className="shrink-0">{item.icon}</span>
-                  {item.label}
-                </Link>
-              );
-            })}
-          </div>
+          )}
 
           {isAdmin && (
             <div className="space-y-1.5">
@@ -195,6 +197,16 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 ? 'Resource Center'
                 : pathname === '/profile'
                 ? 'Account Settings'
+                : pathname === '/admin/dashboard'
+                ? 'Admin Dashboard'
+                : pathname === '/admin/students'
+                ? 'Cohort Directory'
+                : pathname.startsWith('/admin/students/detail')
+                ? 'Student Profile Detail'
+                : pathname === '/admin/companies'
+                ? 'Master Register'
+                : pathname === '/admin/resources'
+                ? 'Moderation Hub'
                 : 'cooked?'}
             </h1>
           </div>
