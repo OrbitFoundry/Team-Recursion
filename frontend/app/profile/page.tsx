@@ -7,6 +7,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { TechStackSelector } from '@/components/ui/TechStackSelector';
 import { authApi } from '@/lib/auth-api';
 import { showToast } from '@/components/ToastProvider';
+import { getMediaUrl } from '@/lib/utils';
 
 function ProfileContent() {
   const { user, updateProfile } = useAuth();
@@ -186,7 +187,7 @@ function ProfileContent() {
               <div className="flex flex-col gap-4">
                 {user?.resumeUrl ? (
                   <a 
-                    href={user.resumeUrl.startsWith('http') ? user.resumeUrl : `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}${user.resumeUrl.startsWith('/') ? '' : '/'}${user.resumeUrl}`} 
+                    href={getMediaUrl(user.resumeUrl)} 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-black dark:text-white underline underline-offset-4 hover:opacity-80"

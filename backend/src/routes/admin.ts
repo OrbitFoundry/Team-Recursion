@@ -18,12 +18,22 @@ router.use(authenticate, adminOnly);
 router.get('/students', async (req: Request, res: Response) => {
   try {
     const { search } = req.query;
-    const matchStage: any = { role: 'student' };
+    const matchStage: any = {
+      $or: [
+        { role: 'student' },
+        { role: { $exists: false } },
+        { role: null },
+      ],
+    };
 
     if (search) {
-      matchStage.$or = [
-        { name: { $regex: search as string, $options: 'i' } },
-        { email: { $regex: search as string, $options: 'i' } },
+      matchStage.$and = [
+        {
+          $or: [
+            { name: { $regex: search as string, $options: 'i' } },
+            { email: { $regex: search as string, $options: 'i' } },
+          ],
+        },
       ];
     }
 
@@ -120,7 +130,7 @@ router.get('/companies', async (req: Request, res: Response) => {
           as: 'student',
         },
       },
-      { $unwind: '$student' },
+      { $unwind: { path: '$student', preserveNullAndEmptyArrays: true } },
       // Filter by student name/email if requested
       ...(studentSearch
         ? [
@@ -180,7 +190,7 @@ router.get('/resources', async (req: Request, res: Response) => {
           as: 'student',
         },
       },
-      { $unwind: '$student' },
+      { $unwind: { path: '$student', preserveNullAndEmptyArrays: true } },
       {
         $project: {
           title: 1,
@@ -237,7 +247,13 @@ router.get('/dashboard/stats', async (_req: Request, res: Response) => {
       recentResources,
     ] = await Promise.all([
       // Total registered students
-      User.countDocuments({ role: 'student' }),
+      User.countDocuments({
+        $or: [
+          { role: 'student' },
+          { role: { $exists: false } },
+          { role: null },
+        ],
+      }),
       // Global status breakdown
       Company.aggregate([
         { $group: { _id: '$status', count: { $sum: 1 } } },
@@ -261,7 +277,7 @@ router.get('/dashboard/stats', async (_req: Request, res: Response) => {
             as: 'student',
           },
         },
-        { $unwind: '$student' },
+        { $unwind: { path: '$student', preserveNullAndEmptyArrays: true } },
         {
           $project: {
             companyName: 1,
@@ -286,7 +302,7 @@ router.get('/dashboard/stats', async (_req: Request, res: Response) => {
             as: 'student',
           },
         },
-        { $unwind: '$student' },
+        { $unwind: { path: '$student', preserveNullAndEmptyArrays: true } },
         {
           $project: {
             title: 1,

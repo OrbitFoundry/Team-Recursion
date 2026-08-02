@@ -92,7 +92,13 @@ router.put('/:id', async (req: Request, res: Response) => {
       return res.status(400).json({ error: { message: 'Validation failed', errors: validation.errors } });
     }
 
-    const filter = { _id: req.params.id };
+    const authReq = req as AuthRequest;
+    const userId = authReq.user?.userId;
+
+    const filter: any = { _id: req.params.id };
+    if (authReq.user?.role === 'student' && userId) {
+      filter.userId = new mongoose.Types.ObjectId(userId);
+    }
 
     const company = await Company.findOneAndUpdate(
       filter,
@@ -118,7 +124,13 @@ router.delete('/:id', async (req: Request, res: Response) => {
       return res.status(400).json({ error: { message: 'Invalid company ID format' } });
     }
 
-    const filter = { _id: req.params.id };
+    const authReq = req as AuthRequest;
+    const userId = authReq.user?.userId;
+
+    const filter: any = { _id: req.params.id };
+    if (authReq.user?.role === 'student' && userId) {
+      filter.userId = new mongoose.Types.ObjectId(userId);
+    }
 
     const company = await Company.findOneAndDelete(filter);
 

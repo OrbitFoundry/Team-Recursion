@@ -6,6 +6,7 @@ import AdminRoute from '@/components/AdminRoute';
 import AppLayout from '@/components/AppLayout';
 import { adminApi } from '@/lib/placement-api';
 import { TechStackBadge } from '@/components/ui/TechStackSelector';
+import { getMediaUrl } from '@/lib/utils';
 import type { Company, CompanyStatus, StudentUser } from '@/types/placement';
 
 const STATUS_BADGE: Record<CompanyStatus, string> = {
@@ -134,7 +135,7 @@ function StudentDetailContent() {
             </div>
             {student.resumeUrl ? (
               <a
-                href={`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}${student.resumeUrl}`}
+                href={getMediaUrl(student.resumeUrl)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 px-4 py-2 bg-black text-white dark:bg-white dark:text-black font-mono text-[10px] font-bold uppercase tracking-wider rounded-full hover:scale-105 transition-all shadow-sm"
